@@ -11,7 +11,16 @@ class HomeScreen extends StatelessWidget {
         bottom: false,
         child: Container(
           color: Colors.black,
-          child: Column(
+          child: Row(
+            // MainAxisAlignment - 주죽 정렬
+            // start - 시작
+            // end - 끝
+            // center - 위젯과 위젯의 사이가 동일하게 배치
+            // spaceBetween - 위젯들 사이의 간격이 동일하게 배치
+            // spaceEvenly - 위젯들 사이의 간격 동일하게 배치되면서 끝과 끝에는 위젯이 아닌 빈 간격으로 배치
+            // spaceAround - spaceEvenly + 끝과 끝의 간격 1/2
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+
             children: [
               Container(
                 color: Colors.red,

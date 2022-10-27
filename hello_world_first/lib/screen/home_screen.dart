@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
         bottom: false,
         child: Container(
           color: Colors.black,
-          child: Row(
+          child: Column(
             // MainAxisAlignment - 주죽 정렬
             // start - 시작
             // end - 끝
@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
             // MainAxisSize 는 주축 크기 조정
             // max - 최대
             // min - 최소
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 color: Colors.red,

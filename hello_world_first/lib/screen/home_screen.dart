@@ -154,7 +154,10 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 // blog 웹앱 만들기
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  WebViewController? controller;
+
+  final homeUrl = 'https://hitang.tistory.com/';
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -162,10 +165,23 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: Text('hi my blog'),
-        centerTitle: false,
+        centerTitle: true,
+        actions: [
+          IconButton(onPressed: (){
+            if(controller == null) {
+              return;
+            }
+            controller!.loadUrl(homeUrl);
+          }, icon: Icon(
+            Icons.home,
+          ))
+        ],
       ),
       body: WebView(
-        initialUrl: 'https://hitang.tistory.com/',
+        onWebViewCreated: (WebViewController controller){
+          this.controller = controller;
+        },
+        initialUrl: homeUrl,
         javascriptMode: JavascriptMode.unrestricted,
       ),
     );

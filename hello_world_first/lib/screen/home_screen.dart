@@ -178,9 +178,11 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: WebView(
-        onWebViewCreated: (WebViewController controller){
-          this.controller = controller;
-        },
+        onWebViewCreated: (WebViewController controller){},
+        // onWebViewCreated: (WebViewController controller){
+        //   this.controller = controller;
+        // },
+
         initialUrl: homeUrl,
         javascriptMode: JavascriptMode.unrestricted,
       ),

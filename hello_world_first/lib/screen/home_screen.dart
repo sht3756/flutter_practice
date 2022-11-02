@@ -152,40 +152,59 @@ import 'package:webview_flutter/webview_flutter.dart';
 //   }
 // }
 
-// blog 웹앱 만들기
-class HomeScreen extends StatelessWidget {
-  WebViewController? controller;
+// blog 웹앱 만들기 시작
+// class HomeScreen extends StatelessWidget {
+//   WebViewController? controller;
+//
+//   final homeUrl = 'https://hitang.tistory.com/';
+//   HomeScreen({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.green,
+//         title: Text('hi my blog'),
+//         centerTitle: true,
+//         actions: [
+//           IconButton(onPressed: (){
+//             if(controller == null) {
+//               return;
+//             }
+//             controller!.loadUrl(homeUrl);
+//           }, icon: Icon(
+//             Icons.home,
+//           ))
+//         ],
+//       ),
+//       body: WebView(
+//         onWebViewCreated: (WebViewController controller){},
+//         // onWebViewCreated: (WebViewController controller){
+//         //   this.controller = controller;
+//         // },
+//
+//         initialUrl: homeUrl,
+//         javascriptMode: JavascriptMode.unrestricted,
+//       ),
+//     );
+//   }
+// }
+// blog 웹앱 만들기 끝
 
-  final homeUrl = 'https://hitang.tistory.com/';
-  HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  final Color color;
+
+  const HomeScreen({
+    required this.color,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text('hi my blog'),
-        centerTitle: true,
-        actions: [
-          IconButton(onPressed: (){
-            if(controller == null) {
-              return;
-            }
-            controller!.loadUrl(homeUrl);
-          }, icon: Icon(
-            Icons.home,
-          ))
-        ],
-      ),
-      body: WebView(
-        onWebViewCreated: (WebViewController controller){},
-        // onWebViewCreated: (WebViewController controller){
-        //   this.controller = controller;
-        // },
-
-        initialUrl: homeUrl,
-        javascriptMode: JavascriptMode.unrestricted,
-      ),
+    return Container(
+      width: 50.0,
+      height: 50.0,
+      color: color,
     );
   }
 }

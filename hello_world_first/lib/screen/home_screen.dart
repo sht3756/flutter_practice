@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-
 // class HomeScreen extends StatelessWidget {
 //   const HomeScreen({Key? key}) : super(key: key);
 //
@@ -191,20 +190,66 @@ import 'package:webview_flutter/webview_flutter.dart';
 // }
 // blog 웹앱 만들기 끝
 
-class HomeScreen extends StatelessWidget {
+// class HomeScreen extends StatefulWidget {
+//   final Color color;
+//
+//   const HomeScreen({
+//     required this.color,
+//     Key? key,
+//   }) : super(key: key)
+//
+//
+//   @override
+//   State<StatefulWidget> createState() {
+//     return _HomeScreenState();
+//   }
+// }
+//
+// class _HomeScreenState extends State<HomeScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: 50.0,
+//       height: 50.0,
+//       color: widget.color,
+//     );
+//   }
+// }
+
+class HomeScreen extends StatefulWidget {
   final Color color;
 
-  const HomeScreen({
-    required this.color,
-    Key? key,
-  }) : super(key: key);
+  const HomeScreen({required this.color, Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 50.0,
       height: 50.0,
-      color: color,
+      color: widget.color,
     );
   }
 }
+
+// class _HomeScreen extends StatelessWidget {
+//   final Color color;
+//
+//   const _HomeScreen({
+//     required this.color,
+//     Key? key,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: 50.0,
+//       height: 50.0,
+//       color: color,
+//     );
+//   }
+// }

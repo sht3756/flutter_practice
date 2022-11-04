@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // class HomeScreen extends StatelessWidget {
@@ -293,29 +294,47 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Timer? timer;
+  PageController controller = PageController(
+    initialPage: 0,
+  );
 
   @override
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      print('Tiemr!');
+    timer = Timer.periodic(Duration(seconds: 4), (timer) {
+      int currentPage = controller.page!.toInt();
+
+      int nextPage = currentPage + 1;
+
+      if (nextPage > 2) {
+        nextPage = 0;
+      }
+
+      controller.animateToPage(
+          nextPage, duration: Duration(milliseconds: 400), curve: Curves.ease);
     });
   }
 
   @override
   void dispose() {
-    if(timer != null){
+    controller.dispose();
+
+    if (timer != null) {
       timer!.cancel();
     }
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
     return Scaffold(
       body: PageView(
-        children: [2,3,4].map(
-            (e) => Image.asset('asset/img/img$e.HEIC', fit: BoxFit.cover)
+        controller: controller,
+        children: [2, 3, 4].map(
+                (e) => Image.asset('asset/img/img$e.HEIC', fit: BoxFit.cover)
         ).toList(),
       ),
     );

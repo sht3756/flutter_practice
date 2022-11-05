@@ -285,6 +285,65 @@ import 'package:webview_flutter/webview_flutter.dart';
 // StatefulWidget 만들기 끝
 
 // 전자 액자 만들기 시작
+// class HomeScreen extends StatefulWidget {
+//   const HomeScreen({Key? key}) : super(key: key);
+//
+//   @override
+//   State<HomeScreen> createState() => _HomeScreenState();
+// }
+//
+// class _HomeScreenState extends State<HomeScreen> {
+//   Timer? timer;
+//   PageController controller = PageController(
+//     initialPage: 0,
+//   );
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//
+//     timer = Timer.periodic(Duration(seconds: 4), (timer) {
+//       int currentPage = controller.page!.toInt();
+//
+//       int nextPage = currentPage + 1;
+//
+//       if (nextPage > 2) {
+//         nextPage = 0;
+//       }
+//
+//       controller.animateToPage(
+//           nextPage, duration: Duration(milliseconds: 400), curve: Curves.ease);
+//     });
+//   }
+//
+//   @override
+//   void dispose() {
+//     controller.dispose();
+//
+//     if (timer != null) {
+//       timer!.cancel();
+//     }
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+//
+//     return Scaffold(
+//       body: PageView(
+//         controller: controller,
+//         children: [2, 3, 4].map(
+//                 (e) => Image.asset('asset/img/img$e.HEIC', fit: BoxFit.cover)
+//         ).toList(),
+//       ),
+//     );
+//   }
+// }
+
+// 전자 액자 만들기 끝
+
+// 우리 만난지 며칠 U&I
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -293,52 +352,49 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Timer? timer;
-  PageController controller = PageController(
-    initialPage: 0,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-
-    timer = Timer.periodic(Duration(seconds: 4), (timer) {
-      int currentPage = controller.page!.toInt();
-
-      int nextPage = currentPage + 1;
-
-      if (nextPage > 2) {
-        nextPage = 0;
-      }
-
-      controller.animateToPage(
-          nextPage, duration: Duration(milliseconds: 400), curve: Curves.ease);
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-
-    if (timer != null) {
-      timer!.cancel();
-    }
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    
     return Scaffold(
-      body: PageView(
-        controller: controller,
-        children: [2, 3, 4].map(
-                (e) => Image.asset('asset/img/img$e.HEIC', fit: BoxFit.cover)
-        ).toList(),
-      ),
-    );
+        backgroundColor: Colors.pink[100],
+        body: SafeArea(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                Text(
+                  'U&I',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'parisienne',
+                    fontSize: 80.0,
+                  ),
+                ),
+                Text(
+                  '우리 처음 만난 날',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'sunflower',
+                      fontSize: 30.0),
+                ),
+                Text(
+                  '2020.01.01',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'sunflower',
+                      fontSize: 20.0),
+                ),
+                IconButton(onPressed: () {}, icon: Icon(Icons.favorite)),
+                Text(
+                  'D+1',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'sunflower',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 50.0),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }
-
-// 전자 액자 만들기 끝

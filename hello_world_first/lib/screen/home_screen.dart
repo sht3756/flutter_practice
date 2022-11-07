@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -408,7 +409,26 @@ class _TopPart extends StatelessWidget {
           ),
           IconButton(
               iconSize: 60.0,
-              onPressed: () {},
+              onPressed: () {
+                showCupertinoDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (BuildContext context) {
+                      return Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          color: Colors.white,
+                          height: 300.0,
+                          child: CupertinoDatePicker(
+                            mode: CupertinoDatePickerMode.date,
+                            onDateTimeChanged: (DateTime date) {
+                              print(date);
+                            },
+                          ),
+                        ),
+                      );
+                    });
+              },
               icon: Icon(
                 Icons.favorite,
                 color: Colors.red,
@@ -432,6 +452,6 @@ class _BottomPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: Image.asset('asset/img/middle_image.png'));
+    return Expanded(child: Image.asset('asset/img/couple_free.png'));
   }
 }

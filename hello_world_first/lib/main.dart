@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world_first/screen/home_screen.dart';
 
-
 // 스플래쉬 스크린 작업 시작
 // void main() {
 //   runApp(MaterialApp(
@@ -107,22 +106,25 @@ import 'package:hello_world_first/screen/home_screen.dart';
 //   }
 // }
 // StatefulWidget 끝
+
+// 만난지 며칠 U&I 시작
 void main() {
-  runApp(
-    MaterialApp(
-      home: HomeScreen(),
-    )
-  );
+  runApp(MaterialApp(
+    theme: ThemeData(
+      fontFamily: 'sunflower',
+      textTheme: const TextTheme(
+        headline1: TextStyle(
+          color: Colors.white,
+          fontFamily: 'parisienne',
+          fontSize: 80.0,
+        ),
+        headline2: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w700, fontSize: 50.0),
+        bodyText1: TextStyle(color: Colors.white, fontSize: 30.0),
+        bodyText2: TextStyle(color: Colors.white, fontSize: 20.0),
+      ),
+    ),
+    home: const HomeScreen(),
+  ));
 }
-
-
-
-
-
-
-
-
-
-
-
-
+// 만난지 며칠 U&I 끝

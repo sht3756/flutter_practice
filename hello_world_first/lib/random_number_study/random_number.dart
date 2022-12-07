@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hello_world_first/random_number_study/constant/color.dart';
 
@@ -9,6 +11,12 @@ class RandomNumberPage extends StatefulWidget {
 }
 
 class _RandomNumberPageState extends State<RandomNumberPage> {
+  List<int> randomNumbers = [
+    123,
+    456,
+    789
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,15 +49,15 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [123,456,789].asMap().entries
+                  children: randomNumbers.asMap().entries
                       .map((x) => Padding(
                         padding: EdgeInsets.only(bottom: x.key == 2 ? 0:  16.0),
                         child: Row(
-                            children: x
+                            children: x.value
                                 .toString()
                                 .split('')
                                 .map((y) => Image.asset(
-                                      'asset/img/$y.png',
+                                      'asset/img/random_number/$y.png',
                                       height: 70.0,
                                       width: 50.0,
                                     ))
@@ -64,7 +72,21 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
                   child: ElevatedButton(
                       style:
                           ElevatedButton.styleFrom(backgroundColor: RED_COLOR),
-                      onPressed: () {},
+                      onPressed: () {
+                        final rand = Random();
+
+                        final List<int> newNumbers =[];
+
+                        for(int i = 0; i < 3; i++){
+                          final number = rand.nextInt(1000);
+
+                          newNumbers.add(number);
+                        }
+
+                        setState(() {
+                          randomNumbers = newNumbers;
+                        });
+                      },
                       child: Text('생성하기!')))
             ],
           ),

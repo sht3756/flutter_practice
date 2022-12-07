@@ -11,11 +11,7 @@ class RandomNumberPage extends StatefulWidget {
 }
 
 class _RandomNumberPageState extends State<RandomNumberPage> {
-  List<int> randomNumbers = [
-    123,
-    456,
-    789
-  ];
+  List<int> randomNumbers = [123, 456, 789];
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +45,23 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: randomNumbers.asMap().entries
+                  children: randomNumbers
+                      .asMap()
+                      .entries
                       .map((x) => Padding(
-                        padding: EdgeInsets.only(bottom: x.key == 2 ? 0:  16.0),
-                        child: Row(
-                            children: x.value
-                                .toString()
-                                .split('')
-                                .map((y) => Image.asset(
-                                      'asset/img/random_number/$y.png',
-                                      height: 70.0,
-                                      width: 50.0,
-                                    ))
-                                .toList()),
-                      ))
+                            padding:
+                                EdgeInsets.only(bottom: x.key == 2 ? 0 : 16.0),
+                            child: Row(
+                                children: x.value
+                                    .toString()
+                                    .split('')
+                                    .map((y) => Image.asset(
+                                          'asset/img/random_number/$y.png',
+                                          height: 70.0,
+                                          width: 50.0,
+                                        ))
+                                    .toList()),
+                          ))
                       .toList(),
                 ),
               ),
@@ -75,16 +74,16 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
                       onPressed: () {
                         final rand = Random();
 
-                        final List<int> newNumbers =[];
+                        final Set<int> newNumbers = {};
 
-                        for(int i = 0; i < 3; i++){
+                        while(newNumbers.length != 3) {
                           final number = rand.nextInt(1000);
 
                           newNumbers.add(number);
                         }
 
                         setState(() {
-                          randomNumbers = newNumbers;
+                          randomNumbers = newNumbers.toList();
                         });
                       },
                       child: Text('생성하기!')))

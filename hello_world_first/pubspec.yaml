@@ -62,6 +62,7 @@ flutter:
 
   assets:
     - asset/img/
+    - asset/img/random_number/
 
   fonts:
     - family: parisienne

@@ -41,18 +41,29 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('123'),
-                    Text('223'),
-                    Text('332'),
-                  ],
+                  children: [123,456,789].asMap().entries
+                      .map((x) => Padding(
+                        padding: EdgeInsets.only(bottom: x.key == 2 ? 0:  16.0),
+                        child: Row(
+                            children: x
+                                .toString()
+                                .split('')
+                                .map((y) => Image.asset(
+                                      'asset/img/$y.png',
+                                      height: 70.0,
+                                      width: 50.0,
+                                    ))
+                                .toList()),
+                      ))
+                      .toList(),
                 ),
               ),
               // 무한대값 double.infinity
               SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: RED_COLOR),
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: RED_COLOR),
                       onPressed: () {},
                       child: Text('생성하기!')))
             ],

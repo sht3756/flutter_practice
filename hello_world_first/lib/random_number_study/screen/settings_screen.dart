@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hello_world_first/random_number_study/constant/color.dart';
 
 class SettingScreen extends StatefulWidget {
-  const SettingScreen({Key? key}) : super(key: key);
+  final int maxNumber;
+
+  const SettingScreen({required this.maxNumber, Key? key}) : super(key: key);
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -10,6 +12,13 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   double maxNumber = 1000;
+
+  @override
+  void initState() {
+    super.initState();
+
+    maxNumber = widget.maxNumber.toDouble();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +45,16 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-
-  void onSliderChanged (double val) {
+  void onSliderChanged(double val) {
     setState(() {
       maxNumber = val;
     });
   }
 
-  void onButtonPressed () {
+  void onButtonPressed() {
     Navigator.of(context).pop(maxNumber.toInt());
   }
-
 }
-
-
-
 
 class _Body extends StatelessWidget {
   final double maxNumber;
@@ -98,8 +102,6 @@ class _Footer extends StatelessWidget {
           min: 1000,
           max: 100000,
           onChanged: onSliderChanged,
-
-
         ),
         ElevatedButton(
           onPressed: onButtonPressed,

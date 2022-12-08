@@ -42,12 +42,14 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
   }
 
   void onSettingsPop() async {
-    final  result = await Navigator.of(context)
+    final result = await Navigator.of(context)
         .push<int>(MaterialPageRoute(builder: (BuildContext context) {
-      return SettingScreen();
+      return SettingScreen(
+        maxNumber: maxNumber,
+      );
     }));
 
-    if(result != null) {
+    if (result != null) {
       setState(() {
         maxNumber = result;
       });

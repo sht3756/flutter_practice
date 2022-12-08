@@ -9,7 +9,7 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  double maxNumber = 10000;
+  double maxNumber = 1000;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,8 @@ class _SettingScreenState extends State<SettingScreen> {
             children: [
               Expanded(
                 child: Row(
-                  children: maxNumber.toInt()
+                  children: maxNumber
+                      .toInt()
                       .toString()
                       .split('')
                       .map((e) => Image.asset(
@@ -37,8 +38,8 @@ class _SettingScreenState extends State<SettingScreen> {
               ),
               Slider(
                 value: maxNumber,
-                min: 10000,
-                max: 1000000,
+                min: 1000,
+                max: 100000,
                 onChanged: (double val) {
                   setState(() {
                     maxNumber = val;
@@ -46,7 +47,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 },
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop(maxNumber.toInt());
+                },
                 child: Text('저장!'),
                 style: ElevatedButton.styleFrom(backgroundColor: RED_COLOR),
               )

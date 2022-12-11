@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world_first/button_study/button_study.dart';
 import 'package:hello_world_first/constructor_study/constructor.dart';
+import 'package:hello_world_first/navigation_study/screen/navigation_home_screen.dart';
 import 'package:hello_world_first/random_number_study/random_number.dart';
 import 'package:hello_world_first/screen/home_screen.dart';
 
@@ -135,7 +136,7 @@ import 'package:hello_world_first/screen/home_screen.dart';
 void main() {
   runApp(
     MaterialApp(
-      home: ButtonScreenPage(),
+      home: NavigationPage(),
     )
   );
 }

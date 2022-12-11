@@ -11,9 +11,12 @@ class NavigationPage extends StatelessWidget {
       title: 'Home Screen',
       children: [
         ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => RouterOneScreen()));
+          onPressed: () async {
+            final result = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => RouterOneScreen(
+                      number: 123,
+                    )));
+            print(result);
           },
           child: Text('Push'),
         ),

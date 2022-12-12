@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hello_world_first/button_study/button_study.dart';
 import 'package:hello_world_first/constructor_study/constructor.dart';
 import 'package:hello_world_first/navigation_study/screen/navigation_home_screen.dart';
+import 'package:hello_world_first/navigation_study/screen/route_one_screen.dart';
 import 'package:hello_world_first/random_number_study/random_number.dart';
 import 'package:hello_world_first/screen/home_screen.dart';
 
@@ -134,9 +135,14 @@ import 'package:hello_world_first/screen/home_screen.dart';
 // 만난지 며칠 U&I 끝
 
 void main() {
-  runApp(
-    MaterialApp(
-      home: NavigationPage(),
-    )
-  );
+  runApp(MaterialApp(
+    // home: NavigationPage(),
+    initialRoute: '/',
+    routes: {
+      '/': (context) => NavigationPage(),
+      '/one': (context) => RouterOneScreen(),
+      '/two': (context) => RouterOneScreen(),
+      '/three': (context) => RouterOneScreen(),
+    },
+  ));
 }

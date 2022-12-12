@@ -3,9 +3,9 @@ import 'package:hello_world_first/navigation_study/layout/main_layout.dart';
 import 'package:hello_world_first/navigation_study/screen/route_two_screen.dart';
 
 class RouterOneScreen extends StatelessWidget {
-  final int number;
+  final int? number;
 
-  const RouterOneScreen({required this.number, Key? key}) : super(key: key);
+  const RouterOneScreen({this.number, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

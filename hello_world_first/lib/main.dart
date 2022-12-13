@@ -7,6 +7,7 @@ import 'package:hello_world_first/navigation_study/screen/route_three_screen.dar
 import 'package:hello_world_first/navigation_study/screen/route_two_screen.dart';
 import 'package:hello_world_first/random_number_study/random_number.dart';
 import 'package:hello_world_first/screen/home_screen.dart';
+import 'package:hello_world_first/video_player_study/screen/home_screen.dart';
 
 // 스플래쉬 스크린 작업 시작
 // void main() {
@@ -136,15 +137,23 @@ import 'package:hello_world_first/screen/home_screen.dart';
 // }
 // 만난지 며칠 U&I 끝
 
+// navigation_study 시작
+// void main() {
+//   runApp(MaterialApp(
+//     // home: NavigationPage(),
+//     initialRoute: '/',
+//     routes: {
+//       '/': (context) => NavigationPage(),
+//       '/one': (context) => RouterOneScreen(),
+//       '/two': (context) => RouterTwoScreen(),
+//       '/three': (context) => RouterThreeScreen(),
+//     },
+//   ));
+// }
+// navigation_study 끝
+
 void main() {
   runApp(MaterialApp(
-    // home: NavigationPage(),
-    initialRoute: '/',
-    routes: {
-      '/': (context) => NavigationPage(),
-      '/one': (context) => RouterOneScreen(),
-      '/two': (context) => RouterTwoScreen(),
-      '/three': (context) => RouterThreeScreen(),
-    },
+    home: VideoHomeScreenPage(),
   ));
 }

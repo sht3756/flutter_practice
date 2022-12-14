@@ -1,47 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class VideoHomeScreenPage extends StatelessWidget {
+class VideoHomeScreenPage extends StatefulWidget {
   const VideoHomeScreenPage({Key? key}) : super(key: key);
+
+  @override
+  State<VideoHomeScreenPage> createState() => _VideoHomeScreenPageState();
+}
+
+class _VideoHomeScreenPageState extends State<VideoHomeScreenPage> {
+  XFile? video;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      width: MediaQuery.of(context).size.width,
+        body: video == null ? renderEmpty(): renderVideo()
+    );
+  }
+
+  // 비디오 있을 때 뷰
+  Widget renderVideo() {
+    return Center(
+      child: Text('video 있다.'),
+    );
+  }
+  // 비디오 없을 때 뷰
+  Widget renderEmpty() {
+    return Container(
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       decoration: getBoxDecoration(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _Logo(),
+          _Logo(onTap: onLogoTap,),
           SizedBox(
             height: 30.0,
           ),
           _AppName(),
         ],
       ),
-    ));
+    );
+  }
+
+  void onLogoTap() async {
+    // ImagePicker 를 통한 갤러리의 비디오 가져오기
+    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+
+    if(video != null){
+      setState(() {
+        this.video = video;
+      });
+    }
   }
 
   BoxDecoration getBoxDecoration() {
     return BoxDecoration(
         gradient: LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [
-        Color(0xFF2A3A7C),
-        Color(0xFF000118),
-      ],
-    ));
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF2A3A7C),
+            Color(0xFF000118),
+          ],
+        ));
   }
 }
 
 class _Logo extends StatelessWidget {
-  const _Logo({Key? key}) : super(key: key);
+  final VoidCallback onTap;
+
+  const _Logo({Key? key, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Image(
-      image: AssetImage("asset/img/logo.png"),
+    return GestureDetector(
+      onTap: onTap,
+      child: Image(
+        image: AssetImage("asset/img/logo.png"),
+      ),
     );
   }
 }

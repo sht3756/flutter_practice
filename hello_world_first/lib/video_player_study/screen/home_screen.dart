@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world_first/video_player_study/component/custom_video_player.dart';
 import 'package:image_picker/image_picker.dart';
 
 class VideoHomeScreenPage extends StatefulWidget {
@@ -20,9 +21,7 @@ class _VideoHomeScreenPageState extends State<VideoHomeScreenPage> {
 
   // 비디오 있을 때 뷰
   Widget renderVideo() {
-    return Center(
-      child: Text('video 있다.'),
-    );
+    return CustomVideoPlayer(video: video!,);
   }
   // 비디오 없을 때 뷰
   Widget renderEmpty() {

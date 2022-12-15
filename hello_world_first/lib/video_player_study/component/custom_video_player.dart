@@ -36,6 +36,15 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     // 초기화
     await videoController!.initialize();
 
+    // videoController 의 값이 변하면 실행이 된다.(position 이 바뀔때마다 매번!)
+    videoController!.addListener(() async {
+      final currentPosition = videoController!.value.position;
+
+      setState(() {
+        this.currentPosition = currentPosition;
+      });
+    });
+
     // 비디오 컨트롤러생성했으니, 새로운 videoController 에 맞게  UI 를 새로 build 해라
     setState(() {});
   }
@@ -57,15 +66,44 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
               isPlaying: videoController!.value.isPlaying,
             ),
             _NewVideo(onPressed: onNewVideoPressed),
-            Slider(
-              value: currentPosition.inSeconds.toDouble(),
-              onChanged: (double val) {
-                setState(() {
-                  currentPosition = Duration(seconds: val.toInt());
-                });
-              },
-              max: videoController!.value.duration.inSeconds.toDouble(),
-              min: 0,
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, "0")}',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        value: currentPosition.inSeconds.toDouble(),
+                        onChanged: (double val) {
+                          videoController!.seekTo(
+                            Duration(
+                              seconds: val.toInt(),
+                            ),
+                          );
+                        },
+                        max: videoController!.value.duration.inSeconds
+                            .toDouble(),
+                        min: 0,
+                      ),
+                    ),
+                    Text(
+                      '${videoController!.value.duration.inMinutes}:${(videoController!.value.duration.inSeconds % 60).toString().padLeft(2, "0")}',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             )
           ],
         ));

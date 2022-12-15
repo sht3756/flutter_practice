@@ -14,27 +14,28 @@ class _VideoHomeScreenPageState extends State<VideoHomeScreenPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: video == null ? renderEmpty(): renderVideo()
-    );
+    return Scaffold(body: video == null ? renderEmpty() : renderVideo());
   }
 
   // 비디오 있을 때 뷰
   Widget renderVideo() {
-    return CustomVideoPlayer(video: video!,);
+    return CustomVideoPlayer(
+      video: video!,
+      onNewVideoPressed: onNewVideoPressed,
+    );
   }
+
   // 비디오 없을 때 뷰
   Widget renderEmpty() {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       decoration: getBoxDecoration(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _Logo(onTap: onLogoTap,),
+          _Logo(
+            onTap: onNewVideoPressed,
+          ),
           SizedBox(
             height: 30.0,
           ),
@@ -44,11 +45,11 @@ class _VideoHomeScreenPageState extends State<VideoHomeScreenPage> {
     );
   }
 
-  void onLogoTap() async {
+  void onNewVideoPressed() async {
     // ImagePicker 를 통한 갤러리의 비디오 가져오기
     final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
 
-    if(video != null){
+    if (video != null) {
       setState(() {
         this.video = video;
       });
@@ -58,13 +59,13 @@ class _VideoHomeScreenPageState extends State<VideoHomeScreenPage> {
   BoxDecoration getBoxDecoration() {
     return BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF2A3A7C),
-            Color(0xFF000118),
-          ],
-        ));
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        Color(0xFF2A3A7C),
+        Color(0xFF000118),
+      ],
+    ));
   }
 }
 

@@ -66,47 +66,20 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
               isPlaying: videoController!.value.isPlaying,
             ),
             _NewVideo(onPressed: onNewVideoPressed),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              left: 0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: [
-                    Text(
-                      '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, "0")}',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Expanded(
-                      child: Slider(
-                        value: currentPosition.inSeconds.toDouble(),
-                        onChanged: (double val) {
-                          videoController!.seekTo(
-                            Duration(
-                              seconds: val.toInt(),
-                            ),
-                          );
-                        },
-                        max: videoController!.value.duration.inSeconds
-                            .toDouble(),
-                        min: 0,
-                      ),
-                    ),
-                    Text(
-                      '${videoController!.value.duration.inMinutes}:${(videoController!.value.duration.inSeconds % 60).toString().padLeft(2, "0")}',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
+            _SliderBottom(
+                currentPosition: currentPosition,
+                maxPosition: videoController!.value.duration,
+                onSliderChanged: onSliderChanged)
           ],
         ));
+  }
+
+  void onSliderChanged(double val) {
+    videoController!.seekTo(
+      Duration(
+        seconds: val.toInt(),
+      ),
+    );
   }
 
   void onNewVideoPressed() {}
@@ -216,6 +189,55 @@ class _NewVideo extends StatelessWidget {
           icon: Icon(
             Icons.photo_camera_back,
           )),
+    );
+  }
+}
+
+class _SliderBottom extends StatelessWidget {
+  final Duration currentPosition;
+  final Duration maxPosition;
+  final ValueChanged<double> onSliderChanged;
+
+  const _SliderBottom(
+      {Key? key,
+      required this.currentPosition,
+      required this.maxPosition,
+      required this.onSliderChanged})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 0,
+      right: 0,
+      left: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          children: [
+            Text(
+              '${currentPosition.inMinutes}:${(currentPosition.inSeconds % 60).toString().padLeft(2, "0")}',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            Expanded(
+              child: Slider(
+                value: currentPosition.inSeconds.toDouble(),
+                onChanged: onSliderChanged,
+                max: maxPosition.inSeconds.toDouble(),
+                min: 0,
+              ),
+            ),
+            Text(
+              '${maxPosition.inMinutes}:${(maxPosition.inSeconds % 60).toString().padLeft(2, "0")}',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

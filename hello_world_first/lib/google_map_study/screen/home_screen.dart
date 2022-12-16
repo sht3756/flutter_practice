@@ -26,13 +26,35 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: renderAppBar(),
-      body: Column(
-        children: [
-          _CustomGoogleMap(
-            initialPosition: initialPosition,
-          ),
-          _AttendanceCheckButton(),
-        ],
+      body: FutureBuilder(
+        future: checkPermission(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.data == null) {
+            return Center(
+              child: Text('데이터가 null 이다.'),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.data == '위치 권한이 허가되었습니다.') {
+            return Column(
+              children: [
+                _CustomGoogleMap(
+                  initialPosition: initialPosition,
+                ),
+                _AttendanceCheckButton(),
+              ],
+            );
+          }
+          return Center(
+            child: Text(snapshot.data),
+          );
+        },
       ),
     );
   }
@@ -41,13 +63,12 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
     // 로케이션 서비스(위치 여부)가 활성화 되어있는지 나타내는 함수, 비동기로 boolean 값 리턴
     final isLocationEnabled = await Geolocator.isLocationServiceEnabled();
 
-    if (isLocationEnabled) {
+    if (!isLocationEnabled) {
       return '위치 서비스를 활성화 해주세요.';
     }
 
     // LocationPermission : enum(열거형)
     LocationPermission checkedPermission = await Geolocator.checkPermission();
-
     // 만약 권한을 리턴받아 저장한 값이 == denied 라면?
     if (checkedPermission == LocationPermission.denied) {
       // 다시 요청해서 변수에 저장을 하고,
@@ -56,11 +77,10 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
       if (checkedPermission == LocationPermission.denied) {
         return '위치 권한을 허가해주세요.';
       }
-
-      // 리턴 받은 값 == deniedForever 이라면? 사용자가 직접 세팅에서 설정해야한다.
-      if (checkedPermission == LocationPermission.deniedForever) {
-        return '앱의 위치 권한을 세팅에서 허가해주세요.';
-      }
+    }
+    // 리턴 받은 값 == deniedForever 이라면? 사용자가 직접 세팅에서 설정해야한다.
+    if (checkedPermission == LocationPermission.deniedForever) {
+      return '앱의 위치 권한을 세팅에서 허가해주세요.';
     }
 
     return '위치 권한이 허가되었습니다.';

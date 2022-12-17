@@ -25,9 +25,9 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
   static final double distance = 100;
 
   // 출첵이 가능한 원
-  static final Circle circle = Circle(
+  static final Circle withinDistanceCircle = Circle(
     // id 값으로 여러개의 동그라미를 표시할때, 같은 동그라미 인지 다른 동그라미인지 구분하는 값!
-    circleId: CircleId('circle'),
+    circleId: CircleId('withinDistanceCircle'),
     // 중앙이 됀는 포인트
     center: companyLatLng,
     // 원의 색상
@@ -38,6 +38,28 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
     strokeColor: Colors.blue,
     // 둘레의 두께
     strokeWidth: 1,
+  );
+  static final Circle notWithinDistanceCircle = Circle(
+    circleId: CircleId('notWithinDistanceCircle'),
+    center: companyLatLng,
+    fillColor: Colors.red.withOpacity(0.5),
+    radius: distance,
+    strokeColor: Colors.red,
+    strokeWidth: 1,
+  );
+  static final Circle checkDoneCircle = Circle(
+    circleId: CircleId('checkDoneCircle'),
+    center: companyLatLng,
+    fillColor: Colors.green.withOpacity(0.5),
+    radius: distance,
+    strokeColor: Colors.green,
+    strokeWidth: 1,
+  );
+
+  static final Marker marker = Marker(
+    // markerId 또한 id 가 같다면 중복으로 간주한다.
+    markerId: MarkerId('marker'),
+    position: companyLatLng,
   );
 
   @override
@@ -64,7 +86,8 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
               children: [
                 _CustomGoogleMap(
                   initialPosition: initialPosition,
-                  circle: circle,
+                  circle: withinDistanceCircle,
+                  marker: marker,
                 ),
                 _AttendanceCheckButton(),
               ],
@@ -119,9 +142,13 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
 class _CustomGoogleMap extends StatelessWidget {
   final CameraPosition initialPosition;
   final Circle circle;
+  final Marker marker;
 
   const _CustomGoogleMap(
-      {Key? key, required this.initialPosition, required this.circle})
+      {Key? key,
+      required this.initialPosition,
+      required this.circle,
+      required this.marker})
       : super(key: key);
 
   @override
@@ -137,6 +164,7 @@ class _CustomGoogleMap extends StatelessWidget {
         myLocationButtonEnabled: false,
         // circleId 가 같으면 중복처리가 되어짐.
         circles: Set.from([circle]),
+        markers: Set.from([marker]),
       ),
     );
   }

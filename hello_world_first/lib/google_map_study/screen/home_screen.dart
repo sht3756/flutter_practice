@@ -22,7 +22,7 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
     zoom: 15,
   );
 
-  static final double distance = 100;
+  static final double okDistance = 100;
 
   // 출첵이 가능한 원
   static final Circle withinDistanceCircle = Circle(
@@ -33,7 +33,7 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
     // 원의 색상
     fillColor: Colors.blue.withOpacity(0.5),
     // 반지름, 반경(출첵이 가능한 미터수 )
-    radius: distance,
+    radius: okDistance,
     // 원 의 외부 둘레
     strokeColor: Colors.blue,
     // 둘레의 두께
@@ -43,7 +43,7 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
     circleId: CircleId('notWithinDistanceCircle'),
     center: companyLatLng,
     fillColor: Colors.red.withOpacity(0.5),
-    radius: distance,
+    radius: okDistance,
     strokeColor: Colors.red,
     strokeWidth: 1,
   );
@@ -51,7 +51,7 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
     circleId: CircleId('checkDoneCircle'),
     center: companyLatLng,
     fillColor: Colors.green.withOpacity(0.5),
-    radius: distance,
+    radius: okDistance,
     strokeColor: Colors.green,
     strokeWidth: 1,
   );
@@ -66,7 +66,7 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: renderAppBar(),
-      body: FutureBuilder(
+      body: FutureBuilder<String>(
         future: checkPermission(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
@@ -82,16 +82,41 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
           }
 
           if (snapshot.data == '위치 권한이 허가되었습니다.') {
-            return Column(
-              children: [
-                _CustomGoogleMap(
-                  initialPosition: initialPosition,
-                  circle: withinDistanceCircle,
-                  marker: marker,
-                ),
-                _AttendanceCheckButton(),
-              ],
-            );
+            return StreamBuilder<Position>(
+                // snapshot 의 타입 : Stream<Position>
+                // 정확도에 따라 값이 변경 될 떄마다 streamBuilder 가 값을 리턴해준다.
+                stream: Geolocator.getPositionStream(),
+                builder: (context, snapshot) {
+                  bool isWithinRange = false;
+
+                  if (snapshot.hasData) {
+                    // 시작 : 현재 위치
+                    final start = snapshot.data!;
+                    // 끝 : 회사 위치
+                    final end = companyLatLng;
+
+                    // Geolocator 를 통한 사이의 거리 구하기
+                    final distance = Geolocator.distanceBetween(start.latitude,
+                        start.longitude, end.latitude, end.longitude);
+
+                    // 현재 위치가 100 미터 거리 보다 가까이 있는 경우
+                    if (distance < okDistance) {
+                      isWithinRange = true;
+                    }
+                  }
+                  return Column(
+                    children: [
+                      _CustomGoogleMap(
+                        initialPosition: initialPosition,
+                        circle: isWithinRange
+                            ? withinDistanceCircle
+                            : notWithinDistanceCircle,
+                        marker: marker,
+                      ),
+                      _AttendanceCheckButton(),
+                    ],
+                  );
+                });
           }
           return Center(
             child: Text(snapshot.data),

@@ -22,6 +22,24 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
     zoom: 15,
   );
 
+  static final double distance = 100;
+
+  // 출첵이 가능한 원
+  static final Circle circle = Circle(
+    // id 값으로 여러개의 동그라미를 표시할때, 같은 동그라미 인지 다른 동그라미인지 구분하는 값!
+    circleId: CircleId('circle'),
+    // 중앙이 됀는 포인트
+    center: companyLatLng,
+    // 원의 색상
+    fillColor: Colors.blue.withOpacity(0.5),
+    // 반지름, 반경(출첵이 가능한 미터수 )
+    radius: distance,
+    // 원 의 외부 둘레
+    strokeColor: Colors.blue,
+    // 둘레의 두께
+    strokeWidth: 1,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +64,7 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
               children: [
                 _CustomGoogleMap(
                   initialPosition: initialPosition,
+                  circle: circle,
                 ),
                 _AttendanceCheckButton(),
               ],
@@ -99,8 +118,10 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
 
 class _CustomGoogleMap extends StatelessWidget {
   final CameraPosition initialPosition;
+  final Circle circle;
 
-  const _CustomGoogleMap({Key? key, required this.initialPosition})
+  const _CustomGoogleMap(
+      {Key? key, required this.initialPosition, required this.circle})
       : super(key: key);
 
   @override
@@ -109,8 +130,13 @@ class _CustomGoogleMap extends StatelessWidget {
       flex: 2,
       child: GoogleMap(
         // 처음 실행시켰을때 기본 위치
-        initialCameraPosition: initialPosition,
         mapType: MapType.normal,
+        initialCameraPosition: initialPosition,
+        myLocationEnabled: true,
+        // 내위치로 가기 버튼 false, 직접 만들어볼 예정
+        myLocationButtonEnabled: false,
+        // circleId 가 같으면 중복처리가 되어짐.
+        circles: Set.from([circle]),
       ),
     );
   }

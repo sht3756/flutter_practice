@@ -14,6 +14,9 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
   // 출근 상태
   bool attendanceCheckDone = false;
 
+  // 구글 컨트롤러(nullable: 구글 맵이 생성된후 받기 떄문)
+  GoogleMapController? mapController;
+
   // 현재 위치를 저장하는 방법
   // latitude - 위도, longitude - 경도
   // 구글에서 제공하는 클래스 LatLng
@@ -117,6 +120,7 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
                                 ? withinDistanceCircle
                                 : notWithinDistanceCircle,
                         marker: marker,
+                        onMapCreated: onMapCreated,
                       ),
                       _AttendanceCheckButton(
                         isWithinRange: isWithinRange,
@@ -133,6 +137,10 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
         },
       ),
     );
+  }
+
+  onMapCreated(GoogleMapController controller) {
+    mapController = controller;
   }
 
   onAttendanceCheckPressed() async {
@@ -202,6 +210,21 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
         '오늘도 출근',
         style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w700),
       ),
+      actions: [
+        IconButton(
+          onPressed: () async {
+            if (mapController == null) {
+              return;
+            }
+            final location = await Geolocator.getCurrentPosition();
+
+            mapController!.animateCamera(
+                CameraUpdate.newLatLng(LatLng(location.latitude, location.longitude)));
+          },
+          color: Colors.blue,
+          icon: Icon(Icons.my_location),
+        )
+      ],
     );
   }
 }
@@ -210,12 +233,14 @@ class _CustomGoogleMap extends StatelessWidget {
   final CameraPosition initialPosition;
   final Circle circle;
   final Marker marker;
+  final MapCreatedCallback onMapCreated;
 
   const _CustomGoogleMap(
       {Key? key,
       required this.initialPosition,
       required this.circle,
-      required this.marker})
+      required this.marker,
+      required this.onMapCreated})
       : super(key: key);
 
   @override
@@ -232,6 +257,7 @@ class _CustomGoogleMap extends StatelessWidget {
         // circleId 가 같으면 중복처리가 되어짐.
         circles: Set.from([circle]),
         markers: Set.from([marker]),
+        onMapCreated: onMapCreated,
       ),
     );
   }

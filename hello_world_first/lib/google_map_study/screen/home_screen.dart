@@ -75,12 +75,6 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
       body: FutureBuilder<String>(
         future: checkPermission(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
-            return Center(
-              child: Text('데이터가 null 이다.'),
-            );
-          }
-
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
@@ -217,7 +211,7 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
               return;
             }
             final location = await Geolocator.getCurrentPosition();
-
+            print('location $location');
             mapController!.animateCamera(
                 CameraUpdate.newLatLng(LatLng(location.latitude, location.longitude)));
           },

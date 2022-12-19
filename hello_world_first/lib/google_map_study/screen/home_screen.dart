@@ -11,6 +11,9 @@ class GoogleMapHomeScreenPage extends StatefulWidget {
 }
 
 class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
+  // 출근 상태
+  bool attendanceCheckDone = false;
+
   // 현재 위치를 저장하는 방법
   // latitude - 위도, longitude - 경도
   // 구글에서 제공하는 클래스 LatLng
@@ -108,12 +111,18 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
                     children: [
                       _CustomGoogleMap(
                         initialPosition: initialPosition,
-                        circle: isWithinRange
-                            ? withinDistanceCircle
-                            : notWithinDistanceCircle,
+                        circle: attendanceCheckDone
+                            ? checkDoneCircle
+                            : isWithinRange
+                                ? withinDistanceCircle
+                                : notWithinDistanceCircle,
                         marker: marker,
                       ),
-                      _AttendanceCheckButton(),
+                      _AttendanceCheckButton(
+                        isWithinRange: isWithinRange,
+                        attendanceCheckDone: attendanceCheckDone,
+                        onPressed: onAttendanceCheckPressed,
+                      ),
                     ],
                   );
                 });
@@ -124,6 +133,39 @@ class _GoogleMapHomeScreenPageState extends State<GoogleMapHomeScreenPage> {
         },
       ),
     );
+  }
+
+  onAttendanceCheckPressed() async {
+    final result = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            // 제목
+            title: Text('출근하기'),
+            // 내용
+            content: Text('출근을 하시겠습니까?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('취소'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text('출근하기'),
+              ),
+            ],
+          );
+        });
+
+    if (result) {
+      setState(() {
+        attendanceCheckDone = true;
+      });
+    }
   }
 
   Future<String> checkPermission() async {
@@ -196,10 +238,41 @@ class _CustomGoogleMap extends StatelessWidget {
 }
 
 class _AttendanceCheckButton extends StatelessWidget {
-  const _AttendanceCheckButton({Key? key}) : super(key: key);
+  final bool isWithinRange;
+  final VoidCallback onPressed;
+  final bool attendanceCheckDone;
+
+  const _AttendanceCheckButton(
+      {Key? key,
+      required this.isWithinRange,
+      required this.onPressed,
+      required this.attendanceCheckDone})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: Text('출근'));
+    return Expanded(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.timelapse_outlined,
+          size: 50.0,
+          color: attendanceCheckDone
+              ? Colors.green
+              : isWithinRange
+                  ? Colors.blue
+                  : Colors.red,
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        if (!attendanceCheckDone && isWithinRange)
+          TextButton(
+            onPressed: onPressed,
+            child: Text('출근하기'),
+          )
+      ],
+    ));
   }
 }

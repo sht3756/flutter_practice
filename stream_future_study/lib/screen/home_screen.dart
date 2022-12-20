@@ -19,23 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FutureBuilder(
-          future: getNumber(),
+        child: StreamBuilder(
+          stream: streamNumbers(),
           builder: (context, snapshot) {
-            if(snapshot.hasData){
-              // 데이터가 있을때 위젯 렌더링
-            }
-            if(snapshot.hasError) {
-              // 에러가 났을때 위젯 렌더링
-            }
-
-            // 로딩 중일때 위젯 렌더링
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'FutureBuilder',
+                  'StreamBuilder',
                   style: textStyle.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: 20.0,
@@ -71,7 +63,19 @@ class _HomeScreenState extends State<HomeScreen> {
     await Future.delayed(Duration(seconds: 3));
     final random = Random();
 
-    throw Exception('에러가 발생했어요.');
+    // throw Exception('에러가 발생했어요.');
     return random.nextInt(100);
+  }
+
+  Stream<int> streamNumbers() async* {
+    for (int i = 0; i < 10; i ++) {
+      if(i ==5) {
+        throw Exception('i = 5');
+      }
+
+      await Future.delayed(Duration(seconds: 1));
+
+      yield i;
+    }
   }
 }

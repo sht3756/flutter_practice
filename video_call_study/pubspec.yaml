@@ -62,24 +62,24 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-   assets:
-     - asset/img.
+  assets:
+     - asset/img/
 
-   fonts:
+  fonts:
      - family: NotoSans
        fonts:
          - asset: asset/font/NotoSansKR-Black.otf
            weight: 900
          - asset: asset/font/NotoSansKR-Bold.otf
-             weight: 700
+           weight: 700
          - asset: asset/font/NotoSansKR-Medium.otf
-             weight: 500
+           weight: 500
          - asset: asset/font/NotoSansKR-Regular.otf
-             weight: 400
+           weight: 400
          - asset: asset/font/NotoSansKR-Light.otf
-             weight: 300
+           weight: 300
          - asset: asset/font/NotoSansKR-Thin.otf
-             weight: 100
+           weight: 100
 
 
   #   - images/a_dot_burr.jpeg

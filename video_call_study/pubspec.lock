@@ -7,7 +7,7 @@ packages:
       name: agora_rtc_engine
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.0"
+    version: "5.3.1"
   async:
     dependency: transitive
     description:
@@ -57,13 +57,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
-  ffi:
-    dependency: transitive
-    description:
-      name: ffi
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -86,13 +79,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  iris_event:
-    dependency: transitive
-    description:
-      name: iris_event
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   js:
     dependency: transitive
     description:
@@ -148,21 +134,7 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "10.2.0"
-  permission_handler_android:
-    dependency: transitive
-    description:
-      name: permission_handler_android
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "10.2.0"
-  permission_handler_apple:
-    dependency: transitive
-    description:
-      name: permission_handler_apple
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "9.0.7"
+    version: "8.3.0"
   permission_handler_platform_interface:
     dependency: transitive
     description:
@@ -170,13 +142,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.9.0"
-  permission_handler_windows:
-    dependency: transitive
-    description:
-      name: permission_handler_windows
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -240,4 +205,4 @@ packages:
     version: "2.1.2"
 sdks:
   dart: ">=2.18.4 <3.0.0"
-  flutter: ">=2.8.0"
+  flutter: ">=2.5.0"

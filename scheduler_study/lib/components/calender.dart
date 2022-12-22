@@ -26,6 +26,7 @@ class _CalenderState extends State<Calender> {
     );
 
     return TableCalendar(
+      locale: 'ko_KR',
       focusedDay: focusedDay,
       firstDay: DateTime(1800),
       lastDay: DateTime(3000),

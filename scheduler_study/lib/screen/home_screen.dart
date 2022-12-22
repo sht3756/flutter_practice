@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scheduler_study/components/calender.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -6,8 +7,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('homeScreen'),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Calender(),
+          ],
+        ),
       ),
     );
   }

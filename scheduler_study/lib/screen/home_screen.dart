@@ -36,10 +36,22 @@ class _HomeScreenState extends State<HomeScreen> {
               scheduleCount: 3,
             ),
             SizedBox(height: 8.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: ScheduleCard(
-                  startTime: 8, endTime: 9, content: '기상', color: Colors.red),
+            Expanded(
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: 8.0);
+                    },
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return ScheduleCard(
+                          startTime: 8,
+                          endTime: 9,
+                          content: '기상',
+                          color: Colors.red);
+                    },
+                  )),
             )
           ],
         ),

@@ -11,7 +11,7 @@ class ScheduleBottomSheet extends StatelessWidget {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: SafeArea(
@@ -57,14 +57,16 @@ class _Time extends StatelessWidget {
       children: [
         Expanded(
             child: CustomTextField(
-          label: '시작 시간', isTime: true,
+          label: '시작 시간',
+          isTime: true,
         )),
         SizedBox(
           width: 16.0,
         ),
         Expanded(
             child: CustomTextField(
-          label: '마감 시간', isTime: true,
+          label: '마감 시간',
+          isTime: true,
         )),
       ],
     );
@@ -78,7 +80,8 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: CustomTextField(
-        label: '내용', isTime: false,
+        label: '내용',
+        isTime: false,
       ),
     );
   }
@@ -89,18 +92,20 @@ class _ColorPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List colorList = [
+      Colors.red,
+      Colors.orange,
+      Colors.yellow,
+      Colors.green,
+      Colors.blue,
+      Colors.indigo,
+      Colors.purple
+    ];
+
     return Wrap(
       spacing: 8.0,
       runSpacing: 10.0,
-      children: [
-        renderColor(Colors.red),
-        renderColor(Colors.orange),
-        renderColor(Colors.yellow),
-        renderColor(Colors.green),
-        renderColor(Colors.blue),
-        renderColor(Colors.indigo),
-        renderColor(Colors.purple),
-      ],
+      children: colorList.map((e) => renderColor(e)).toList(),
     );
   }
 

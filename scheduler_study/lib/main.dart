@@ -5,7 +5,7 @@ import 'package:scheduler_study/screen/home_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // 색상 배열
-const  DEFAULT_COLORS = [
+const DEFAULT_COLORS = [
   // 빨강
   'F44336',
   // 주황
@@ -36,16 +36,13 @@ void main() async {
   final colors = await database.getCategoryColors();
 
   // 만약 DB 에서 불러온 카테고리 컬러가 없을시 실행
-  if(colors.isEmpty) {
-   for(String hexCode in DEFAULT_COLORS) {
-     await database.createCategoryColor(
-       CategoryColorsCompanion(
-         hexCode: Value(hexCode),
-       )
-     );
-   }
+  if (colors.isEmpty) {
+    for (String hexCode in DEFAULT_COLORS) {
+      await database.createCategoryColor(CategoryColorsCompanion(
+        hexCode: Value(hexCode),
+      ));
+    }
   }
-
 
   runApp(
     MaterialApp(

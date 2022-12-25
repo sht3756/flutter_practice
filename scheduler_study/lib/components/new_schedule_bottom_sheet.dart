@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:scheduler_study/components/text_field.dart';
 import 'package:scheduler_study/constant/colors.dart';
 
-class ScheduleBottomSheet extends StatelessWidget {
+class ScheduleBottomSheet extends StatefulWidget {
   const ScheduleBottomSheet({Key? key}) : super(key: key);
+
+  @override
+  State<ScheduleBottomSheet> createState() => _ScheduleBottomSheetState();
+}
+
+class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
+  final GlobalKey<FormState> formKey = GlobalKey();
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,29 +30,43 @@ class ScheduleBottomSheet extends StatelessWidget {
             padding: EdgeInsets.only(bottom: bottomInset),
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _Time(),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  _Content(),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  _ColorPicker(),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  _SaveButton(),
-                ],
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _Time(),
+                    SizedBox(height: 16.0),
+                    _Content(),
+                    SizedBox(height: 16.0),
+                    _ColorPicker(),
+                    SizedBox(height: 8.0),
+                    _SaveButton(onPressed: onSavePressed,),
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  void onSavePressed() {
+    // formKey 는 생성했는데 Form 위젯과 결합을 안했을때 (Form 위젯에 key 값 안넣을때)
+    if(formKey.currentState == null){
+      return;
+    }
+    // 모든 textField 를 검증을 하고서 다 null 값이 다 리턴되면(모두 에러가 안나면) true 리턴
+    if(formKey.currentState!.validate()) {
+      // true: TextFormField(validator)은 null 로 리턴을 했다.
+      print('에러가 없습니다.');
+    }else {
+      // false: TextFormField(validator)은 string 값을 리턴한다.
+      print('에러 가 있습니다.');
+    }
+
+
   }
 }
 
@@ -122,7 +144,9 @@ class _ColorPicker extends StatelessWidget {
 }
 
 class _SaveButton extends StatelessWidget {
-  const _SaveButton({Key? key}) : super(key: key);
+  final VoidCallback onPressed;
+
+  const _SaveButton({Key? key, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +155,7 @@ class _SaveButton extends StatelessWidget {
         Expanded(
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
-                onPressed: () {},
+                onPressed: onPressed,
                 child: Text('저장'))),
       ],
     );

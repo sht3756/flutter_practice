@@ -33,10 +33,9 @@ class LocalDatabase extends _$LocalDatabase {
   Future<List<CategoryColor>> getCategoryColors() =>
       select(categoryColors).get();
 
-
+  // 데이터 베이스 상태의 버전이다. 데이터 구조가 변경될 떄 올려주면 된다.
   @override
   int get schemaVersion => 1;
-// int get schemaVersion => throw UnimplementedError();
 }
 
 LazyDatabase _openConnection() {

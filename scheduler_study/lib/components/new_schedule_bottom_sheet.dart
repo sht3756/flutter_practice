@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:scheduler_study/components/text_field.dart';
 import 'package:scheduler_study/constant/colors.dart';
+import 'package:scheduler_study/database/drift_database.dart';
+import 'package:scheduler_study/model/category_color.dart';
+import 'package:scheduler_study/database/drift_database.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
   const ScheduleBottomSheet({Key? key}) : super(key: key);
@@ -55,7 +59,21 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                       },
                     ),
                     SizedBox(height: 16.0),
-                    _ColorPicker(),
+                    FutureBuilder<List<CategoryColor>>(
+                        future: GetIt.I<LocalDatabase>().getCategoryColors(),
+                        builder: (context, snapshot) {
+                          print(snapshot.data);
+                          return _ColorPicker(
+                            colors: snapshot.hasData
+                                ? snapshot.data!.map((e) => Color(
+                                      int.parse(
+                                        'FF${e.hexCode}',
+                                        radix: 16,
+                                      ),
+                                    )).toList()
+                                : [],
+                          );
+                        }),
                     SizedBox(height: 8.0),
                     _SaveButton(
                       onPressed: onSavePressed,
@@ -105,7 +123,6 @@ class _Time extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-
             child: CustomTextField(
           label: '시작 시간',
           isTime: true,
@@ -143,24 +160,16 @@ class _Content extends StatelessWidget {
 }
 
 class _ColorPicker extends StatelessWidget {
-  const _ColorPicker({Key? key}) : super(key: key);
+  final List<Color> colors;
+
+  const _ColorPicker({Key? key, required this.colors}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List colorList = [
-      Colors.red,
-      Colors.orange,
-      Colors.yellow,
-      Colors.green,
-      Colors.blue,
-      Colors.indigo,
-      Colors.purple
-    ];
-
     return Wrap(
       spacing: 8.0,
       runSpacing: 10.0,
-      children: colorList.map((e) => renderColor(e)).toList(),
+      children: colors.map((e) => renderColor(e)).toList(),
     );
   }
 

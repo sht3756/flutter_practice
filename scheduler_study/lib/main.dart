@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:scheduler_study/database/drift_database.dart';
 import 'package:scheduler_study/screen/home_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -31,6 +32,8 @@ void main() async {
   await initializeDateFormatting();
 
   final database = LocalDatabase();
+
+  GetIt.I.registerSingleton<LocalDatabase>(database);
 
   // 디비의 카테고리색상 불러오기!
   final colors = await database.getCategoryColors();

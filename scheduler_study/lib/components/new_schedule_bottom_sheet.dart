@@ -12,7 +12,6 @@ class ScheduleBottomSheet extends StatefulWidget {
 class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   final GlobalKey<FormState> formKey = GlobalKey();
 
-
   @override
   Widget build(BuildContext context) {
     // 시스템적으로 가려진 부분
@@ -32,6 +31,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
               child: Form(
                 key: formKey,
+                autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -41,7 +41,9 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                     SizedBox(height: 16.0),
                     _ColorPicker(),
                     SizedBox(height: 8.0),
-                    _SaveButton(onPressed: onSavePressed,),
+                    _SaveButton(
+                      onPressed: onSavePressed,
+                    ),
                   ],
                 ),
               ),
@@ -54,19 +56,17 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
 
   void onSavePressed() {
     // formKey 는 생성했는데 Form 위젯과 결합을 안했을때 (Form 위젯에 key 값 안넣을때)
-    if(formKey.currentState == null){
+    if (formKey.currentState == null) {
       return;
     }
     // 모든 textField 를 검증을 하고서 다 null 값이 다 리턴되면(모두 에러가 안나면) true 리턴
-    if(formKey.currentState!.validate()) {
+    if (formKey.currentState!.validate()) {
       // true: TextFormField(validator)은 null 로 리턴을 했다.
       print('에러가 없습니다.');
-    }else {
+    } else {
       // false: TextFormField(validator)은 string 값을 리턴한다.
       print('에러 가 있습니다.');
     }
-
-
   }
 }
 

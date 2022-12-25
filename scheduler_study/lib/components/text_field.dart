@@ -4,11 +4,11 @@ import 'package:scheduler_study/constant/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
-
   // true - 시간 / false - 내용
   final bool isTime;
+  final FormFieldSetter<String> onSaved;
 
-  const CustomTextField({Key? key, required this.label, required this.isTime})
+  const CustomTextField({Key? key, required this.label, required this.isTime, required this.onSaved})
       : super(key: key);
 
   @override
@@ -30,6 +30,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       // null 이 리턴 되면 에러가 없다.
       // 에러가 있으면 에러를 String 값을 리턴 해준다.
+      onSaved: onSaved,
       validator: (String? val) {
         if (val == null || val.isEmpty) {
           return '값을 입력해주세요';

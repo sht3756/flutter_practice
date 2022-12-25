@@ -3,8 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:scheduler_study/components/text_field.dart';
 import 'package:scheduler_study/constant/colors.dart';
 import 'package:scheduler_study/database/drift_database.dart';
-import 'package:scheduler_study/model/category_color.dart';
-import 'package:scheduler_study/database/drift_database.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
   const ScheduleBottomSheet({Key? key}) : super(key: key);
@@ -19,6 +17,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   int? startTime;
   int? endTime;
   String? content;
+  int selectedColorId = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -63,15 +62,20 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                         future: GetIt.I<LocalDatabase>().getCategoryColors(),
                         builder: (context, snapshot) {
                           print(snapshot.data);
+                          if (snapshot.hasData &&
+                              selectedColorId == null &&
+                              snapshot.data!.isNotEmpty) {
+                            selectedColorId = snapshot.data![0].id;
+                          }
+
                           return _ColorPicker(
-                            colors: snapshot.hasData
-                                ? snapshot.data!.map((e) => Color(
-                                      int.parse(
-                                        'FF${e.hexCode}',
-                                        radix: 16,
-                                      ),
-                                    )).toList()
-                                : [],
+                            colors: snapshot.hasData ? snapshot.data! : [],
+                            selectedColorId: selectedColorId,
+                            colorIdSetter: (int id) {
+                              setState(() {
+                                selectedColorId = id;
+                              });
+                            },
                           );
                         }),
                     SizedBox(height: 8.0),
@@ -159,25 +163,49 @@ class _Content extends StatelessWidget {
   }
 }
 
-class _ColorPicker extends StatelessWidget {
-  final List<Color> colors;
+// 함수를 변수처럼 정의 해준다.
+typedef ColorIdSetter = void Function(int id);
 
-  const _ColorPicker({Key? key, required this.colors}) : super(key: key);
+class _ColorPicker extends StatelessWidget {
+  final List<CategoryColor> colors;
+  final int selectedColorId;
+  final ColorIdSetter colorIdSetter;
+
+  const _ColorPicker(
+      {Key? key,
+      required this.colors,
+      required this.selectedColorId,
+      required this.colorIdSetter})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 8.0,
       runSpacing: 10.0,
-      children: colors.map((e) => renderColor(e)).toList(),
+      children: colors
+          .map((e) => GestureDetector(
+              onTap: () {
+                colorIdSetter(e.id);
+              },
+              child: renderColor(e, selectedColorId == e.id)))
+          .toList(),
     );
   }
 
-  Widget renderColor(Color color) {
+  Widget renderColor(CategoryColor color, bool isSelected) {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: color,
+        color: Color(
+          int.parse('FF${color.hexCode}', radix: 16),
+        ),
+        border: isSelected
+            ? Border.all(
+                color: Colors.black,
+                width: 4.0,
+              )
+            : null,
       ),
       width: 32.0,
       height: 32.0,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:scheduler_study/components/calender.dart';
 import 'package:scheduler_study/components/new_schedule_bottom_sheet.dart';
 import 'package:scheduler_study/components/schedule_card.dart';
 import 'package:scheduler_study/components/today_banner.dart';
 import 'package:scheduler_study/constant/colors.dart';
+import 'package:scheduler_study/database/drift_database.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -54,7 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
             isScrollControlled: true,
             context: context,
             builder: (_) {
-              return ScheduleBottomSheet(selectedDate:  selectedDay,);
+              return ScheduleBottomSheet(
+                selectedDate: selectedDay,
+              );
             });
       },
       backgroundColor: PRIMARY_COLOR,
@@ -79,16 +83,24 @@ class _ScheduleList extends StatelessWidget {
     return Expanded(
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: ListView.separated(
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 8.0);
-            },
-            itemCount: 3,
-            itemBuilder: (context, index) {
-              return ScheduleCard(
-                  startTime: 8, endTime: 9, content: '기상', color: Colors.red);
-            },
-          )),
+          child: StreamBuilder<List<Schedule>>(
+              stream: GetIt.I<LocalDatabase>().watchSchedules(),
+              builder: (context, snapshot) {
+                print(snapshot.data);
+                return ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: 8.0);
+                  },
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return ScheduleCard(
+                        startTime: 8,
+                        endTime: 9,
+                        content: '기상',
+                        color: Colors.red);
+                  },
+                );
+              })),
     );
   }
 }

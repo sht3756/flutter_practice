@@ -112,7 +112,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
         startTime: Value(startTime!),
         endTime: Value(endTime!),
         content: Value(content!),
-        colorId: Value(selectedColorId!),
+        colorId: Value(selectedColorId),
       ));
 
       Navigator.of(context).pop();

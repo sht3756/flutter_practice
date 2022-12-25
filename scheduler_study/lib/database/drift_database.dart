@@ -33,6 +33,10 @@ class LocalDatabase extends _$LocalDatabase {
   Future<List<CategoryColor>> getCategoryColors() =>
       select(categoryColors).get();
 
+  // update 될때마다 계속 지속적으로 받는 Stream
+  Stream<List<Schedule>> watchSchedules() =>
+      select(schedules).watch();
+
   // 데이터 베이스 상태의 버전이다. 데이터 구조가 변경될 떄 올려주면 된다.
   @override
   int get schemaVersion => 1;

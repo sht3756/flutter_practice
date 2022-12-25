@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scheduler_study/components/text_field.dart';
@@ -5,7 +6,10 @@ import 'package:scheduler_study/constant/colors.dart';
 import 'package:scheduler_study/database/drift_database.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
-  const ScheduleBottomSheet({Key? key}) : super(key: key);
+  final DateTime selectedDate;
+
+  const ScheduleBottomSheet({Key? key, required this.selectedDate})
+      : super(key: key);
 
   @override
   State<ScheduleBottomSheet> createState() => _ScheduleBottomSheetState();
@@ -38,7 +42,6 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
               child: Form(
                 key: formKey,
-                autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -92,7 +95,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     );
   }
 
-  void onSavePressed() {
+  void onSavePressed() async {
     // formKey 는 생성했는데 Form 위젯과 결합을 안했을때 (Form 위젯에 key 값 안넣을때)
     if (formKey.currentState == null) {
       return;
@@ -103,10 +106,16 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
       print('에러가 없습니다.');
       formKey.currentState!.save();
 
-      print('----');
-      print('startTime : $startTime');
-      print('endTime : $endTime');
-      print('content : $content');
+      final key =
+          await GetIt.I<LocalDatabase>().createSchedule(SchedulesCompanion(
+        date: Value(widget.selectedDate),
+        startTime: Value(startTime!),
+        endTime: Value(endTime!),
+        content: Value(content!),
+        colorId: Value(selectedColorId!),
+      ));
+
+      Navigator.of(context).pop();
     } else {
       // false: TextFormField(validator)은 string 값을 리턴한다.
       print('에러 가 있습니다.');

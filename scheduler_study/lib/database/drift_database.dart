@@ -49,6 +49,13 @@ class LocalDatabase extends _$LocalDatabase {
     // 테이블이 두 개이기 때문에 schedules 라고 테이블 정의 해준다.
     query.where(schedules.date.equals(date));
 
+    // 정렬
+    query.orderBy([
+      // asc -> 오름 차순
+      // desc -> descending 내림차순
+      OrderingTerm.asc(schedules.startTime),
+    ]);
+
     // rows : 필터링된 모든 데이터들, row : 각각의 데이터 를 ScheduleWithColor 에 넣어준거다.
     // readeTable(테이블) : 해당하는 테이블 읽어와라
     return query.watch().map((rows) => rows

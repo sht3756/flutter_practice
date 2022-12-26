@@ -34,8 +34,10 @@ class LocalDatabase extends _$LocalDatabase {
       select(categoryColors).get();
 
   // update 될때마다 계속 지속적으로 받는 Stream
-  Stream<List<Schedule>> watchSchedules() =>
-      select(schedules).watch();
+  Stream<List<Schedule>> watchSchedules(DateTime date) {
+    // .. : ..where() 함수가 실행이 되는데, 실행되는 대상이 주체(select(schedules)) 가 된다.
+    return (select(schedules)..where((tbl) => tbl.date.equals(date))).watch();
+  }
 
   // 데이터 베이스 상태의 버전이다. 데이터 구조가 변경될 떄 올려주면 된다.
   @override

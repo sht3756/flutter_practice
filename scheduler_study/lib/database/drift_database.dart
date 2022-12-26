@@ -22,6 +22,10 @@ part 'drift_database.g.dart';
 class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
 
+  // 특정 스케쥴 select 문
+  Future<Schedule> getScheduleById(int id) =>
+      (select(schedules)..where((tbl) => tbl.id.equals(id))).getSingle();
+
   // 스케쥴 추가 insert 문
   Future<int> createSchedule(SchedulesCompanion data) =>
       into(schedules).insert(data);
@@ -33,6 +37,11 @@ class LocalDatabase extends _$LocalDatabase {
   // 카테고리 컬러 다 불러오는 select 문
   Future<List<CategoryColor>> getCategoryColors() =>
       select(categoryColors).get();
+
+  // update 문
+  // schedules 을 업데이트 한다. 테이블 id와 선택한 스케쥴의 id 같은 row 컬럼을 찾아서 data 값으로 변경해라!
+  Future<int> updateScheduleById(int id, SchedulesCompanion data) =>
+      (update(schedules)..where((tbl) => tbl.id.equals(id))).write(data);
 
   // 스케줄 삭제 delete 문
   // 외부에서 삭제할 id 값을 받아서 schedules 테이블의 id 와 같은지 비교하고 같은 row 를 삭제를 하겠다. int 값을 리턴 받을 수 있다.(삭제한 id 의 int 값이다.)

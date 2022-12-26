@@ -6,6 +6,7 @@ import 'package:scheduler_study/model/schedule.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:drift/native.dart';
+import 'package:scheduler_study/model/schedule_with_color.dart';
 
 // part 는 import 보다 조금 더 넓은 기능을 한다.
 // import 는 private 를 불러올 수 없다.
@@ -34,9 +35,27 @@ class LocalDatabase extends _$LocalDatabase {
       select(categoryColors).get();
 
   // update 될때마다 계속 지속적으로 받는 Stream
-  Stream<List<Schedule>> watchSchedules(DateTime date) {
+  Stream<List<ScheduleWithColor>> watchSchedules(DateTime date) {
     // .. : ..where() 함수가 실행이 되는데, 실행되는 대상이 주체(select(schedules)) 가 된다.
-    return (select(schedules)..where((tbl) => tbl.date.equals(date))).watch();
+    // return (select(schedules)..where((tbl) => tbl.date.equals(date))).watch();
+
+    final query = select(schedules).join([
+      // innerJoin(join 할 테이블, 조건)
+      // join 할때는 equalsExp 를 사용
+      // schedules 와 categoryColors 조인하는 데 categoryColors.id 와 schedules.colorId 같은 것만!
+      innerJoin(categoryColors, categoryColors.id.equalsExp(schedules.colorId))
+    ]);
+
+    // 테이블이 두 개이기 때문에 schedules 라고 테이블 정의 해준다.
+    query.where(schedules.date.equals(date));
+
+    // rows : 필터링된 모든 데이터들, row : 각각의 데이터 를 ScheduleWithColor 에 넣어준거다.
+    // readeTable(테이블) : 해당하는 테이블 읽어와라
+    return query.watch().map((rows) => rows
+        .map((row) => ScheduleWithColor(
+            schedule: row.readTable(schedules),
+            categoryColor: row.readTable(categoryColors)))
+        .toList());
   }
 
   // 데이터 베이스 상태의 버전이다. 데이터 구조가 변경될 떄 올려주면 된다.

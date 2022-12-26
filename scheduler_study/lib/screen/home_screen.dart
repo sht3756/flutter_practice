@@ -6,6 +6,7 @@ import 'package:scheduler_study/components/schedule_card.dart';
 import 'package:scheduler_study/components/today_banner.dart';
 import 'package:scheduler_study/constant/colors.dart';
 import 'package:scheduler_study/database/drift_database.dart';
+import 'package:scheduler_study/model/schedule_with_color.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -86,15 +87,15 @@ class _ScheduleList extends StatelessWidget {
     return Expanded(
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: StreamBuilder<List<Schedule>>(
+          child: StreamBuilder<List<ScheduleWithColor>>(
               stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDate),
               builder: (context, snapshot) {
-                if(!snapshot.hasData) {
+                if (!snapshot.hasData) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-                if(snapshot.hasData && snapshot.data!.isEmpty){
+                if (snapshot.hasData && snapshot.data!.isEmpty) {
                   // 데이터 통신은 잘해서 data 는 잘 받아오는데, 리스트가 빈 값이라면?
                   return Center(
                     child: Text('스케줄이 없습니다.'),
@@ -107,13 +108,15 @@ class _ScheduleList extends StatelessWidget {
                   },
                   itemBuilder: (context, index) {
                     // 각각의 인덴스별 스케쥴
-                    final schedule = snapshot.data![index];
+                    final scheduleWithColor = snapshot.data![index];
 
                     return ScheduleCard(
-                        startTime: schedule.startTime,
-                        endTime: schedule.endTime,
-                        content: schedule.content,
-                        color: Colors.red);
+                        startTime: scheduleWithColor.schedule.startTime,
+                        endTime: scheduleWithColor.schedule.endTime,
+                        content: scheduleWithColor.schedule.content,
+                        color: Color(int.parse(
+                            'FF${scheduleWithColor.categoryColor.hexCode}',
+                            radix: 16)));
                   },
                 );
               })),

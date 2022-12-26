@@ -4,11 +4,16 @@ import 'package:scheduler_study/constant/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
+
   // true - 시간 / false - 내용
   final bool isTime;
   final FormFieldSetter<String> onSaved;
 
-  const CustomTextField({Key? key, required this.label, required this.isTime, required this.onSaved})
+  const CustomTextField(
+      {Key? key,
+      required this.label,
+      required this.isTime,
+      required this.onSaved})
       : super(key: key);
 
   @override
@@ -61,10 +66,13 @@ class CustomTextField extends StatelessWidget {
       keyboardType: isTime ? TextInputType.number : TextInputType.multiline,
       inputFormatters: isTime ? [FilteringTextInputFormatter.digitsOnly] : [],
       decoration: InputDecoration(
-          // 테두리 삭제
-          border: InputBorder.none,
-          filled: true,
-          fillColor: Colors.grey[300]),
+        // 테두리 삭제
+        border: InputBorder.none,
+        filled: true,
+        fillColor: Colors.grey[300],
+        // 뒤에 붙는 글자
+        suffixText: isTime ? '시': null,
+      ),
     );
   }
 }

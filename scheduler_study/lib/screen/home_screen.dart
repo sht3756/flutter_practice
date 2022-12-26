@@ -109,13 +109,24 @@ class _ScheduleList extends StatelessWidget {
                     // 각각의 인덴스별 스케쥴
                     final scheduleWithColor = snapshot.data![index];
 
-                    return ScheduleCard(
-                        startTime: scheduleWithColor.schedule.startTime,
-                        endTime: scheduleWithColor.schedule.endTime,
-                        content: scheduleWithColor.schedule.content,
-                        color: Color(int.parse(
-                            'FF${scheduleWithColor.categoryColor.hexCode}',
-                            radix: 16)));
+                    // 스와이퍼 가능하게끔 해주는 위젯
+                    return Dismissible(
+                      // 어떤 위젯이 삭제가 됐는지 인식을 한다. (유니크한 키)
+                      key: ObjectKey(scheduleWithColor.schedule.id),
+                      // 어디로 스와이프 할지 설정
+                      direction: DismissDirection.endToStart,
+                      // 스와이프 됐을때 함수 설정
+                      onDismissed: (DismissDirection direction){
+                        GetIt.I<LocalDatabase>().removeSchedule(scheduleWithColor.schedule.id);
+                      },
+                      child: ScheduleCard(
+                          startTime: scheduleWithColor.schedule.startTime,
+                          endTime: scheduleWithColor.schedule.endTime,
+                          content: scheduleWithColor.schedule.content,
+                          color: Color(int.parse(
+                              'FF${scheduleWithColor.categoryColor.hexCode}',
+                              radix: 16))),
+                    );
                   },
                 );
               })),

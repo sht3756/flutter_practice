@@ -34,10 +34,14 @@ class LocalDatabase extends _$LocalDatabase {
   Future<List<CategoryColor>> getCategoryColors() =>
       select(categoryColors).get();
 
+  // 스케줄 삭제 delete 문
+  // 외부에서 삭제할 id 값을 받아서 schedules 테이블의 id 와 같은지 비교하고 같은 row 를 삭제를 하겠다. int 값을 리턴 받을 수 있다.(삭제한 id 의 int 값이다.)
+  Future<int> removeSchedule(int id) =>
+      (delete(schedules)..where((tbl) => tbl.id.equals(id))).go();
+
   // update 될때마다 계속 지속적으로 받는 Stream
   Stream<List<ScheduleWithColor>> watchSchedules(DateTime date) {
-    // .. : ..where() 함수가 실행이 되는데, 실행되는 대상이 주체(select(schedules)) 가 된다.
-    // return (select(schedules)..where((tbl) => tbl.date.equals(date))).watch();
+    // .. : ..where() 함수가 실행이 // return (select(schedules)..where((tbl) => tbl.date.equals(date))).watch();되는데, 실행되는 대상이 주체(select(schedules)) 가 된다.
 
     final query = select(schedules).join([
       // innerJoin(join 할 테이블, 조건)

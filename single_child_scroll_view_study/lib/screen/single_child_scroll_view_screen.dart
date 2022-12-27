@@ -3,12 +3,16 @@ import 'package:single_child_scroll_view_study/constant/colors.dart';
 import 'package:single_child_scroll_view_study/layout/main_layout.dart';
 
 class SingleChildScrollViewScreen extends StatelessWidget {
-  const SingleChildScrollViewScreen({Key? key}) : super(key: key);
+  final List<int> numbers = List.generate(100, (index) => index);
+
+  SingleChildScrollViewScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      title: 'SingleChildScrollView', body: renderPhysics(),);
+      title: 'SingleChildScrollView',
+      body: renderPerformance(),
+    );
   }
 
   //1. 기본 렌더링 법
@@ -57,9 +61,27 @@ class SingleChildScrollViewScreen extends StatelessWidget {
     );
   }
 
+  //5. SingleChildScrollView 퍼포먼스
+  // SingleChildScrollView 는 랜더를 전부다 해버린다. 아직 보지도 않은 리스트들의 마지막까지 출력을해버리면, 리소스 낭비가 심해질것이다.
+  Widget renderPerformance() {
+    return SingleChildScrollView(
+      child: Column(
+          children: numbers
+              .map((e) => renderContainer(
+            // 빨강 부터 보라색까지 가져오려는식 나머지를 구함.
+                  color: rainbowColors[e % rainbowColors.length], index: e))
+              .toList()),
+    );
+  }
+
   Widget renderContainer({
     required Color color,
+    int? index,
   }) {
+    if(index != null) {
+      print(index);
+    }
+
     return Container(
       height: 300,
       color: color,

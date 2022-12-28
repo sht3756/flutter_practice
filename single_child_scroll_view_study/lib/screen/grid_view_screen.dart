@@ -11,7 +11,7 @@ class GridViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainLayout(
       title: 'GridViewScreen',
-      body: renderBuilderCrossAxis(),
+      body: renderBuilderCrossAxisExtent(),
     );
   }
 
@@ -50,7 +50,7 @@ class GridViewScreen extends StatelessWidget {
   }
 
   // 3. 2번 과 같다. 위젯 최대 길이에 따라서 그림
-  Widget renderBuilderCrossAxis() {
+  Widget renderBuilderCrossAxisExtent() {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         // 위젯들의 최대 길이

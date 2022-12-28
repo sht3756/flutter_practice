@@ -1,6 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:single_child_scroll_view_study/constant/colors.dart';
 
+// SliverPersistentHeaderDelegate 를 상속 해야한다.
+// @override 를 4개를 꼭 해줘야한다.
+class _SliverFixedHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double maxHeight;
+  final double minHeight;
+
+  _SliverFixedHeaderDelegate({
+    required this.child,
+    required this.maxHeight,
+    required this.minHeight,
+  });
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(
+      child: child,
+    );
+  }
+
+  @override
+  // 최대 높이
+  double get maxExtent => maxHeight;
+
+  @override
+  // 최소 높이
+  double get minExtent => minHeight;
+
+  @override
+  //covariant : 상속된 클래스도 사용가능, 이거를(SliverPersistentHeaderDelegate) 상속한 클래스 일수 도있다는 것을 명시해주는것이다.
+  // 편의상 바꿔준다. 현재 상황에서는 이미 _SliverFixedHeaderDelegate에서 상속을 했으니 다른걸 상속했을 경우는 없다.
+  // oldDelegate 는 오래된 것을 의미한거다. build 가 될 때 이전인 기존에 존재하던 delegate
+  // thisDelegate 는 새로운 delegate 이다.
+  // shouldRebuild - 새로 build 를 해야할지 말지 결정해주는 함수
+  // false : build 안함, true : build 다시함
+  // 그러니 특정 조건을 넣어주면 됌. child 값이 바뀌거나 minHeight, maxHeight 가 바뀔때 해주면 됌
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return oldDelegate.minExtent != minHeight ||
+        oldDelegate.maxExtent != maxHeight;
+  }
+}
+
 class CustomScrollViewScreen extends StatelessWidget {
   final List<int> numbers = List.generate(100, (index) => index);
 
@@ -14,13 +57,38 @@ class CustomScrollViewScreen extends StatelessWidget {
         slivers: [
           // ios : appBar 가 스크롤이 된다.
           renderSliverAppBar(),
+          renderHeader(),
           renderChildSliverGrid(),
+          renderHeader(),
           renderSliverGridBuilder(),
+          renderHeader(),
           renderBuilderSliverList(),
         ],
       ),
     );
   }
+
+  // Header
+  SliverPersistentHeader renderHeader() {
+    return SliverPersistentHeader(
+      // 헤더에 쌓인다.
+      pinned: true,
+      delegate: _SliverFixedHeaderDelegate(
+        child: Container(
+          color: Colors.black,
+          child: Center(
+            child: Text(
+              '내용',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        minHeight: 75,
+        maxHeight: 150,
+      ),
+    );
+  }
+
 
   // AppBar
   SliverAppBar renderSliverAppBar() {

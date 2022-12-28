@@ -26,65 +26,65 @@ class ListViewScreen extends StatelessWidget {
           .toList(),
     );
   }
-}
 
 // 2. 보이는것만 그림
-Widget renderBuilder() {
-  return ListView.builder(
-    itemCount: 100,
-    itemBuilder: (context, index) {
-      return renderContainer(
-        color: rainbowColors[index % rainbowColors.length],
-        index: index,
-      );
-    },
-  );
-}
-
-// 3. 2+ 중간 중간마다 추가로 위젯을 넣을 수 있다.
-Widget renderSeparated() {
-  return ListView.separated(
+  Widget renderBuilder() {
+    return ListView.builder(
       itemCount: 100,
       itemBuilder: (context, index) {
         return renderContainer(
-            color: rainbowColors[index % rainbowColors.length], index: index);
-      },
-      separatorBuilder: (context, index) {
-        index += 1;
-
-        // 5개의 item마다 배너 보여주기
-        if (index % 5 == 0) {
-          return renderContainer(
-            color: Colors.black,
-            index: index,
-            height: 100,
-          );
-        }
-        return SizedBox(
-          height: 32.0,
+          color: rainbowColors[index % rainbowColors.length],
+          index: index,
         );
-      });
-}
+      },
+    );
+  }
 
-Widget renderContainer({
-  required Color color,
-  required int index,
-  double? height,
-}) {
-  print(index);
+// 3. 2+ 중간 중간마다 추가로 위젯을 넣을 수 있다.
+  Widget renderSeparated() {
+    return ListView.separated(
+        itemCount: 100,
+        itemBuilder: (context, index) {
+          return renderContainer(
+              color: rainbowColors[index % rainbowColors.length], index: index);
+        },
+        separatorBuilder: (context, index) {
+          index += 1;
 
-  return Container(
-    height: height ?? 300,
-    color: color,
-    child: Center(
-      child: Text(
-        index.toString(),
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w700,
-          fontSize: 30.0,
+          // 5개의 item마다 배너 보여주기
+          if (index % 5 == 0) {
+            return renderContainer(
+              color: Colors.black,
+              index: index,
+              height: 100,
+            );
+          }
+          return SizedBox(
+            height: 32.0,
+          );
+        });
+  }
+
+  Widget renderContainer({
+    required Color color,
+    required int index,
+    double? height,
+  }) {
+    print(index);
+
+    return Container(
+      height: height ?? 300,
+      color: color,
+      child: Center(
+        child: Text(
+          index.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+            fontSize: 30.0,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

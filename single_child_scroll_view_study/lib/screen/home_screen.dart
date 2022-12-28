@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:single_child_scroll_view_study/layout/main_layout.dart';
 import 'package:single_child_scroll_view_study/screen/grid_view_screen.dart';
+import 'package:single_child_scroll_view_study/screen/reorderable_list_view_screen.dart';
 import 'package:single_child_scroll_view_study/screen/single_child_scroll_view_screen.dart';
 
 import 'list_view_screen.dart';
@@ -29,6 +30,10 @@ class HomeScreen extends StatelessWidget {
       builder: (_) => GridViewScreen(),
       name: 'GridViewScreen',
     ),
+    ScreenModel(
+      builder: (_) => ReorderableListViewScreen(),
+      name: 'ReorderableListViewScreen',
+    ),
   ];
 
   HomeScreen({Key? key}) : super(key: key);
@@ -39,21 +44,23 @@ class HomeScreen extends StatelessWidget {
         title: 'home',
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: screens
-                .map(
-                  (screen) => ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: screen.builder),
-                      );
-                    },
-                    child: Text(screen.name),
-                  ),
-                )
-                .toList(),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: screens
+                  .map(
+                    (screen) => ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: screen.builder),
+                        );
+                      },
+                      child: Text(screen.name),
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
         ));
   }

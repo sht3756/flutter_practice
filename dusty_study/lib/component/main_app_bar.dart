@@ -17,43 +17,47 @@ class MainAppBar extends StatelessWidget {
       backgroundColor: primaryColor,
       flexibleSpace: FlexibleSpaceBar(
         background: SafeArea(
-          child: Column(
-            children: [
-              Text(
-                '서울',
-                style: ts.copyWith(
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.w700,
+          child: Container(
+            // kToolbarHeight: 시스템적으로 기본적인 정해진 AppBar 높이를 사용할 수 있다.
+            margin: EdgeInsets.only(top: kToolbarHeight),
+            child: Column(
+              children: [
+                Text(
+                  '서울',
+                  style: ts.copyWith(
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              Text(
-                DateTime.now().toString(),
-                style: ts.copyWith(
-                  fontSize: 20.0,
+                Text(
+                  DateTime.now().toString(),
+                  style: ts.copyWith(
+                    fontSize: 20.0,
+                  ),
                 ),
-              ),
-              SizedBox(height: 20.0),
-              Image.asset(
-                'asset/img/mediocre.png',
-                width: MediaQuery.of(context).size.width / 2,
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                '보통',
-                style: ts.copyWith(
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.w700,
+                SizedBox(height: 20.0),
+                Image.asset(
+                  'asset/img/mediocre.png',
+                  width: MediaQuery.of(context).size.width / 2,
                 ),
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                '나쁘지 않네요!',
-                style: ts.copyWith(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
+                SizedBox(height: 20.0),
+                Text(
+                  '보통',
+                  style: ts.copyWith(
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              )
-            ],
+                SizedBox(height: 8.0),
+                Text(
+                  '나쁘지 않네요!',
+                  style: ts.copyWith(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w700,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

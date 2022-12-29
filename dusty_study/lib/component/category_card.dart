@@ -1,3 +1,5 @@
+import 'package:dusty_study/component/card_title.dart';
+import 'package:dusty_study/component/main_card.dart';
 import 'package:dusty_study/component/main_stat.dart';
 import 'package:dusty_study/constant/colors.dart';
 import 'package:flutter/material.dart';
@@ -7,40 +9,14 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(16.0),
-        ),
-      ),
-      color: lightColor,
-      child: SizedBox(
-        height: 160,
+    return SizedBox(
+      height: 160,
+      child: MainCard(
         child: LayoutBuilder(builder: (context, constraint) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: darkColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16.0),
-                    topRight: Radius.circular(16.0),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    '종류별 통계',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
+              CardTitle(title: '종류별 통계',),
               Expanded(
                 child: ListView(
                   scrollDirection: Axis.horizontal,

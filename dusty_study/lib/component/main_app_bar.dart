@@ -1,9 +1,21 @@
+import 'package:dusty_study/model/stat_model.dart';
+import 'package:dusty_study/model/status_model.dart';
 import 'package:flutter/material.dart';
 
 import '../constant/colors.dart';
 
 class MainAppBar extends StatelessWidget {
-  const MainAppBar({Key? key}) : super(key: key);
+  // 데이터 모델링 클래스를 기반으로 단계를 나누는 값 정의한 모델
+  final StatusModel status;
+
+  // 실제 api 통신하고 플러터로 사용하기 쉽게 만든 데이터 모델링 클래스
+  final StatModel stat;
+
+  const MainAppBar({
+    Key? key,
+    required this.status,
+    required this.stat,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +26,7 @@ class MainAppBar extends StatelessWidget {
 
     return SliverAppBar(
       expandedHeight: 500,
-      backgroundColor: primaryColor,
+      backgroundColor: status.primaryColor,
       flexibleSpace: FlexibleSpaceBar(
         background: SafeArea(
           child: Container(
@@ -30,19 +42,19 @@ class MainAppBar extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  DateTime.now().toString(),
+                  getTimeFromDateTime(dateTime: stat.dataTime),
                   style: ts.copyWith(
                     fontSize: 20.0,
                   ),
                 ),
                 SizedBox(height: 20.0),
                 Image.asset(
-                  'asset/img/mediocre.png',
+                  status.imagePath,
                   width: MediaQuery.of(context).size.width / 2,
                 ),
                 SizedBox(height: 20.0),
                 Text(
-                  '보통',
+                  status.label,
                   style: ts.copyWith(
                     fontSize: 40.0,
                     fontWeight: FontWeight.w700,
@@ -50,7 +62,7 @@ class MainAppBar extends StatelessWidget {
                 ),
                 SizedBox(height: 8.0),
                 Text(
-                  '나쁘지 않네요!',
+                  status.comment,
                   style: ts.copyWith(
                     fontSize: 20.0,
                     fontWeight: FontWeight.w700,
@@ -62,5 +74,13 @@ class MainAppBar extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getTimeFromDateTime({required DateTime dateTime}) {
+    return '${dateTime.year}-${dateTime.month}-${dateTime.day}-${getTimeFormat(dateTime.hour)}-${getTimeFormat(dateTime.minute)}';
+  }
+
+  String getTimeFormat(int number) {
+    return number.toString().padLeft(2, '0');
   }
 }

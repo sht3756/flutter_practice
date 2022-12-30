@@ -11,6 +11,7 @@ import 'package:dusty_study/constant/data.dart';
 import 'package:dusty_study/constant/status_level.dart';
 import 'package:dusty_study/model/stat_model.dart';
 import 'package:dusty_study/repository/stat_repository.dart';
+import 'package:dusty_study/utils/data_utils.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,9 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
             StatModel recentStat = stats[0];
 
             // 현재 상태
-            final status = statusLevel
-                .where((element) => element.minFineDust < recentStat.seoul)
-                .last;
+            final status = DataUtils.getStatusFromItemCodeAndValue(
+                value: recentStat.seoul, itemCode: ItemCode.PM10);
 
             print(recentStat.seoul);
 

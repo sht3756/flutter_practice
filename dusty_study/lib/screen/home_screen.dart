@@ -8,6 +8,7 @@ import 'package:dusty_study/component/main_drawer.dart';
 import 'package:dusty_study/component/main_stat.dart';
 import 'package:dusty_study/constant/colors.dart';
 import 'package:dusty_study/constant/data.dart';
+import 'package:dusty_study/model/stat_model.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,7 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
           'searchCondition': 'WEEK',
         });
 
-    print(res.data);
+    print(res.data['response']['body']['items']
+        .map((item) => StatModel.fromJson(json: item)));
   }
 
   @override

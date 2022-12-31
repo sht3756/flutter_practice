@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 class CategoryCard extends StatelessWidget {
   final String region;
   final List<StatAndStatusModel> models;
+  final Color darkColor;
+  final Color lightColor;
 
   const CategoryCard({
     Key? key,
     required this.region,
-    required this.models,
+    required this.models, required this.darkColor, required this.lightColor,
   }) : super(key: key);
 
   @override
@@ -20,11 +22,13 @@ class CategoryCard extends StatelessWidget {
     return SizedBox(
       height: 160,
       child: MainCard(
+        backgroundColor: lightColor,
         child: LayoutBuilder(builder: (context, constraint) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               CardTitle(
+                backgroundColor: darkColor,
                 title: '종류별 통계',
               ),
               Expanded(
@@ -32,15 +36,17 @@ class CategoryCard extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   physics: PageScrollPhysics(),
                   children: models
-                      .map((model) => MainStat(
-                            category: DataUtils.getItemCodeKrString(
-                                itemCode: model.itemCode),
-                            imgPath: model.status.imagePath,
-                            level: model.status.label,
-                            stat:
-                                '${model.stat.getLevelFromRegion(region)}${DataUtils.getUnitFromItemType(itemCode: model.itemCode)}',
-                            width: constraint.maxWidth / 3,
-                          ))
+                      .map((model) =>
+                      MainStat(
+                        category: DataUtils.getItemCodeKrString(
+                            itemCode: model.itemCode),
+                        imgPath: model.status.imagePath,
+                        level: model.status.label,
+                        stat:
+                        '${model.stat.getLevelFromRegion(region)}${DataUtils
+                            .getUnitFromItemType(itemCode: model.itemCode)}',
+                        width: constraint.maxWidth / 3,
+                      ))
                       .toList(),
                 ),
               )

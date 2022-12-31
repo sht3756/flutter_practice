@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import '../constant/colors.dart';
 
 class MainAppBar extends StatelessWidget {
+  // 지역
+  final String region;
+
   // 데이터 모델링 클래스를 기반으로 단계를 나누는 값 정의한 모델
   final StatusModel status;
 
@@ -16,6 +19,7 @@ class MainAppBar extends StatelessWidget {
     Key? key,
     required this.status,
     required this.stat,
+    required this.region,
   }) : super(key: key);
 
   @override
@@ -36,7 +40,7 @@ class MainAppBar extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  '서울',
+                  region,
                   style: ts.copyWith(
                     fontSize: 40.0,
                     fontWeight: FontWeight.w700,
@@ -76,6 +80,4 @@ class MainAppBar extends StatelessWidget {
       ),
     );
   }
-
-
 }

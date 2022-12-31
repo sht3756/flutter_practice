@@ -8,6 +8,7 @@ import 'package:dusty_study/component/main_drawer.dart';
 import 'package:dusty_study/component/main_stat.dart';
 import 'package:dusty_study/constant/colors.dart';
 import 'package:dusty_study/constant/data.dart';
+import 'package:dusty_study/constant/regions.dart';
 import 'package:dusty_study/constant/status_level.dart';
 import 'package:dusty_study/model/stat_model.dart';
 import 'package:dusty_study/repository/stat_repository.dart';
@@ -22,6 +23,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // 지역
+  String region = regions[0];
+
   @override
   Future<List<StatModel>> fetchData() async {
     final statModels = await StatRepository.fetchData();
@@ -33,7 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      drawer: MainDrawer(),
+      drawer: MainDrawer(
+        onRegionTap: (String region) {
+          setState(() {
+            this.region = region;
+          });
+          Navigator.of(context).pop();
+        },
+        selectedWidget: region,
+      ),
       body: FutureBuilder<List<StatModel>>(
           future: fetchData(),
           builder: (context, snapshot) {
@@ -63,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 MainAppBar(
                   stat: recentStat,
                   status: status,
+                  region: region,
                 ),
                 SliverToBoxAdapter(
                   child: Column(

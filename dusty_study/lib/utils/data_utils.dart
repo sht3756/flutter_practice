@@ -30,7 +30,7 @@ class DataUtils {
   }
 
   // item 코드를 한국어로 변경하는 함수
-  static String itemCodeKrString({required ItemCode itemCode}) {
+  static String getItemCodeKrString({required ItemCode itemCode}) {
     switch (itemCode) {
       case ItemCode.PM10:
         return '미세먼지';

@@ -4,6 +4,7 @@ import 'package:dusty_study/component/main_app_bar.dart';
 import 'package:dusty_study/component/main_drawer.dart';
 import 'package:dusty_study/constant/colors.dart';
 import 'package:dusty_study/constant/regions.dart';
+import 'package:dusty_study/model/stat_and_status_model.dart';
 import 'package:dusty_study/model/stat_model.dart';
 import 'package:dusty_study/repository/stat_repository.dart';
 import 'package:dusty_study/utils/data_utils.dart';
@@ -81,7 +82,20 @@ class _HomeScreenState extends State<HomeScreen> {
             final status = DataUtils.getStatusFromItemCodeAndValue(
                 value: pm10RecentStat.seoul, itemCode: ItemCode.PM10);
 
-            print(pm10RecentStat.seoul);
+            // 키들 가져와서 매핑
+            final ssModel = stats.keys.map((key) {
+              final value = stats[key]!;
+              final stat = value[0];
+
+              return StatAndStatusModel(
+                itemCode: key,
+                status: DataUtils.getStatusFromItemCodeAndValue(
+                  value: stat.getLevelFromRegion(region),
+                  itemCode: key,
+                ),
+                stat: stat,
+              );
+            }).toList();
 
             return CustomScrollView(
               slivers: [
@@ -94,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      CategoryCard(),
+                      CategoryCard(region: region, models: ssModel),
                       const SizedBox(height: 16.0),
                       HourlyCard(),
                     ],

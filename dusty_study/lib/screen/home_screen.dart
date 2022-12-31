@@ -1,15 +1,9 @@
-import 'package:dio/dio.dart';
-import 'package:dusty_study/component/card_title.dart';
 import 'package:dusty_study/component/category_card.dart';
 import 'package:dusty_study/component/hourly_card.dart';
 import 'package:dusty_study/component/main_app_bar.dart';
-import 'package:dusty_study/component/main_card.dart';
 import 'package:dusty_study/component/main_drawer.dart';
-import 'package:dusty_study/component/main_stat.dart';
 import 'package:dusty_study/constant/colors.dart';
-import 'package:dusty_study/constant/data.dart';
 import 'package:dusty_study/constant/regions.dart';
-import 'package:dusty_study/constant/status_level.dart';
 import 'package:dusty_study/model/stat_model.dart';
 import 'package:dusty_study/repository/stat_repository.dart';
 import 'package:dusty_study/utils/data_utils.dart';
@@ -27,10 +21,20 @@ class _HomeScreenState extends State<HomeScreen> {
   String region = regions[0];
 
   @override
-  Future<List<StatModel>> fetchData() async {
-    final statModels = await StatRepository.fetchData();
+  Future<Map<ItemCode, List<StatModel>>> fetchData() async {
+    Map<ItemCode, List<StatModel>> stats = {};
 
-    return statModels;
+    for (ItemCode itemCode in ItemCode.values) {
+      final statModels = await StatRepository.fetchData(
+        itemCode: itemCode,
+      );
+
+      stats.addAll({
+        itemCode: statModels,
+      });
+    }
+
+    return stats;
   }
 
   @override
@@ -46,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         selectedWidget: region,
       ),
-      body: FutureBuilder<List<StatModel>>(
+      body: FutureBuilder<Map<ItemCode, List<StatModel>>>(
           future: fetchData(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -61,19 +65,19 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
 
-            List<StatModel> stats = snapshot.data!;
-            StatModel recentStat = stats[0];
+            Map<ItemCode, List<StatModel>> stats = snapshot.data!;
+            StatModel pm10RecentStat = stats[ItemCode.PM10]![0];
 
             // 현재 상태
             final status = DataUtils.getStatusFromItemCodeAndValue(
-                value: recentStat.seoul, itemCode: ItemCode.PM10);
+                value: pm10RecentStat.seoul, itemCode: ItemCode.PM10);
 
-            print(recentStat.seoul);
+            print(pm10RecentStat.seoul);
 
             return CustomScrollView(
               slivers: [
                 MainAppBar(
-                  stat: recentStat,
+                  stat: pm10RecentStat,
                   status: status,
                   region: region,
                 ),

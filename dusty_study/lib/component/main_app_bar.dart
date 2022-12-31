@@ -15,11 +15,19 @@ class MainAppBar extends StatelessWidget {
   // 실제 api 통신하고 플러터로 사용하기 쉽게 만든 데이터 모델링 클래스
   final StatModel stat;
 
+  // appbar 의 시간
+  final DateTime dateTime;
+
+  // pinned title 이 보일지 여부
+  final bool isExpanded;
+
   const MainAppBar({
     Key? key,
     required this.status,
     required this.stat,
     required this.region,
+    required this.dateTime,
+    required this.isExpanded,
   }) : super(key: key);
 
   @override
@@ -31,6 +39,13 @@ class MainAppBar extends StatelessWidget {
 
     return SliverAppBar(
       expandedHeight: 500,
+      pinned: true,
+      title: isExpanded
+          ? null
+          : Text(
+              '$region ${DataUtils.getTimeFromDateTime(dateTime: dateTime)}'),
+      // android 와 ios 타이틀 가운데 정렬이 다를 수 있으니 추가
+      centerTitle: true,
       backgroundColor: status.primaryColor,
       flexibleSpace: FlexibleSpaceBar(
         background: SafeArea(

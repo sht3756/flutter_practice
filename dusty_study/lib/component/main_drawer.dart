@@ -1,4 +1,3 @@
-import 'package:dusty_study/constant/colors.dart';
 import 'package:dusty_study/constant/regions.dart';
 import 'package:flutter/material.dart';
 
@@ -6,10 +5,19 @@ typedef OnRegionTap = void Function(String region);
 
 class MainDrawer extends StatelessWidget {
   final OnRegionTap onRegionTap;
+
   // 선택된 지역
   final String selectedWidget;
+  final Color darkColor;
+  final Color lightColor;
 
-  const MainDrawer({Key? key, required this.onRegionTap, required this.selectedWidget}) : super(key: key);
+  const MainDrawer(
+      {Key? key,
+      required this.onRegionTap,
+      required this.selectedWidget,
+      required this.darkColor,
+      required this.lightColor})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -49,13 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // 아무 box 들고오면 된다.
       final box = Hive.box<StatModel>(ItemCode.PM10.name);
-      // 가장 최근 데이터
-      final recent = box.values.last as StatModel;
+      // 가장 최근 데이터 box.values.last as StatModel
 
       // 데이터를 가져와야하는 시간과 가장 최근 데이터 의 시간이 동일하다면? 밑에있는 작업을 실행할 필요가 없다.
 
       // isAtSameMomentAs: 같은 순간인지 파악하는 함수 같으면 true, 다르면 false
-      if (recent.dataTime.isAtSameMomentAs(fetchTime)) {
+      if (box.values.isNotEmpty &&
+          (box.values.last as StatModel).dataTime.isAtSameMomentAs(fetchTime)) {
         print('이미 최신 데이터가 있습니다.');
         return;
       }
@@ -125,6 +125,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return ValueListenableBuilder<Box>(
         valueListenable: Hive.box<StatModel>(ItemCode.PM10.name).listenable(),
         builder: (context, box, widget) {
+          // box 에 값이 없을때, 로딩중일떄
+          if(box.values.isEmpty) {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
           // PM10 (미세먼지)
           // box.values.toList().last
 

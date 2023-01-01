@@ -33,9 +33,9 @@ class StatModelAdapter extends TypeAdapter<StatModel> {
       jeju: fields[13] as double,
       chungbuk: fields[14] as double,
       gyeongnam: fields[15] as double,
-      gyeonggi: fields[16] as double,
-      dataTime: fields[17] as DateTime,
-      itemCode: fields[18] as ItemCode,
+      dataTime: fields[16] as DateTime,
+      itemCode: fields[17] as ItemCode,
+      gyeonggi: fields[18] as double,
     );
   }
 
@@ -76,11 +76,11 @@ class StatModelAdapter extends TypeAdapter<StatModel> {
       ..writeByte(15)
       ..write(obj.gyeongnam)
       ..writeByte(16)
-      ..write(obj.gyeonggi)
-      ..writeByte(17)
       ..write(obj.dataTime)
+      ..writeByte(17)
+      ..write(obj.itemCode)
       ..writeByte(18)
-      ..write(obj.itemCode);
+      ..write(obj.gyeonggi);
   }
 
   @override

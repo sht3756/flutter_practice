@@ -2,7 +2,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 part 'stat_model.g.dart';
 
-// enum 선언
+// 모델링 할 떄 class 로 맹그러야한다.
+
 @HiveType(typeId: 2)
 enum ItemCode {
   // 미세먼지
@@ -60,11 +61,11 @@ class StatModel {
   @HiveField(15)
   final double gyeongnam;
   @HiveField(16)
-  final double gyeonggi;
-  @HiveField(17)
   final DateTime dataTime;
-  @HiveField(18)
+  @HiveField(17)
   final ItemCode itemCode;
+  @HiveField(18)
+  final double gyeonggi;
 
   StatModel({
     required this.daegu,
@@ -83,14 +84,15 @@ class StatModel {
     required this.jeju,
     required this.chungbuk,
     required this.gyeongnam,
-    required this.gyeonggi,
     required this.dataTime,
     required this.itemCode,
+    required this.gyeonggi,
   });
 
-  // fromJson() : json 형태로 데이터를 받아온다. 컨벤션이다.
-  StatModel.fromJson({required Map<String, dynamic> json})
-      : daegu = double.parse(json['daegu'] ?? '0'),
+  // JSON형태에서부터 데이터를 받아온다. (json형태의 데이터면 fromJson 이렇게하는게
+  //일종에 컨벤션? 개발자들간의 약속 그렇다고 한다.)
+  StatModel.fromJson({required Map<String, dynamic> json}):
+        daegu = double.parse(json['daegu'] ?? '0'),
         chungnam = double.parse(json['chungnam'] ?? '0'),
         incheon = double.parse(json['incheon'] ?? '0'),
         daejeon = double.parse(json['daejeon'] ?? '0'),
@@ -106,59 +108,36 @@ class StatModel {
         jeju = double.parse(json['jeju'] ?? '0'),
         chungbuk = double.parse(json['chungbuk'] ?? '0'),
         gyeongnam = double.parse(json['gyeongnam'] ?? '0'),
-        gyeonggi = double.parse(json['gyeonggi'] ?? '0'),
         dataTime = DateTime.parse(json['dataTime']),
-        itemCode = parseItemCode(json['itemCode']);
+        itemCode = parseItemCode(json['itemCode']),
+        gyeonggi = double.parse(json['gyeonggi'] ?? '0');
 
   static ItemCode parseItemCode(String raw) {
-    // PM25 만 PM2.5 로 온다.
-    if (raw == 'PM2.5') {
-      return ItemCode.PM25;
-    }
-
-    // 원하는 방식 : ItemCode.CO.name -> 'CO'
-    // 원하지 않는 방식 : ItemCode.CO.toString() -> 'ItemCode.CO'
+    if (raw == 'PM2.5') return ItemCode.PM25;
 
     return ItemCode.values.firstWhere((element) => element.name == raw);
   }
 
   double getLevelFromRegion(String region) {
-    if (region == '서울') {
-      return seoul;
-    } else if (region == '경기') {
-      return gyeonggi;
-    } else if (region == '대구') {
-      return daegu;
-    } else if (region == '충남') {
-      return chungnam;
-    } else if (region == '인천') {
-      return incheon;
-    } else if (region == '대전') {
-      return daejeon;
-    } else if (region == '경북') {
-      return gyeongbuk;
-    } else if (region == '세종') {
-      return sejong;
-    } else if (region == '광주') {
-      return gwangju;
-    } else if (region == '전북') {
-      return jeonbuk;
-    } else if (region == '강원') {
-      return gangwon;
-    } else if (region == '울산') {
-      return ulsan;
-    } else if (region == '전남') {
-      return jeonnam;
-    } else if (region == '부산') {
-      return busan;
-    } else if (region == '제주') {
-      return jeju;
-    } else if (region == '충북') {
-      return chungbuk;
-    } else if (region == '충남') {
-      return chungnam;
-    } else {
-      throw Exception('지역을 알 수 없습니다.');
+    switch(region) {
+      case '서울':return seoul;
+      case '경기':return gyeonggi;
+      case '대구':return daegu;
+      case '충남':return daegu;
+      case '인천':return chungnam;
+      case '대전':return daejeon;
+      case '경북':return gyeongbuk;
+      case '세종':return sejong;
+      case '광주':return gwangju;
+      case '전북':return jeonbuk;
+      case '강원':return gangwon;
+      case '울산':return ulsan;
+      case '전남':return jeonnam;
+      case '부산':return busan;
+      case '제주':return jeju;
+      case '충북':return chungbuk;
+      case '경남':return gyeongnam;
+      default: return throw Exception('알수없는 지역입니다.');
     }
   }
 }

@@ -14,14 +14,14 @@ void main() async {
   Hive.registerAdapter<StatModel>(StatModelAdapter());
   Hive.registerAdapter<ItemCode>(ItemCodeAdapter());
 
-  await Hive.openBox(testBox);
+  // await Hive.openBox(testBox);
 
   for(ItemCode itemCode in ItemCode.values) {
-    await Hive.openBox(itemCode.name);
+    await Hive.openBox<StatModel>(itemCode.name);
   }
 
   runApp(MaterialApp(
     theme: ThemeData(fontFamily: 'sunflower'),
-    home: TestScreen(),
+    home: HomeScreen(),
   ));
 }

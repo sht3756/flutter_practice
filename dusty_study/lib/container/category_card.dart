@@ -1,7 +1,6 @@
 import 'package:dusty_study/component/card_title.dart';
 import 'package:dusty_study/component/main_card.dart';
 import 'package:dusty_study/component/main_stat.dart';
-import 'package:dusty_study/model/stat_and_status_model.dart';
 import 'package:dusty_study/model/stat_model.dart';
 import 'package:dusty_study/utils/data_utils.dart';
 import 'package:flutter/material.dart';

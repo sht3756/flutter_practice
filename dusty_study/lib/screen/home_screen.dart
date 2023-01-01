@@ -1,5 +1,5 @@
-import 'package:dusty_study/component/category_card.dart';
-import 'package:dusty_study/component/hourly_card.dart';
+import 'package:dusty_study/container/category_card.dart';
+import 'package:dusty_study/container/hourly_card.dart';
 import 'package:dusty_study/component/main_app_bar.dart';
 import 'package:dusty_study/component/main_drawer.dart';
 import 'package:dusty_study/constant/regions.dart';

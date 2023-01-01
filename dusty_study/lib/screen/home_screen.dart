@@ -26,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     scrollController.addListener(scrollListener);
+
+    fetchData();
   }
 
   @override
@@ -38,6 +40,32 @@ class _HomeScreenState extends State<HomeScreen> {
   // 데이터 통신 후 Map 에 넣은 것들을 다 삭제 해준다. 왜냐 Hive 애 넣어서, ValueListenableBuilder 로 변경하기 위해서!
   @override
   Future<void> fetchData() async {
+    final now = DateTime.now();
+
+    // 데이터를 가져와야하는 시간의 기준
+    final fetchTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      now.hour
+    );
+
+    // 아무 box 들고오면 된다.
+    final box = Hive.box<StatModel>(ItemCode.PM10.name);
+    // 가장 최근 데이터
+    final recent = box.values.last as StatModel;
+
+    // 데이터를 가져와야하는 시간과 가장 최근 데이터 의 시간이 동일하다면? 밑에있는 작업을 실행할 필요가 없다.
+
+    print('fetchTime $fetchTime');
+    print('recent $recent');
+    print(recent.dataTime.isAtSameMomentAs(fetchTime));
+    // isAtSameMomentAs: 같은 순간인지 파악하는 함수 같으면 true, 다르면 false
+    if(recent.dataTime.isAtSameMomentAs(fetchTime)) {
+        print('이미 최신 데이터가 있습니다.');
+        return;
+    }
+
     List<Future> futures = [];
 
     for (ItemCode itemCode in ItemCode.values) {
@@ -48,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final results = await Future.wait(futures);
 
+    // Hive에 데이터 넣기
     for (int i = 0; i < results.length; i++) {
       // ItemCode
       final key = ItemCode.values[i];
@@ -58,6 +87,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
       for (StatModel stat in value) {
         box.put(stat.dataTime.toString(), stat);
+      }
+
+      // 키 값 전부 가져옴
+      final allKeys = box.keys.toList();
+
+      // 24개 이상이면 삭제하는 if 문
+      if(allKeys.length > 24) {
+        // start - 시작 인덱스
+        // end - 끝 인덱스
+
+        // 만약 25개 라면?
+        // allKeys.sublist(0, 25-24)
+        final deleteKeys = allKeys.sublist(0, allKeys.length - 24);
+        // 무조건 24개만 남는다.
+        box.deleteAll(deleteKeys);
       }
     }
   }
@@ -87,9 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
             value: recentStat.getLevelFromRegion(region),
             itemCode: ItemCode.PM10,
           );
-
-          print('여기 ${box.values.last.toString()}');
-          print('여기여기 ${box.values.toString()}');
 
           return Scaffold(
             drawer: MainDrawer(

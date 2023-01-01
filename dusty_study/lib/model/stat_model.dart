@@ -140,4 +140,8 @@ class StatModel {
       default: return throw Exception('알수없는 지역입니다.');
     }
   }
+  @override
+  String toString() {
+    return '{seoul: $seoul , gyeonggi: $gyeonggi , daegu: $daegu , chungnam: $chungnam , dataTime: $dataTime , itemCode : $itemCode}';
+  }
 }

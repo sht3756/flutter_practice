@@ -36,6 +36,8 @@ class HourlyCard extends StatelessWidget {
                 builder: (context, box, widget) {
                   return Column(
                     children: box.values
+                        .toList()
+                        .reversed
                         .map((stat) => renderRow(stat: stat))
                         .toList(),
                   );

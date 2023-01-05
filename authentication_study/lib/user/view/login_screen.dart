@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:authentication_study/common/component/custom_text_form_field.dart';
 import 'package:authentication_study/common/const/colors.dart';
 import 'package:authentication_study/common/layout/default_layout.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -8,6 +12,14 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dio = Dio();
+
+    // localhost
+    final emulatorIp = '10.0.2.2:3000';
+    final simulatorIp = '127.0.0.1:3000';
+
+    final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+
     return DefaultLayout(
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -37,13 +49,36 @@ class LoginScreen extends StatelessWidget {
                   obscureText: true,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    // ID:PW
+                    final rawString = 'test@codefactory.ai:testtest';
+
+                    // 일반 스트링을 base64 로 인코딩하는 것!
+                    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+                    String token = stringToBase64.encode(rawString);
+
+                    final resp = await dio.post('http://$ip/auth/login',
+                        options: Options(headers: {
+                          'authorization': 'Basic $token',
+                        }));
+
+                    print(resp.data);
+                  },
                   child: Text('로그인'),
                   style:
                       ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final refreshToken ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTY3MjkyNjMxMCwiZXhwIj';
+
+                    final resp = await dio.post('http://$ip/auth/token',
+                        options: Options(headers: {
+                          'authorization': 'Bearer $refreshToken',
+                        }));
+
+                    print(resp.data);
+                  },
                   child: Text('회원가입'),
                   style: TextButton.styleFrom(foregroundColor: Colors.black),
                 )

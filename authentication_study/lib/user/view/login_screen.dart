@@ -4,11 +4,20 @@ import 'dart:io';
 import 'package:authentication_study/common/component/custom_text_form_field.dart';
 import 'package:authentication_study/common/const/colors.dart';
 import 'package:authentication_study/common/layout/default_layout.dart';
+import 'package:authentication_study/common/view/root_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String username = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -36,22 +45,29 @@ class LoginScreen extends StatelessWidget {
                 _SubTitle(),
                 Image.asset(
                   'asset/img/misc/logo.png',
-                  width: MediaQuery.of(context).size.width / 3 * 2,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 3 * 2,
                 ),
                 CustomTextFormField(
-                  onChanged: (String value) {},
+                  onChanged: (String value) {
+                    username = value;
+                  },
                   hitText: '이메일을 입력해주세요.',
                 ),
                 const SizedBox(height: 16.0),
                 CustomTextFormField(
-                  onChanged: (String value) {},
+                  onChanged: (String value) {
+                    password = value;
+                  },
                   hitText: '비밀번호를 입력해주세요.',
                   obscureText: true,
                 ),
                 ElevatedButton(
                   onPressed: () async {
                     // ID:PW
-                    final rawString = 'test@codefactory.ai:testtest';
+                    final rawString = 'test@codefactory.ai:$username$password';
 
                     // 일반 스트링을 base64 로 인코딩하는 것!
                     Codec<String, String> stringToBase64 = utf8.fuse(base64);
@@ -61,23 +77,22 @@ class LoginScreen extends StatelessWidget {
                         options: Options(headers: {
                           'authorization': 'Basic $token',
                         }));
-
-                    print(resp.data);
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => RootTab()));
                   },
                   child: Text('로그인'),
                   style:
-                      ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
+                  ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
                 ),
                 TextButton(
                   onPressed: () async {
-                    final refreshToken ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTY3MjkyNjMxMCwiZXhwIj';
+                    final refreshToken =
+                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTY3MjkyNjg2OSwiZXhwIjoxNjczMDEzMjY5fQ.3yrt6fpY5oNcZM0pRLCAjlxnA16RYmur2YPEomeRwYw';
 
                     final resp = await dio.post('http://$ip/auth/token',
                         options: Options(headers: {
                           'authorization': 'Bearer $refreshToken',
                         }));
-
-                    print(resp.data);
                   },
                   child: Text('회원가입'),
                   style: TextButton.styleFrom(foregroundColor: Colors.black),

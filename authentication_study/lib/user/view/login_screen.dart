@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:authentication_study/common/component/custom_text_form_field.dart';
 import 'package:authentication_study/common/const/colors.dart';
+import 'package:authentication_study/common/const/data.dart';
 import 'package:authentication_study/common/layout/default_layout.dart';
 import 'package:authentication_study/common/view/root_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -21,6 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 토큰을 저장할 스토리지
+    final storage = FlutterSecureStorage();
+
     final dio = Dio();
 
     // localhost
@@ -45,10 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 _SubTitle(),
                 Image.asset(
                   'asset/img/misc/logo.png',
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 3 * 2,
+                  width: MediaQuery.of(context).size.width / 3 * 2,
                 ),
                 CustomTextFormField(
                   onChanged: (String value) {
@@ -77,12 +79,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         options: Options(headers: {
                           'authorization': 'Basic $token',
                         }));
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => RootTab()));
+
+                    final refreshToken = resp.data['refreshToken'];
+                    final accessToken = resp.data['accessToken'];
+
+                    await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
+                    await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+
+
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (_) => RootTab()));
                   },
                   child: Text('로그인'),
                   style:
-                  ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
+                      ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
                 ),
                 TextButton(
                   onPressed: () async {

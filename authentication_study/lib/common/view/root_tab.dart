@@ -1,3 +1,4 @@
+import 'package:authentication_study/common/layout/default_layout.dart';
 import 'package:flutter/material.dart';
 
 class RootTab extends StatelessWidget {
@@ -5,6 +6,6 @@ class RootTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return DefaultLayout(child: Column(children: [],));
   }
 }

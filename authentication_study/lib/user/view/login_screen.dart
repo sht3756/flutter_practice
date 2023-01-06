@@ -8,7 +8,6 @@ import 'package:authentication_study/common/layout/default_layout.dart';
 import 'package:authentication_study/common/view/root_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -23,8 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 토큰을 저장할 스토리지
-    final storage = FlutterSecureStorage();
+
 
     final dio = Dio();
 
@@ -69,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     // ID:PW
-                    final rawString = 'test@codefactory.ai:$username$password';
+                    final rawString = '$username:$password';
 
                     // 일반 스트링을 base64 로 인코딩하는 것!
                     Codec<String, String> stringToBase64 = utf8.fuse(base64);

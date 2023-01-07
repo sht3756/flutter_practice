@@ -9,28 +9,66 @@ class RootTab extends StatefulWidget {
   State<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab> {
+
+class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
+  late TabController controller;
+
   int index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // vsync 에 this 라는 현재 클래스를 넣어줘야한다. SingleTickerProviderStateMixin 를 with 해준다.
+    controller = TabController(length: 4, vsync: this);
+
+    // addListener : controller 에서 값이 변경될때 마다 특정 변수를 실행해라!
+    controller.addListener(tabListener);
+
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(tabListener);
+
+    super.dispose();
+  }
+
+  // 탭 인덱스를 읽는 함수
+  void tabListener() {
+    setState(() {
+      index = controller.index;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '딜리버리',
-      child: Center(
-        child: Text('Root Tab'),
+      child: TabBarView(
+        // TabBarView 단
+
+        // 스크롤 안되게!
+        physics: NeverScrollableScrollPhysics(),
+        controller: controller,
+        children: [
+          Container(child: Text('홈')),
+          Container(child: Text('음식')),
+          Container(child: Text('주문')),
+          Container(child: Text('프로필')),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        // bottomNavigationBar 단
         selectedItemColor: PRIMARY_COLOR,
         unselectedItemColor: BODY_TEXT_COLOR,
         selectedFontSize: 10,
         unselectedFontSize: 10,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
-          setState(() {
-            this.index = index;
-          });
+          controller.animateTo(index);
         },
-        currentIndex: index,
+        currentIndex: controller.index,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: '홈'),
           BottomNavigationBarItem(

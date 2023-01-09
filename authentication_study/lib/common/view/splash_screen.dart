@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     final dio = Dio();
     try {
-      final resp = await dio.post(
+      final res = await dio.post(
         'http://$ip/auth/token',
         options: Options(
           headers: {
@@ -41,6 +41,11 @@ class _SplashScreenState extends State<SplashScreen> {
           },
         ),
       );
+
+      // 발급받은 토큰 저장
+      await storage.write(
+          key: ACCESS_TOKEN_KEY, value: res.data['accessToken']);
+
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => RootTab()), (route) => false);
     } catch (e) {

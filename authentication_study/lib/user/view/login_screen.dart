@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:authentication_study/common/component/custom_text_form_field.dart';
 import 'package:authentication_study/common/const/colors.dart';
 import 'package:authentication_study/common/const/data.dart';
@@ -22,11 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     final dio = Dio();
-
-
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -77,9 +71,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     final refreshToken = resp.data['refreshToken'];
                     final accessToken = resp.data['accessToken'];
 
-                    await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
-                    await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
-
+                    await storage.write(
+                        key: REFRESH_TOKEN_KEY, value: refreshToken);
+                    await storage.write(
+                        key: ACCESS_TOKEN_KEY, value: accessToken);
 
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (_) => RootTab()));
@@ -89,9 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
                 ),
                 TextButton(
-                  onPressed: () async {
-
-                  },
+                  onPressed: () async {},
                   child: Text('회원가입'),
                   style: TextButton.styleFrom(foregroundColor: Colors.black),
                 )

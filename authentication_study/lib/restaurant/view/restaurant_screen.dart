@@ -1,5 +1,6 @@
 import 'package:authentication_study/common/const/data.dart';
 import 'package:authentication_study/restaurant/component/restaurant_card.dart';
+import 'package:authentication_study/restaurant/model/restaurant_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -33,22 +34,38 @@ class RestaurantScreen extends StatelessWidget {
             if (!snapshot.hasData) {
               return Container();
             }
+
             return ListView.separated(
                 itemBuilder: (_, index) {
                   final item = snapshot.data![index];
-                  return RestaurantCard(
-                    image: Image.network(
-                      'http://$ip${item['thumbUrl']}',
-                      fit: BoxFit.cover,
-                    ),
-                    name:item['name'],
-                    // <dynamic>으로 오는걸 List<String>형태로 바꾼다.
+                  // parsed
+                  final parseItem = RestaurantModel(
+                    id: item['id'],
+                    name: item['name'],
+                    thumbUrl: 'http://$ip${item['thumbUrl']}',
                     tags: List<String>.from(item['tags']),
-                    // tags: ['떡볶이', '치즈', '매운맛'],
+                    // enum 값을 매핑
+                    priceRange: RestaurantPriceRange.values.firstWhere(
+                      (e) => e.name == item['priceRange'],
+                    ),
+                    ratings: item['ratings'],
                     ratingsCount: item['ratingsCount'],
                     deliveryTime: item['deliveryTime'],
                     deliveryFee: item['deliveryFee'],
-                    ratings: item['ratings'],
+                  );
+
+                  return RestaurantCard(
+                    image: Image.network(
+                      parseItem.thumbUrl,
+                      fit: BoxFit.cover,
+                    ),
+                    name: parseItem.name,
+                    // <dynamic>으로 오는걸 List<String>형태로 바꾼다.
+                    tags: parseItem.tags,
+                    ratingsCount: parseItem.ratingsCount,
+                    deliveryTime: parseItem.deliveryTime,
+                    deliveryFee: parseItem.deliveryFee,
+                    ratings: parseItem.ratings,
                   );
                 },
                 separatorBuilder: (_, index) {

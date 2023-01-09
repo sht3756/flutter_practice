@@ -1,4 +1,5 @@
 import 'package:authentication_study/common/const/colors.dart';
+import 'package:authentication_study/restaurant/model/restaurant_model.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -33,6 +34,22 @@ class RestaurantCard extends StatelessWidget {
       required this.deliveryFee,
       required this.ratings})
       : super(key: key);
+
+  // factory constructor 생성, 생성가능한 이유? RestaurantCard 도 클래스이기 때문이다!
+  factory RestaurantCard.fromModel({required RestaurantModel model}) {
+    return RestaurantCard(
+      image: Image.network(
+        model.thumbUrl,
+        fit: BoxFit.cover,
+      ),
+      name: model.name,
+      tags: model.tags,
+      ratingsCount: model.ratingsCount,
+      deliveryTime: model.deliveryTime,
+      deliveryFee: model.deliveryFee,
+      ratings: model.ratings,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

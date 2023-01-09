@@ -39,19 +39,8 @@ class RestaurantScreen extends StatelessWidget {
                   final item = snapshot.data![index];
                   final parseItem = RestaurantModel.fromJson(json: item);
 
-                  return RestaurantCard(
-                    image: Image.network(
-                      parseItem.thumbUrl,
-                      fit: BoxFit.cover,
-                    ),
-                    name: parseItem.name,
-                    // <dynamic>으로 오는걸 List<String>형태로 바꾼다.
-                    tags: parseItem.tags,
-                    ratingsCount: parseItem.ratingsCount,
-                    deliveryTime: parseItem.deliveryTime,
-                    deliveryFee: parseItem.deliveryFee,
-                    ratings: parseItem.ratings,
-                  );
+                  // RestaurantModel 이 매핑이 되어 들어오면 RestaurantCard 로 자동으로 매핑되게 설정
+                  return RestaurantCard.fromModel(model: parseItem);
                 },
                 separatorBuilder: (_, index) {
                   return SizedBox(height: 16.0);

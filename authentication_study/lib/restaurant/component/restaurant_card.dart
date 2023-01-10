@@ -24,19 +24,30 @@ class RestaurantCard extends StatelessWidget {
   // 평균 평점
   final double ratings;
 
-  const RestaurantCard(
-      {Key? key,
-      required this.image,
-      required this.name,
-      required this.tags,
-      required this.ratingsCount,
-      required this.deliveryTime,
-      required this.deliveryFee,
-      required this.ratings})
-      : super(key: key);
+  // 상세페이지 여부
+  final bool isDetail;
+
+  // 상세 내용
+  final String? detail;
+
+  const RestaurantCard({
+    Key? key,
+    required this.image,
+    required this.name,
+    required this.tags,
+    required this.ratingsCount,
+    required this.deliveryTime,
+    required this.deliveryFee,
+    required this.ratings,
+    this.isDetail = false,
+    this.detail,
+  }) : super(key: key);
 
   // factory constructor 생성, 생성가능한 이유? RestaurantCard 도 클래스이기 때문이다!
-  factory RestaurantCard.fromModel({required RestaurantModel model}) {
+  factory RestaurantCard.fromModel({
+    required RestaurantModel model,
+    bool isDetail = false,
+  }) {
     return RestaurantCard(
       image: Image.network(
         model.thumbUrl,
@@ -48,6 +59,7 @@ class RestaurantCard extends StatelessWidget {
       deliveryTime: model.deliveryTime,
       deliveryFee: model.deliveryFee,
       ratings: model.ratings,
+      isDetail: isDetail,
     );
   }
 
@@ -55,53 +67,67 @@ class RestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // 깍을 수 있는 위젯
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: image,
-        ),
+        // 디테일일때
+        if (isDetail) image,
+
+        // 디테일이 아닐때(리스트뷰 일때)
+        if (!isDetail)
+          // 깍을 수 있는 위젯
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12.0),
+            child: image,
+          ),
         const SizedBox(height: 16.0),
         // Text(name),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              name,
-              style: TextStyle(fontSize: 20.0),
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              tags.join('·'),
-              style: TextStyle(
-                color: BODY_TEXT_COLOR,
-                fontSize: 14.0,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: isDetail ? 16.0 : 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                name,
+                style: TextStyle(fontSize: 20.0),
               ),
-            ),
-            const SizedBox(height: 8.0),
-            Row(
-              children: [
-                _IconText(
-                  icon: Icons.star,
-                  label: ratings.toString(),
+              const SizedBox(height: 8.0),
+              Text(
+                tags.join('·'),
+                style: TextStyle(
+                  color: BODY_TEXT_COLOR,
+                  fontSize: 14.0,
                 ),
-                renderDot(),
-                _IconText(
-                  icon: Icons.receipt,
-                  label: ratingsCount.toString(),
+              ),
+              const SizedBox(height: 8.0),
+              Row(
+                children: [
+                  _IconText(
+                    icon: Icons.star,
+                    label: ratings.toString(),
+                  ),
+                  renderDot(),
+                  _IconText(
+                    icon: Icons.receipt,
+                    label: ratingsCount.toString(),
+                  ),
+                  renderDot(),
+                  _IconText(
+                    icon: Icons.timelapse_outlined,
+                    label: '$deliveryTime 분',
+                  ),
+                  renderDot(),
+                  _IconText(
+                    icon: Icons.monetization_on,
+                    label: deliveryFee == 0 ? '무료' : deliveryFee.toString(),
+                  ),
+                ],
+              ),
+              // 디테일 있고 isDetail true 일때
+              if (detail != null && isDetail)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(detail!),
                 ),
-                renderDot(),
-                _IconText(
-                  icon: Icons.timelapse_outlined,
-                  label: '$deliveryTime 분',
-                ),
-                renderDot(),
-                _IconText(
-                  icon: Icons.monetization_on,
-                  label: deliveryFee == 0 ? '무료' : deliveryFee.toString(),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         )
       ],
     );

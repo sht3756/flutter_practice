@@ -1,6 +1,7 @@
 import 'package:authentication_study/common/const/data.dart';
 import 'package:authentication_study/restaurant/component/restaurant_card.dart';
 import 'package:authentication_study/restaurant/model/restaurant_model.dart';
+import 'package:authentication_study/restaurant/view/restaurant_detail_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,14 @@ class RestaurantScreen extends StatelessWidget {
                   final parseItem = RestaurantModel.fromJson(json: item);
 
                   // RestaurantModel 이 매핑이 되어 들어오면 RestaurantCard 로 자동으로 매핑되게 설정
-                  return RestaurantCard.fromModel(model: parseItem);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => RestaurantDetailScreen(),
+                      ));
+                    },
+                    child: RestaurantCard.fromModel(model: parseItem),
+                  );
                 },
                 separatorBuilder: (_, index) {
                   return SizedBox(height: 16.0);

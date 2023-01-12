@@ -38,7 +38,7 @@ class RestaurantScreen extends StatelessWidget {
             return ListView.separated(
                 itemBuilder: (_, index) {
                   final item = snapshot.data![index];
-                  final parseItem = RestaurantModel.fromJson(json: item);
+                  final parseItem = RestaurantModel.fromJson(item);
 
                   // RestaurantModel 이 매핑이 되어 들어오면 RestaurantCard 로 자동으로 매핑되게 설정
                   return GestureDetector(

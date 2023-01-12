@@ -1,4 +1,7 @@
 import 'package:authentication_study/common/const/data.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'restaurant_model.g.dart';
 
 enum RestaurantPriceRange {
   expensive,
@@ -6,9 +9,13 @@ enum RestaurantPriceRange {
   cheap,
 }
 
+@JsonSerializable()
 class RestaurantModel {
   final String id;
   final String name;
+  @JsonKey(
+    fromJson: pathToUrl,
+  )
   final String thumbUrl;
   final List<String> tags;
   final RestaurantPriceRange priceRange;
@@ -30,21 +37,18 @@ class RestaurantModel {
     required this.deliveryFee,
   });
 
-  // factory constructor 사용
-  factory RestaurantModel.fromJson({required Map<String, dynamic> json}) {
-    return RestaurantModel(
-      id: json['id'],
-      name: json['name'],
-      thumbUrl: 'http://$ip${json['thumbUrl']}',
-      tags: List<String>.from(json['tags']),
-      // enum 값을 매핑
-      priceRange: RestaurantPriceRange.values.firstWhere(
-            (e) => e.name == json['priceRange'],
-      ),
-      ratings: json['ratings'],
-      ratingsCount: json['ratingsCount'],
-      deliveryTime: json['deliveryTime'],
-      deliveryFee: json['deliveryFee'],
-    );
+  // g.dart 적용하기!
+  // 1) json -> 인스턴스를 만드는것
+  factory RestaurantModel.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantModelFromJson(json);
+
+  // 2) 인스턴스 -> json 으로 만드는것
+  Map<String, dynamic> toJson() => _$RestaurantModelToJson(this);
+
+  // thumbUrl 앞에 http://$ip 를 붙여주기 위해서 static 함수 생성
+  // g.dart 파일에도 적용이 되게! @JsonKey
+  static pathToUrl(String value) {
+    // value 는 thumbUrl 이다.
+    return 'http://$ip$value';
   }
 }

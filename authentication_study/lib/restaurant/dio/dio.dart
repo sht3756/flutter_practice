@@ -52,8 +52,54 @@ class CustomInterceptor extends Interceptor {
 
   // 3) 에러가 났을때
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
-    // TODO: implement onError
-    return super.onError(err, handler);
+  void onError(DioError err, ErrorInterceptorHandler handler) async {
+    // 401 에러가 날때 (status code)
+    // 토큰을 재발급 받는 시도를 한다.
+    // 토큰이 재발급되면, 다시 새로운 토큰으로 요청을 한다.
+    print('[ERR] [${err.requestOptions.method}] ${err.requestOptions.uri}');
+
+    final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
+
+    // refreshToken 이 없으면
+    // 당연히 에러를 던진다.
+    if (refreshToken == null) {
+      // 에러를 던질때는 handler.reject 를 사용한다.
+      return handler.reject(err);
+    }
+
+    final isStatus401 = err.response?.statusCode == 401;
+    final isPathRefresh = err.requestOptions.path == '/auth/token';
+
+    if (isStatus401 && !isPathRefresh) {
+      final dio = Dio();
+
+      try {
+        final res = await dio.post(
+          'http://$ip/auth/token',
+          options: Options(headers: {
+            'authorization': 'Bearer $refreshToken',
+          }),
+        );
+        final accessToken = res.data['accessToken'];
+
+        final options = err.requestOptions;
+
+        // 토큰 변경하기
+        options.headers.addAll({
+          'authorization': 'Bearer $accessToken',
+        });
+
+        await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+
+        // 요청 재전송
+        final response = await dio.fetch(options);
+
+        return handler.resolve(response);
+      } on DioError catch (e) {
+        // on DioError : 오직 DioError 만!
+        return handler.reject(e);
+      }
+    }
+    return handler.reject(err);
   }
 }

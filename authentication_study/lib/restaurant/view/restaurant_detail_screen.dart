@@ -2,6 +2,7 @@ import 'package:authentication_study/common/const/data.dart';
 import 'package:authentication_study/common/layout/default_layout.dart';
 import 'package:authentication_study/product/component/product_card.dart';
 import 'package:authentication_study/restaurant/component/restaurant_card.dart';
+import 'package:authentication_study/restaurant/dio/dio.dart';
 import 'package:authentication_study/restaurant/model/restaurant_detail_model.dart';
 import 'package:authentication_study/restaurant/repository/restaurant_repository.dart';
 import 'package:dio/dio.dart';
@@ -19,21 +20,14 @@ class RestaurantDetailScreen extends StatelessWidget {
   Future<RestaurantDetailModel> getRestaurantDetail() async {
     final dio = Dio();
 
+    dio.interceptors.add(
+      CustomInterceptor(storage: storage),
+    );
+
     final repository =
         RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant');
 
     return repository.getRestaurantDetail(id: id);
-    // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-    //
-    // final res = await dio.get(
-    //   'http://$ip/restaurant/$id',
-    //   options: Options(
-    //     headers: {
-    //       'authorization': 'Bearer $accessToken',
-    //     },
-    //   ),
-    // );
-    // return res.data;
   }
 
   @override

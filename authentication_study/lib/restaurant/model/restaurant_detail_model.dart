@@ -47,15 +47,11 @@ class RestaurantDetailModel extends RestaurantModel {
       deliveryTime: json['deliveryTime'],
       deliveryFee: json['deliveryFee'],
       detail: json['detail'],
-      products: json['products'].map<RestaurantProductModel>(
-        (x) => RestaurantProductModel(
-          id: x['id'],
-          name: x['name'],
-          detail: x['detail'],
-          imgUrl: x['imgUrl'],
-          price: x['price'],
-        ),
-      ).toList(),
+      products: json['products']
+          .map<RestaurantProductModel>(
+            (x) => RestaurantProductModel.fromJson(json: x),
+          )
+          .toList(),
     );
   }
 }
@@ -82,4 +78,17 @@ class RestaurantProductModel {
     required this.imgUrl,
     required this.price,
   });
+
+  // factory 생성자로 자동으로 매핑되게 설정
+  factory RestaurantProductModel.fromJson({
+    required Map<String, dynamic> json,
+  }) {
+    return RestaurantProductModel(
+      id: json['id'],
+      name: json['name'],
+      detail: json['detail'],
+      imgUrl: 'http://$ip${json['imgUrl']}',
+      price: json['price'],
+    );
+  }
 }

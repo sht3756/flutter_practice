@@ -21,11 +21,19 @@ class StateProviderScreen extends ConsumerWidget {
               Text(provider.toString()),
               ElevatedButton(
                 onPressed: () {
+                  // update 할때, read 로 변화된 것을 읽고 .notifier 로 변화를 준다.
                   ref
                       .read(numberProvider.notifier)
                       .update((state) => state + 1);
                 },
                 child: Text('UP'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(numberProvider.notifier).state =
+                      ref.read(numberProvider.notifier).state - 1;
+                },
+                child: Text('Down'),
               ),
               ElevatedButton(
                   onPressed: () {

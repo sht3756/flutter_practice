@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_study/layout/default_layout.dart';
-import 'package:riverpod_study/reverpod/stream_provider.dart';
+import 'package:riverpod_study/riverpod/stream_provider.dart';
 
 class StreamProviderScreen extends ConsumerWidget {
   const StreamProviderScreen({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_study/layout/default_layout.dart';
-import 'package:riverpod_study/reverpod/future_provider.dart';
+import 'package:riverpod_study/riverpod/future_provider.dart';
 
 class FutureProviderScreen extends ConsumerWidget {
   const FutureProviderScreen({Key? key}) : super(key: key);

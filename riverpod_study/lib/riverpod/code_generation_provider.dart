@@ -62,3 +62,23 @@ int gStateMultiply(GStateMultiplyRef ref, {
   return number1 * number2;
 }
 // 결론 : 이 2가지 문제를 해결하기 위해서 code_generation 이 riverPod 에 추가가 된 것이다.
+
+// 코드제너레이션에 StateNotifierProvider 생성하기
+@riverpod
+class GStateNotifier extends _$GStateNotifier{
+
+  // 상태의 초기값을 재정의 해줘야한다.
+  @override
+  int build() {
+    return 0;
+  }
+
+  increment() {
+    state ++;
+  }
+
+  decrement() {
+    state --;
+  }
+
+}

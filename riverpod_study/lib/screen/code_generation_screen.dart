@@ -14,8 +14,9 @@ class CodeGenerationScreen extends ConsumerWidget {
     // FutureProvider 로 만들어짐, 그렇기 때문에 캐싱데이터 들고온다.
     final state3 = ref.watch(gStateFuture2Provider);
     // @ 어노테이션을 통해서 .family 파라미터 전달받기
-    final state4 = ref.watch(gStateMultiplyProvider(number1: 100,number2: 20));
-
+    final state4 = ref.watch(gStateMultiplyProvider(number1: 100, number2: 20));
+    // StateNotifierProvider 코드제너레이션으로 만들기
+    final state5 = ref.watch(gStateNotifierProvider);
 
     return DefaultLayout(
       title: 'CodeGenerationScreen',
@@ -54,7 +55,22 @@ class CodeGenerationScreen extends ConsumerWidget {
                 child: CircularProgressIndicator(),
               ),
             ),
-            Text(state4.toString()),
+            Text('State4 : $state4'),
+            Text('State5 : $state5'),
+            Row(
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      ref.read(gStateNotifierProvider.notifier).increment();
+                    },
+                    child: Text('State5 증가')),
+                ElevatedButton(
+                    onPressed: () {
+                      ref.read(gStateNotifierProvider.notifier).decrement();
+                    },
+                    child: Text('State5 감소')),
+              ],
+            ),
           ],
         ),
       ),

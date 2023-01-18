@@ -8,6 +8,7 @@ class CodeGenerationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print('build');
     final state1 = ref.watch(gStateProvider);
     // AutoDisposeProvider 로 만들어짐, 그렇기 때문에 자동을 종료된다.
     final state2 = ref.watch(gStateFutureProvider);
@@ -16,7 +17,7 @@ class CodeGenerationScreen extends ConsumerWidget {
     // @ 어노테이션을 통해서 .family 파라미터 전달받기
     final state4 = ref.watch(gStateMultiplyProvider(number1: 100, number2: 20));
     // StateNotifierProvider 코드제너레이션으로 만들기
-    final state5 = ref.watch(gStateNotifierProvider);
+    // final state5 = ref.watch(gStateNotifierProvider);
 
     return DefaultLayout(
       title: 'CodeGenerationScreen',
@@ -56,7 +57,20 @@ class CodeGenerationScreen extends ConsumerWidget {
               ),
             ),
             Text('State4 : $state4'),
-            Text('State5 : $state5'),
+            Consumer(
+              // state5 를 Consumer 위젯을 사용해서 build 함수 재실행 안되게 적용
+              builder: (context, ref, child) {
+                final state5 = ref.watch(gStateNotifierProvider);
+
+                return Row(
+                  children: [
+                    Text('State5 : $state5'),
+                    if (child != null) child,
+                  ],
+                );
+              },
+              child: Text('Hello'),
+            ),
             Row(
               children: [
                 ElevatedButton(
@@ -70,6 +84,13 @@ class CodeGenerationScreen extends ConsumerWidget {
                     },
                     child: Text('State5 감소')),
               ],
+            ),
+            //invalidate() 함수 : 상태값을 초기화 시키겠다. Disposed 된다.
+            ElevatedButton(
+              onPressed: () {
+                ref.invalidate(gStateNotifierProvider);
+              },
+              child: Text('Invalidate'),
             ),
           ],
         ),

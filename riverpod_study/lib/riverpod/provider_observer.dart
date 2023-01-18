@@ -23,7 +23,7 @@ class Logger extends ProviderObserver {
   @override
   void didDisposeProvider(ProviderBase provider, ProviderContainer container) {
     print(
-      '[Provider Added] provider: $provider',
+      '[Provider Disposed] provider: $provider',
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:authentication_study/common/model/cursor_pagination_model.dart';
 import 'package:authentication_study/restaurant/model/restaurant_model.dart';
 import 'package:authentication_study/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,13 +14,13 @@ final restaurantProvider =
   return notifier;
 });
 
-class RestaurantStateNotifier extends StateNotifier<List<RestaurantModel>> {
+class RestaurantStateNotifier extends StateNotifier<CursorPagination> {
   final RestaurantRepository repository;
 
   // 페이지네이션 기능과 디테일페이지를 가져오는 기능을 Provider 안에서 수행하고 data 를 받아오고 super constructor 의 list 에 넣어줄것이다.
   RestaurantStateNotifier({
     required this.repository,
-  }) : super([]) {
+  }) : super(CursorPagination(meta: meta, data: data)) {
     paginate();
   }
 

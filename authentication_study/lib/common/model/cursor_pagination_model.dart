@@ -2,11 +2,24 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'cursor_pagination_model.g.dart';
 
+// 인스턴스로 못만들게 하겠다
+abstract class CursorPaginationBase {}
+
+class CursorPaginationError extends CursorPaginationBase {
+  final String message;
+
+  CursorPaginationError({
+    required this.message,
+  });
+}
+
+class CursorPaginationLoading extends CursorPaginationBase {}
+
 @JsonSerializable(
   // true : retrofit 으로 자동으로 CursorPagination<T> 만들때,  genericArgument 를 고려해서 만들겠다! 라는 의미
   genericArgumentFactories: true,
 )
-class CursorPagination<T> {
+class CursorPagination<T> extends CursorPaginationBase {
   final CursorPaginationMeta meta;
   final List<T> data;
 
@@ -34,4 +47,20 @@ class CursorPaginationMeta {
 
   factory CursorPaginationMeta.fromJson(Map<String, dynamic> json) =>
       _$CursorPaginationMetaFromJson(json);
+}
+
+// 새로고침할때
+class CursorPaginationRefetching extends CursorPagination {
+  CursorPaginationRefetching({
+    required super.meta,
+    required super.data,
+  });
+}
+
+// 리스트의 맨 아래로 내려서 추가 데이터를 요청하는 중
+class CursorPaginationFetchingMore extends CursorPagination {
+  CursorPaginationFetchingMore({
+    required super.meta,
+    required super.data,
+  });
 }

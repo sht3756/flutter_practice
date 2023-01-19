@@ -5,10 +5,10 @@ import 'package:authentication_study/restaurant/component/restaurant_card.dart';
 import 'package:authentication_study/common/dio/dio.dart';
 import 'package:authentication_study/restaurant/model/restaurant_detail_model.dart';
 import 'package:authentication_study/restaurant/repository/restaurant_repository.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RestaurantDetailScreen extends StatelessWidget {
+class RestaurantDetailScreen extends ConsumerWidget {
   // 해당 디테일 id
   final String id;
 
@@ -17,12 +17,8 @@ class RestaurantDetailScreen extends StatelessWidget {
     required this.id,
   }) : super(key: key);
 
-  Future<RestaurantDetailModel> getRestaurantDetail() async {
-    final dio = Dio();
-
-    dio.interceptors.add(
-      CustomInterceptor(storage: storage),
-    );
+  Future<RestaurantDetailModel> getRestaurantDetail(WidgetRef ref) async {
+    final dio = ref.watch(dioProvider);
 
     final repository =
         RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant');
@@ -31,11 +27,11 @@ class RestaurantDetailScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       title: '불타는 떡볶이',
       child: FutureBuilder<RestaurantDetailModel>(
-          future: getRestaurantDetail(),
+          future: getRestaurantDetail(ref),
           builder: (_, AsyncSnapshot<RestaurantDetailModel> snapshot) {
             if (snapshot.hasError) {
               return Center(

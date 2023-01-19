@@ -1,6 +1,21 @@
 import 'package:authentication_study/common/const/data.dart';
+import 'package:authentication_study/common/secure_storage/secure_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final dioProvider = Provider<Dio>((ref) {
+  final dio = Dio();
+
+  // 스토리지 프로바이더를 바라본다.
+  // Provider 로 또다른 Provider 를 바라본다.
+  final storage = ref.watch(secureStorageProvider);
+
+  dio.interceptors.add(
+    CustomInterceptor(storage: storage),
+  );
+  return dio;
+});
 
 class CustomInterceptor extends Interceptor {
   // 스토리지 안에서 토큰을 가져오기 위해서 선언
@@ -13,11 +28,11 @@ class CustomInterceptor extends Interceptor {
   // 1) 요청 보낼때
   // 요청이 보내질때마다
   // 만약에 요청의 Header 에 accessToken: true 라는 값이 있다면
-  // 실제 토큰을 가져와서 storage에서 authorization: bearer $token 으로 헤더를 변경하다.
+  // 실제 토큰을 가져와서 storage 에서 authorization: bearer $token 으로 헤더를 변경하다.
 
   @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(RequestOptions options,
+      RequestInterceptorHandler handler) async {
     print('[REQ] [${options.method}] ${options.uri}');
 
     // header 의 accessToken 이 true 가 온다면?
@@ -46,7 +61,8 @@ class CustomInterceptor extends Interceptor {
   // 2) 응답을 받을때
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print('[RES] [${response.requestOptions.method}] ${response.requestOptions.uri}');
+    print('[RES] [${response.requestOptions.method}] ${response.requestOptions
+        .uri}');
     return super.onResponse(response, handler);
   }
 

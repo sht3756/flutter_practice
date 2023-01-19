@@ -1,6 +1,6 @@
 import 'package:authentication_study/common/const/data.dart';
 import 'package:authentication_study/restaurant/component/restaurant_card.dart';
-import 'package:authentication_study/restaurant/dio/dio.dart';
+import 'package:authentication_study/common/dio/dio.dart';
 import 'package:authentication_study/restaurant/model/restaurant_model.dart';
 import 'package:authentication_study/restaurant/repository/restaurant_repository.dart';
 import 'package:authentication_study/restaurant/view/restaurant_detail_screen.dart';

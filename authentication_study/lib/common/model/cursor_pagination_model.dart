@@ -13,7 +13,7 @@ class CursorPaginationError extends CursorPaginationBase {
   });
 }
 
-// 로딩할때
+// 로딩할때 (처음 랜더링 할때)
 class CursorPaginationLoading extends CursorPaginationBase {}
 
 @JsonSerializable(
@@ -50,7 +50,7 @@ class CursorPaginationMeta {
       _$CursorPaginationMetaFromJson(json);
 }
 
-// 새로고침할때
+// 새로고침할때(데이터가 있는 상태)
 class CursorPaginationRefetching<T> extends CursorPagination<T> {
   CursorPaginationRefetching({
     required super.meta,
@@ -58,7 +58,7 @@ class CursorPaginationRefetching<T> extends CursorPagination<T> {
   });
 }
 
-// 리스트의 맨 아래로 내려서 추가 데이터를 요청하는 중
+// 리스트의 맨 아래로 내려서 추가 데이터를 요청하는 중 (데이터가 있는 상태)
 class CursorPaginationFetchingMore<T> extends CursorPagination<T> {
   CursorPaginationFetchingMore({
     required super.meta,

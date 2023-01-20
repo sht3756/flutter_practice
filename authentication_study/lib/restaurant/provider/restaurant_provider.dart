@@ -1,5 +1,4 @@
 import 'package:authentication_study/common/model/cursor_pagination_model.dart';
-import 'package:authentication_study/restaurant/model/restaurant_model.dart';
 import 'package:authentication_study/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,7 +43,7 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
     // 바로 반환하는 상황
     // 1) hasMore = false (기존 상태에서 이미 다음 데이터가 없다는 값을 들고있다면?)
     // 2) 로딩중 - fetchMore : true 일때
-    //    fetchMore 이 아닐때 - 새로고침의 의도가 있다.
+    //    fetchMore 이 아닐때 - 새로고침의 의도가 있을 수 있다.
     if (state is CursorPagination && !forceRefetch) {
       // pagination 을 하고 이미 데이터를 가지고있을때, 강제 새로고침이라면  body 실행
       final pState = state
@@ -53,6 +52,17 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
       if (!pState.meta.hasMore) {
         return;
       }
+    }
+
+    // 첫랜더링 로딩 시 (기존 데이터 없음)
+    final isLoading = state is CursorPaginationLoading;
+    // 새로고침 로딩시 (기존 데이터 있음)
+    final isRefeching = state is CursorPaginationRefetching;
+    // 데이터 추가 요청시 (기존 데이터 있음)
+    final isFetchingMore = state is CursorPaginationFetchingMore;
+
+    if (fetchMore && (isLoading || isRefeching || isFetchingMore)) {
+      return;
     }
   }
 }

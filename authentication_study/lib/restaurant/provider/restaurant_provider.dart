@@ -1,7 +1,21 @@
 import 'package:authentication_study/common/model/cursor_pagination_model.dart';
 import 'package:authentication_study/common/model/pagination_params.dart';
+import 'package:authentication_study/restaurant/model/restaurant_model.dart';
 import 'package:authentication_study/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// restaurantProvider 에서 제공해주는 상태에 반응해 그 상태안의 데이터 값을 불러올거다. (이미 기억해놓은 캐싱 데이터를 들고오기위함)
+final restaurantDetailProvider =
+    Provider.family<RestaurantModel?, String>((ref, id) {
+  final state = ref.watch(restaurantProvider);
+
+  if (state is! CursorPagination<RestaurantModel>) {
+    // CursorPagination 이 아니라면 이미 데이터가 restaurantProvider 에 없다는 뜻
+    return null;
+  }
+  // firstWhere 문으로 RestaurantModel 의 고유 id 값과 restaurantDetailProvider 의 family 에 파라미터 넣어준 id 값과 같은걸 리턴하겠다.
+  return state.data.firstWhere((element) => element.id == id);
+});
 
 // RestaurantStateNotifier 를 리턴해주는 provider 만들었다.
 final restaurantProvider =

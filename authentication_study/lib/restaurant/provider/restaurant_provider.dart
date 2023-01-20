@@ -1,4 +1,5 @@
 import 'package:authentication_study/common/model/cursor_pagination_model.dart';
+import 'package:authentication_study/common/model/pagination_params.dart';
 import 'package:authentication_study/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,8 +47,8 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
     //    fetchMore 이 아닐때 - 새로고침의 의도가 있을 수 있다.
     if (state is CursorPagination && !forceRefetch) {
       // pagination 을 하고 이미 데이터를 가지고있을때, 강제 새로고침이라면  body 실행
-      final pState = state
-          as CursorPagination; // state 를 캐스팅 할수 있는 이유는 이미 if 문에 CursorPagination 이라고 타입 비교를 했기때문
+      // state 를 캐스팅 할수 있는 이유는 이미 if 문에 CursorPagination 이라고 타입 비교를 했기때문
+      final pState = state as CursorPagination;
 
       if (!pState.meta.hasMore) {
         return;
@@ -63,6 +64,60 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
 
     if (fetchMore && (isLoading || isRefeching || isFetchingMore)) {
       return;
+    }
+
+    // PaginationParams 생성
+    PaginationParams paginationParams = PaginationParams(
+      count: fetchCount,
+    );
+
+    // fetchMore : 데이터를 추가로 요청하는 상황
+    if (fetchMore) {
+      // 캐스팅을 할 수 있는 이유는 데이터를 추가로 요청하는 상황에서는 CursorPagination 을 extends 또는 인스턴스라는 상황을 확신하기 때문
+      final pState = state as CursorPagination;
+
+      // state CursorPaginationFetchingMore 로 변경 : 현재 상태와 데이터는 유지하면서 클래스만 바꾸는 것이다.
+      state = CursorPaginationFetchingMore(
+        meta: pState.meta,
+        data: pState.data,
+      );
+
+      // after 는 무조건 넣어야한다. 다음 데이터를 추가 요청할때 어떤 데이터를 마지막으로 불러와야하는지 알아야하기 때문
+      paginationParams = paginationParams.copyWith(
+        after: pState.data.last.id,
+      );
+    }
+
+    /*
+     if(fetchMore 가 true 일때) {
+      state 에 현재 상태와 데이터는 그대로 주면서 클래스로 CursorPaginationFetchingMore 할것이다라고 알려주고있다.
+      ...
+     }
+     UI 에서는 현재 클래스가 CursorPaginationFetchingMore 이면 로딩화면 을 보여주는 식으로 작업 가능하다.
+
+
+    */
+    // 로딩이 돌아가는 순간 요청을 해야한다.
+    final res = await repository.paginate(
+      paginationParams: paginationParams,
+    );
+
+    if(state is CursorPaginationFetchingMore) {
+      // 현재 상태 캐스팅 해주고,
+      final pState = state as CursorPaginationFetchingMore;
+
+      // 응답이 다 온 다음(로딩이 다 끝난 상태)에는 상태를 다시 캐스팅해줘야한다.
+      // paginate 함수는 이미 <CursorPagination<RestaurantModel>> 인스턴스를 자동으로 반환해준다.
+      state = res.copyWith(
+        // meta 는 그대로 유지하고 data 만 변경할거다.
+        // data 는 기존 + 요청받은 새로운 데이터 를 할것이기 때문!
+        data: [
+          ...pState.data,
+          ...res.data,
+        ]
+
+      );
+
     }
   }
 }

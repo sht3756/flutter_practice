@@ -9,7 +9,7 @@ final restaurantDetailProvider =
     Provider.family<RestaurantModel?, String>((ref, id) {
   final state = ref.watch(restaurantProvider);
 
-  if (state is! CursorPagination<RestaurantModel>) {
+  if (state is! CursorPagination) {
     // CursorPagination 이 아니라면 이미 데이터가 restaurantProvider 에 없다는 뜻
     return null;
   }
@@ -40,7 +40,7 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
   // repository 를 정상적으로 받았다는 가정하에 paginate 함수 안에서 페이지네이션을 진행하고 값을 반환받는 것이 아니라
   // 상태 안에다 응답받은 리스트로 된 RestaurantModel 을 집어넣을것이다.
   // 위젯에서는 상태를 바라보고있다가 상태가 변화하면 화면에 새로운값으로 랜더링 해줄것이다.
-  void paginate({
+  Future<void> paginate({
     int fetchCount = 20,
     // 추가로 데이터 가져오기여부, true : 추가로 가져오기, false : 새로고침(현재상태를 덮어씌움)
     bool fetchMore = false,
@@ -155,5 +155,36 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
     } catch (e) {
       state = CursorPaginationError(message: '데이터를 가져오지 못했습니다.');
     }
+  }
+
+  // 가져오려는 고유 id 값의 디테일 조회하는 함수
+  void getDetail({
+    required String id,
+  }) async {
+// 만약에 데이터가 없는 상태라면(CursorPagination 이 아니라면) 데이터를 가져온다.
+    if (state is! CursorPagination) {
+      await this.paginate();
+    }
+
+    // state 가 CursorPagination 이 아닐때 그냥 리턴
+    if (state is! CursorPagination) {
+      return;
+    }
+
+    // 캐스팅
+    final pState = state as CursorPagination;
+
+    // 새로 요청한 res : getDetail 함수에 넣어준 파라미터 값으로 찾은 응답값이다.
+    final res = await repository.getRestaurantDetail(id: id);
+
+    // 파라미터 로 받은 id 값을 pState 에서 찾은 다음에 res 로 대체를 해줘야한다.
+    state = pState.copyWith(
+      // pState 의 데이터를 변경해주는 로직(pState.data 를 map 함수를 적용해 id 값이 같다면 새로 요청해온 res 값을 넣어주고, 아니면 기존의 데이터 값을 넣어준다.)
+      data: pState.data
+          .map<RestaurantModel>(
+            (e) => e.id == id ? res : e,
+          )
+          .toList(),
+    );
   }
 }

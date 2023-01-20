@@ -7,7 +7,7 @@ import 'package:authentication_study/restaurant/provider/restaurant_provider.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RestaurantDetailScreen extends ConsumerWidget {
+class RestaurantDetailScreen extends ConsumerStatefulWidget {
   // 해당 디테일 id
   final String id;
 
@@ -17,8 +17,23 @@ class RestaurantDetailScreen extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(restaurantDetailProvider(id));
+  ConsumerState<RestaurantDetailScreen> createState() =>
+      _RestaurantDetailScreenState();
+}
+
+class _RestaurantDetailScreenState
+    extends ConsumerState<RestaurantDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    // 상세 정보를 가져오는 코드 : 디테일 페이지 올떄마다 새로운 디테일 정보 읽어올거다
+    ref.read(restaurantProvider.notifier).getDetail(id: widget.id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(restaurantDetailProvider(widget.id));
 
     if (state == null) {
       return DefaultLayout(
@@ -33,8 +48,9 @@ class RestaurantDetailScreen extends ConsumerWidget {
           renderTop(
             model: state!,
           ),
-          // renderLabel(),
-          // renderProducts(products: state!.products),
+          if (state is RestaurantDetailModel) renderLabel(),
+          if (state is RestaurantDetailModel)
+            renderProducts(products: state!.products),
         ],
       ),
     );

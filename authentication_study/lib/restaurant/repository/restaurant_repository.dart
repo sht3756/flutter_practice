@@ -1,6 +1,7 @@
 import 'package:authentication_study/common/const/data.dart';
 import 'package:authentication_study/common/dio/dio.dart';
 import 'package:authentication_study/common/model/cursor_pagination_model.dart';
+import 'package:authentication_study/common/model/pagination_params.dart';
 import 'package:authentication_study/restaurant/model/restaurant_detail_model.dart';
 import 'package:authentication_study/restaurant/model/restaurant_model.dart';
 import 'package:dio/dio.dart' hide Headers;
@@ -31,7 +32,10 @@ abstract class RestaurantRepository {
   @Headers({
     'accessToken': 'true',
   })
-  Future<CursorPagination<RestaurantModel>> paginate();
+  Future<CursorPagination<RestaurantModel>> paginate({
+    // 쿼리 파라미터 라고 정의 해주는 @어노테이션
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
   // http://$ip/restaurant/:id;
   @GET('/{id}')

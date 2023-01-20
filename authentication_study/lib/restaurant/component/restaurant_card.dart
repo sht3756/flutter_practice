@@ -31,6 +31,9 @@ class RestaurantCard extends StatelessWidget {
   // 상세 내용
   final String? detail;
 
+  // hero 위젯 태그
+  final String? heroKey;
+
   const RestaurantCard({
     Key? key,
     required this.image,
@@ -42,6 +45,7 @@ class RestaurantCard extends StatelessWidget {
     required this.ratings,
     this.isDetail = false,
     this.detail,
+    this.heroKey,
   }) : super(key: key);
 
   // factory constructor 생성, 생성가능한 이유? RestaurantCard 도 클래스이기 때문이다!
@@ -62,6 +66,7 @@ class RestaurantCard extends StatelessWidget {
       ratings: model.ratings,
       isDetail: isDetail,
       detail: model is RestaurantDetailModel ? model.detail : null,
+      heroKey: model.id,
     );
   }
 
@@ -69,18 +74,24 @@ class RestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // 디테일일때
-        if (isDetail) image,
-
-        // 디테일이 아닐때(리스트뷰 일때)
-        if (!isDetail)
-          // 깍을 수 있는 위젯
+        if (heroKey != null)
+          // Hero 위젯 : 화면 전환 될떄 이미지가 그대로 넘어오는 듯한 애니메이션 전환 위젯,
+          // tag 값이 같은 것들이 연결을 시킬 수 있다.
+          Hero(
+            tag: ObjectKey(heroKey),
+            child: ClipRRect(
+              // 디테일 페이지면 border 0, 리스트 페이지면 border 12
+              borderRadius: BorderRadius.circular(isDetail ? 0 : 12.0),
+              child: image,
+            ),
+          ),
+        if (heroKey == null)
           ClipRRect(
-            borderRadius: BorderRadius.circular(12.0),
+            // 디테일 페이지면 border 0, 리스트 페이지면 border 12
+            borderRadius: BorderRadius.circular(isDetail ? 0 : 12.0),
             child: image,
           ),
         const SizedBox(height: 16.0),
-        // Text(name),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: isDetail ? 16.0 : 0),
           child: Column(

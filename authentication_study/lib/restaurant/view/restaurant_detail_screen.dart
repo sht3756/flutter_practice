@@ -63,7 +63,7 @@ class _RestaurantDetailScreenState
                 avatarImage: AssetImage('asset/img/logo/codefactory_logo.png'),
                 images: [],
                 rating: 4,
-                email: 'gmlxo1514@naver.com',
+                email: 'test@naver.com',
                 content: '맛있습니다.',
               ),
             ),

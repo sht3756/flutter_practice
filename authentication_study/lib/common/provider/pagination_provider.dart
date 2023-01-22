@@ -5,7 +5,7 @@ import 'package:authentication_study/common/repository/base_pagination_repositor
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // U type 은 IBasePaginationRepository 와 관련있다
-// T type dms 실제 페이지네이션에서 가져오는 실제 데이터 타입이다.
+// T type 은 실제 페이지네이션에서 가져오는 실제 데이터 타입이다.
 class PaginationProvider<T extends IModelWithId,
         U extends IBasePaginationRepository<T>>
     extends StateNotifier<CursorPaginationBase> {
@@ -21,6 +21,7 @@ class PaginationProvider<T extends IModelWithId,
   }
 
   Future<void> paginate({
+    // 가져올 개수
     int fetchCount = 20,
     // 추가로 데이터 가져오기여부, true : 추가로 가져오기, false : 새로고침(현재상태를 덮어씌움)
     bool fetchMore = false,

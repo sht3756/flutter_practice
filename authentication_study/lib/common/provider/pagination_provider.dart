@@ -1,10 +1,12 @@
 import 'package:authentication_study/common/model/cursor_pagination_model.dart';
+import 'package:authentication_study/common/model/model_with_id.dart';
 import 'package:authentication_study/common/model/pagination_params.dart';
 import 'package:authentication_study/common/repository/base_pagination_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // U type 은 IBasePaginationRepository 와 관련있다고
-class PaginationProvider<U extends IBasePaginationRepository>
+class PaginationProvider<T extends IModelWithId,
+        U extends IBasePaginationRepository<T>>
     extends StateNotifier<CursorPaginationBase> {
   // 조금 더 일반화를 시킨다. IBasePaginationRepository 로 타입을 지정하면,
   // 너무 일반화 되어버리니 클래스에서 extends 를 해주자!
@@ -63,7 +65,7 @@ class PaginationProvider<U extends IBasePaginationRepository>
       // fetchMore : 데이터를 추가로 요청하는 상황
       if (fetchMore) {
         // 캐스팅을 할 수 있는 이유는 데이터를 추가로 요청하는 상황에서는 CursorPagination 을 extends 또는 인스턴스라는 상황을 확신하기 때문
-        final pState = state as CursorPagination;
+        final pState = state as CursorPagination<T>;
 
         // state CursorPaginationFetchingMore 로 변경 : 현재 상태와 데이터는 유지하면서 클래스만 바꾸는 것이다.
         state = CursorPaginationFetchingMore(
@@ -82,9 +84,9 @@ class PaginationProvider<U extends IBasePaginationRepository>
         // 데이터를 처음 부터 가져오는 것이니 위의 if 문처럼 paginationParams 를 변경할 필요도 없다!
         if (state is CursorPagination && !forceRefetch) {
           // CursorPagination 으로 캐스팅
-          final pState = state as CursorPagination;
+          final pState = state as CursorPagination<T>;
 
-          state = CursorPaginationRefetching(
+          state = CursorPaginationRefetching<T>(
             meta: pState.meta,
             data: pState.data,
           );
@@ -110,7 +112,7 @@ class PaginationProvider<U extends IBasePaginationRepository>
 
       if (state is CursorPaginationFetchingMore) {
         // 현재 상태 캐스팅 해주고,
-        final pState = state as CursorPaginationFetchingMore;
+        final pState = state as CursorPaginationFetchingMore<T>;
 
         // 응답이 다 온 다음(로딩이 다 끝난 상태)에는 상태를 다시 캐스팅해줘야한다.
         // paginate 함수는 이미 <CursorPagination<RestaurantModel>> 인스턴스를 자동으로 반환해준다.

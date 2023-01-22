@@ -20,7 +20,8 @@ final restaurantRatingRepositoryProvider =
 
 // http://ip/restaurant/:rid/rating
 @RestApi()
-abstract class RestaurantRatingRepository implements IBasePaginationRepository<RatingModel>{
+abstract class RestaurantRatingRepository
+    implements IBasePaginationRepository<RatingModel> {
   factory RestaurantRatingRepository(Dio dio, {String baseUrl}) =
       _RestaurantRatingRepository;
 

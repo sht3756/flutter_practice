@@ -4,7 +4,8 @@ import 'package:authentication_study/common/model/pagination_params.dart';
 import 'package:authentication_study/common/repository/base_pagination_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// U type 은 IBasePaginationRepository 와 관련있다고
+// U type 은 IBasePaginationRepository 와 관련있다
+// T type dms 실제 페이지네이션에서 가져오는 실제 데이터 타입이다.
 class PaginationProvider<T extends IModelWithId,
         U extends IBasePaginationRepository<T>>
     extends StateNotifier<CursorPaginationBase> {
@@ -14,7 +15,10 @@ class PaginationProvider<T extends IModelWithId,
 
   PaginationProvider({
     required this.repository,
-  }) : super(CursorPaginationLoading());
+  }) : super(CursorPaginationLoading()) {
+    //PaginationProvider 를 상속하는 모든 클래스는 생성되자마자 함수 실행
+    paginate();
+  }
 
   Future<void> paginate({
     int fetchCount = 20,
@@ -128,7 +132,9 @@ class PaginationProvider<T extends IModelWithId,
         // 맨 처음 페이지 응답값을 넣어주면된다. (paginationParams 에 after 값을 넣은 값이 아니기 때문이다.)
         state = res;
       }
-    } catch (e) {
+    } catch (e, stack) {
+      print(e);
+      print(stack);
       state = CursorPaginationError(message: '데이터를 가져오지 못했습니다.');
     }
   }

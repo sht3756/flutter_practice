@@ -1,6 +1,7 @@
 import 'package:authentication_study/product/provider/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 class ProductTab extends ConsumerStatefulWidget {
   const ProductTab({Key? key}) : super(key: key);
 
@@ -11,11 +12,10 @@ class ProductTab extends ConsumerStatefulWidget {
 class _ProductTabState extends ConsumerState<ProductTab> {
   @override
   Widget build(BuildContext context) {
-    final state =ref.watch(productProvider);
-
+    final state = ref.watch(productProvider);
 
     return Center(
-      child: Text('으식'),
+      child: Text('음식'),
     );
   }
 }

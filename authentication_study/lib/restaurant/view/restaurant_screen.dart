@@ -1,3 +1,4 @@
+import 'package:authentication_study/common/component/paginateion_list_view.dart';
 import 'package:authentication_study/common/model/cursor_pagination_model.dart';
 import 'package:authentication_study/common/utils/pagination_utils.dart';
 import 'package:authentication_study/restaurant/component/restaurant_card.dart';
@@ -35,69 +36,20 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final data = ref.watch(restaurantProvider);
-
-    // 완전 처음 랜더링할때
-    if (data is CursorPaginationLoading) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    // 에러날 때
-    if (data is CursorPaginationError) {
-      return Center(
-        child: Text(data.message),
-      );
-    }
-
-    // CursorPagination
-    // CursorPaginationFetchingMore
-    // CursorPaginationRefetching
-
-    // 캐스팅
-    final cp = data as CursorPagination;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: ListView.separated(
-        controller: controller,
-        // ListView 에서 한개의 위젯을 더 추가 (데이터 요청하는 부분을 끊기지 않게 여유를 둔다.)
-        itemCount: cp.data.length + 1,
-        itemBuilder: (_, index) {
-          // index 가 마지막크기와 같을때 실행
-          if (index == cp.data.length) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              child: Center(
-                // 클래스가 CursorPaginationFetchingMore 일때는 로딩 아니면 메세지
-                child: data is CursorPaginationFetchingMore
-                    ? CircularProgressIndicator()
-                    : Text('마지막 데이터입니다. :)'),
-              ),
-            );
-          }
-          final parseItem = cp.data[index];
-
+    return PaginationListView(
+        provider: restaurantProvider,
+        itemBuilder: <RestaurantModel>(_, index, model) {
           // RestaurantModel 이 매핑이 되어 들어오면 RestaurantCard 로 자동으로 매핑되게 설정
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => RestaurantDetailScreen(
-                  id: parseItem.id,
+                  id: model.id,
                 ),
               ));
             },
-            child: RestaurantCard.fromModel(model: parseItem),
+            child: RestaurantCard.fromModel(model: model),
           );
-        },
-        separatorBuilder: (_, index) {
-          return SizedBox(height: 16.0);
-        },
-      ),
-    );
+        });
   }
 }

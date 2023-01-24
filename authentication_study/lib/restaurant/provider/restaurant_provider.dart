@@ -3,6 +3,7 @@ import 'package:authentication_study/common/provider/pagination_provider.dart';
 import 'package:authentication_study/restaurant/model/restaurant_model.dart';
 import 'package:authentication_study/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 
 // restaurantProvider 에서 제공해주는 상태에 반응해 그 상태안의 데이터 값을 불러올거다. (이미 기억해놓은 캐싱 데이터를 들고오기위함)
 final restaurantDetailProvider =
@@ -14,7 +15,8 @@ final restaurantDetailProvider =
     return null;
   }
   // firstWhere 문으로 RestaurantModel 의 고유 id 값과 restaurantDetailProvider 의 family 에 파라미터 넣어준 id 값과 같은걸 리턴하겠다.
-  return state.data.firstWhere((element) => element.id == id);
+  // 변경 : firstWhereOrNull 로 값이 없으면 null 로 리턴
+  return state.data.firstWhereOrNull((element) => element.id == id);
 });
 
 // RestaurantStateNotifier 를 리턴해주는 provider 만들었다.
@@ -54,14 +56,27 @@ class RestaurantStateNotifier
     // 새로 요청한 res : getDetail 함수에 넣어준 파라미터 값으로 찾은 응답값이다.
     final res = await repository.getRestaurantDetail(id: id);
 
-    // 파라미터 로 받은 id 값을 pState 에서 찾은 다음에 res 로 대체를 해줘야한다.
-    state = pState.copyWith(
-      // pState 의 데이터를 변경해주는 로직(pState.data 를 map 함수를 적용해 id 값이 같다면 새로 요청해온 res 값을 넣어주고, 아니면 기존의 데이터 값을 넣어준다.)
-      data: pState.data
-          .map<RestaurantModel>(
-            (e) => e.id == id ? res : e,
-          )
-          .toList(),
-    );
+
+    if (pState.data.where((e) => e.id == id).isEmpty) {
+      // 요청 id : 11 이고 현재 캐싱데이터에는 id 가 10 까지 있을때
+      // list.where((e) e.id == 10) => 데이터 가 없다고 출력!
+      // 데이터가 없을시 그냥 캐시의 마지막에 데이터 추가하는 로직 추가!
+      // 존재하지 않는 데이터인 경우
+      state = pState.copyWith(data: <RestaurantModel>[
+        ...pState.data,
+        res,
+      ]);
+    } else {
+      // 존재하는 데이터인 경우 ()
+      // 파라미터 로 받은 id 값을 pState 에서 찾은 다음에 res 로 대체를 해줘야한다.
+      state = pState.copyWith(
+        // pState 의 데이터를 변경해주는 로직(pState.data 를 map 함수를 적용해 id 값이 같다면 새로 요청해온 res 값을 넣어주고, 아니면 기존의 데이터 값을 넣어준다.)
+        data: pState.data
+            .map<RestaurantModel>(
+              (e) => e.id == id ? res : e,
+            )
+            .toList(),
+      );
+    }
   }
 }

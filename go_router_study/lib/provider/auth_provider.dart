@@ -14,7 +14,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final authStateProvider = AuthNotifier(ref: ref);
 
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/login',
     // 에러페이지 등록
     errorBuilder: (context, state) {
       // navigation 간에 생긴 에러는 state 에 담겨온다.

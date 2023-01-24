@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_router_study/screen/1_screen.dart';
 import 'package:go_router_study/screen/home_screen.dart';
 
 void main() {
@@ -12,11 +13,18 @@ class _App extends StatelessWidget {
   // router 는 라우팅해주는것
   // route 는 router 안에서 각각의 route 를 얘기하는것
   GoRouter get _router => GoRouter(
-    initialLocation: '/',
+        initialLocation: '/',
         routes: [
           GoRoute(
             path: '/',
             builder: (_, state) => HomeScreen(),
+            // 중첩(nesting)
+            routes: [
+              GoRoute(
+                path: 'one',
+                builder: (_, state) => OneScreen(),
+              ),
+            ],
           ),
         ],
       );

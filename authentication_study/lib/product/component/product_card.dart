@@ -1,4 +1,5 @@
 import 'package:authentication_study/common/const/colors.dart';
+import 'package:authentication_study/product/model/product_model.dart';
 import 'package:authentication_study/restaurant/model/restaurant_detail_model.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,23 @@ class ProductCard extends StatelessWidget {
     required this.price,
   }) : super(key: key);
 
-  factory ProductCard.fromModel({
+  factory ProductCard.fromProductModel({
+    required ProductModel model,
+  }) {
+    return ProductCard(
+      image: Image.network(
+        model.imgUrl,
+        width: 110,
+        height: 110,
+        fit: BoxFit.cover,
+      ),
+      name: model.name,
+      detail: model.detail,
+      price: model.price,
+    );
+  }
+
+  factory ProductCard.fromRestaurantProductModel({
     required RestaurantProductModel model,
   }) {
     return ProductCard(
@@ -57,14 +74,14 @@ class ProductCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '떡볶이',
+                name,
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               Text(
-                '전통 떡볶이의 정석!\n맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.맛있습니다.',
+                detail,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyle(
@@ -73,7 +90,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               Text(
-                'W10000',
+                'W${price.toString()}',
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   color: PRIMARY_COLOR,

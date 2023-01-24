@@ -35,8 +35,8 @@ class _PaginationListViewState<T extends IModelWithId> extends ConsumerState<Pag
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
     controller.addListener(scrollListener);
   }
 
@@ -122,8 +122,7 @@ class _PaginationListViewState<T extends IModelWithId> extends ConsumerState<Pag
           }
           final parseItem = cp.data[index];
 
-          // 제일 중요한 부분!! (각 인덱스별로 어떤 값을 보여줘야할지!, typedef 를 이용해 외부에서 build하는 함수를 제공해줄것이다.)
-          // RestaurantModel 이 매핑이 되어 들어오면 RestaurantCard 로 자동으로 매핑되게 설정
+          // 제일 중요한 부분!! (각 인덱스별로 어떤 값을 보여줘야할지!, typedef 를 이용해 외부에서 build 하는 함수를 제공해줄것이다.)
           return widget.itemBuilder(
             context,
             index,

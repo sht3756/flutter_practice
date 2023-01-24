@@ -52,7 +52,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         controller: controller,
         children: [
           RestaurantScreen(),
-          ProductTab(),
+          ProductScreen(),
           Container(child: Text('주문')),
           Container(child: Text('프로필')),
         ],

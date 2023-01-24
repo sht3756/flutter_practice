@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:go_router_study/screen/1_screen.dart';
 import 'package:go_router_study/screen/2_screen.dart';
 import 'package:go_router_study/screen/3_screen.dart';
+import 'package:go_router_study/screen/error_screen.dart';
 import 'package:go_router_study/screen/home_screen.dart';
 
 void main() {
@@ -16,6 +17,11 @@ class _App extends StatelessWidget {
   // route 는 router 안에서 각각의 route 를 얘기하는것
   final GoRouter _router = GoRouter(
     initialLocation: '/',
+    // 에러페이지 등록
+    errorBuilder: (context, state) {
+      // navigation 간에 생긴 에러는 state 에 담겨온다.
+      return ErrorScreen(error: state.error.toString());
+    },
     routes: [
       GoRoute(
         path: '/',

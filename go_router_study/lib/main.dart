@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router_study/screen/1_screen.dart';
+import 'package:go_router_study/screen/2_screen.dart';
+import 'package:go_router_study/screen/3_screen.dart';
 import 'package:go_router_study/screen/home_screen.dart';
 
 void main() {
@@ -8,26 +10,37 @@ void main() {
 }
 
 class _App extends StatelessWidget {
-  const _App({Key? key}) : super(key: key);
+  _App({Key? key}) : super(key: key);
 
   // router 는 라우팅해주는것
   // route 는 router 안에서 각각의 route 를 얘기하는것
-  GoRouter get _router => GoRouter(
-        initialLocation: '/',
+  final GoRouter _router = GoRouter(
+    initialLocation: '/',
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (_, state) => HomeScreen(),
+        // 중첩(nesting)
         routes: [
           GoRoute(
-            path: '/',
-            builder: (_, state) => HomeScreen(),
-            // 중첩(nesting)
+            path: 'one',
+            builder: (_, state) => OneScreen(),
+          ),
+          GoRoute(
+            path: 'two',
+            builder: (_, state) => TwoScreen(),
             routes: [
               GoRoute(
-                path: 'one',
-                builder: (_, state) => OneScreen(),
+                path: 'three',
+                name: ThreeScreen.routename,
+                builder: (_, state) => ThreeScreen(),
               ),
-            ],
+            ]
           ),
         ],
-      );
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {

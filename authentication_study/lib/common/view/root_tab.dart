@@ -1,5 +1,6 @@
 import 'package:authentication_study/common/const/colors.dart';
 import 'package:authentication_study/common/layout/default_layout.dart';
+import 'package:authentication_study/product/view/product_tab.dart';
 import 'package:authentication_study/restaurant/view/restaurant_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,6 @@ class RootTab extends StatefulWidget {
   @override
   State<RootTab> createState() => _RootTabState();
 }
-
 
 class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   late TabController controller;
@@ -24,7 +24,6 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
 
     // addListener : controller 에서 값이 변경될때 마다 특정 변수를 실행해라!
     controller.addListener(tabListener);
-
   }
 
   @override
@@ -41,7 +40,6 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
@@ -54,9 +52,9 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         controller: controller,
         children: [
           RestaurantScreen(),
-          Container(child: Text('홈')),
-          Container(child: Text('음식')),
+          ProductTab(),
           Container(child: Text('주문')),
+          Container(child: Text('프로필')),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

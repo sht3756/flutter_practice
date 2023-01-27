@@ -1,5 +1,9 @@
+import 'package:authentication_study/common/view/root_tab.dart';
+import 'package:authentication_study/common/view/splash_screen.dart';
+import 'package:authentication_study/restaurant/view/restaurant_detail_screen.dart';
 import 'package:authentication_study/user/model/user_model.dart';
 import 'package:authentication_study/user/provider/user_me_provider.dart';
+import 'package:authentication_study/user/view/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -25,9 +29,37 @@ class AuthProvider extends ChangeNotifier {
     });
   }
 
+  // 라우트 등록 : 웹표준 (서버 구조랑 같게 했다.)
+  List<GoRoute> get routes => [
+        GoRoute(
+          path: '/',
+          name: RootTab.routeName,
+          builder: (_, __) => RootTab(),
+          routes: [
+            // 서버 path 랑 같게 명명, 라우팅을 할때 rid 를 입력해줄 수 있다.
+            GoRoute(
+              path: 'restaurant/:rid',
+              builder: (_, state) => RestaurantDetailScreen(
+                id: state.params['rid']!,
+              ),
+            ),
+          ],
+        ),
+        GoRoute(
+          path: '/splash',
+          name: SplashScreen.routeName,
+          builder: (_, __) => SplashScreen(),
+        ),
+        GoRoute(
+          path: '/login',
+          name: LoginScreen.routeName,
+          builder: (_, __) => LoginScreen(),
+        ),
+      ];
+
   // redirect 로직
   // splash screen : 토큰 존재여부에따라 로그인 스크린 or 홈스크린으로 보낼지 확인 과정 필요
-  String? redirectLogic(GoRouterState state) {
+  String? redirectLogic(_, GoRouterState state) {
     // 유저 상태
     final UserModelBase? user = ref.read(userMeProvider);
     // 로그인 시도 상태 : 유저의 현재 페이지의 위치가 '/login' 인경우 true 아님 false
@@ -47,9 +79,12 @@ class AuthProvider extends ChangeNotifier {
 
     // UserModelError
     // 에러 상태이고, 로그인 시도상태가 아닐때는 login 페이지로 , 아닐때는 그대로 유지
-    if(user is UserModelError) {
+    if (user is UserModelError) {
       return !loginIn ? '/login' : null;
     }
+
+    // 나머지 경우는 원래 가려던 곳으로 가라
+    return null;
   }
 
 // refresh

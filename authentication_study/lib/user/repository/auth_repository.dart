@@ -34,7 +34,7 @@ class AuthRepository {
     final res = await dio.post(
       '$baseUrl/login',
       options: Options(
-        headers: {'authorization': 'Beaer $serialized'},
+        headers: {'authorization': 'Basic $serialized'},
       ),
     );
 

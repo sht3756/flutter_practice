@@ -61,10 +61,11 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
     required String username,
     required String password,
   }) async {
-    // 바로 상태 로딩상태로
-    state = UserModelLoading();
 
     try {
+      // 바로 상태 로딩상태로
+      state = UserModelLoading();
+
       // 로그인 함수 호출
       final res = await authRepository.login(
         username: username,

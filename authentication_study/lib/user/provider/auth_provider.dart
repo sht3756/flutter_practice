@@ -39,6 +39,7 @@ class AuthProvider extends ChangeNotifier {
             // 서버 path 랑 같게 명명, 라우팅을 할때 rid 를 입력해줄 수 있다.
             GoRoute(
               path: 'restaurant/:rid',
+              name: RestaurantDetailScreen.routeName,
               builder: (_, state) => RestaurantDetailScreen(
                 id: state.params['rid']!,
               ),

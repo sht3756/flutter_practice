@@ -1,7 +1,16 @@
+import 'package:authentication_study/common/const/data.dart';
 import 'package:authentication_study/common/model/login_response.dart';
 import 'package:authentication_study/common/model/token_response.dart';
 import 'package:authentication_study/common/utils/data_utils.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// repository 를 provider 에 넣기
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final dio = Dio();
+
+  return AuthRepository(baseUrl: 'http://$ip/auth', dio: dio);
+});
 
 class AuthRepository {
   // http://$ip/auth

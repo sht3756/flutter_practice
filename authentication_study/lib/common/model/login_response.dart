@@ -1,4 +1,4 @@
-// 응답 받을 수 있는 형태를 JsonSeriable 형태로 제작하겠다.
+// 응답 받을 수 있는 형태를 JsonSerializable 형태로 제작하겠다.
 import 'package:json_annotation/json_annotation.dart';
 
 part 'login_response.g.dart';
@@ -14,5 +14,5 @@ class LoginResponse {
   });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) =>
-      _$LoginreponseFromJson(json);
+      _$LoginResponseFromJson(json);
 }

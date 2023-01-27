@@ -1,9 +1,23 @@
 import 'package:authentication_study/common/const/data.dart';
+import 'package:authentication_study/common/secure_storage/secure_storage.dart';
 import 'package:authentication_study/user/model/user_model.dart';
 import 'package:authentication_study/user/repository/auth_repository.dart';
 import 'package:authentication_study/user/repository/user_me_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final userMeProvider =
+    StateNotifierProvider<UserMeStateNotifier, UserModelBase?>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  final userMeRepository = ref.watch(userMeRepositoryProvider);
+  final storage = ref.watch(secureStorageProvider);
+
+  return UserMeStateNotifier(
+    authRepository: authRepository,
+    repository: userMeRepository,
+    storage: storage,
+  );
+});
 
 // UserModelBase? 를 상속한 클래스는 모두 가능하다, null 도 가능하다.
 class UserMeStateNotifier extends StateNotifier<UserModelBase?> {

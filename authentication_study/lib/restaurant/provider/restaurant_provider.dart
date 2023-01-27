@@ -56,7 +56,6 @@ class RestaurantStateNotifier
     // 새로 요청한 res : getDetail 함수에 넣어준 파라미터 값으로 찾은 응답값이다.
     final res = await repository.getRestaurantDetail(id: id);
 
-
     if (pState.data.where((e) => e.id == id).isEmpty) {
       // 요청 id : 11 이고 현재 캐싱데이터에는 id 가 10 까지 있을때
       // list.where((e) e.id == 10) => 데이터 가 없다고 출력!

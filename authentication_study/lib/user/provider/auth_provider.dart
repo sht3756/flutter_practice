@@ -58,6 +58,13 @@ class AuthProvider extends ChangeNotifier {
         ),
       ];
 
+  void logout() {
+    // 테스트 : 실행이 되는 순간에만 읽는다.
+    ref.read(userMeProvider.notifier).logout();
+  }
+
+
+
   // redirect 로직
   // splash screen : 토큰 존재여부에따라 로그인 스크린 or 홈스크린으로 보낼지 확인 과정 필요
   String? redirectLogic(_, GoRouterState state) {

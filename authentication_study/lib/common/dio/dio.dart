@@ -1,5 +1,7 @@
 import 'package:authentication_study/common/const/data.dart';
 import 'package:authentication_study/common/secure_storage/secure_storage.dart';
+import 'package:authentication_study/user/provider/auth_provider.dart';
+import 'package:authentication_study/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,7 +14,7 @@ final dioProvider = Provider<Dio>((ref) {
   final storage = ref.watch(secureStorageProvider);
 
   dio.interceptors.add(
-    CustomInterceptor(storage: storage),
+    CustomInterceptor(storage: storage, ref: ref),
   );
   return dio;
 });
@@ -21,8 +23,12 @@ class CustomInterceptor extends Interceptor {
   // 스토리지 안에서 토큰을 가져오기 위해서 선언
   final FlutterSecureStorage storage;
 
+  // 테스트 : 리프레쉬 만료되면 로그아웃 되게 하기 위함, UserMeProvider 의 logout() 함수를 provider 로 불러와서 실행하면 되지않을까 라는 테스트
+  final Ref ref;
+
   CustomInterceptor({
     required this.storage,
+    required this.ref,
   });
 
   // 1) 요청 보낼때
@@ -31,8 +37,8 @@ class CustomInterceptor extends Interceptor {
   // 실제 토큰을 가져와서 storage 에서 authorization: bearer $token 으로 헤더를 변경하다.
 
   @override
-  void onRequest(RequestOptions options,
-      RequestInterceptorHandler handler) async {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     print('[REQ] [${options.method}] ${options.uri}');
 
     // header 의 accessToken 이 true 가 온다면?
@@ -61,8 +67,8 @@ class CustomInterceptor extends Interceptor {
   // 2) 응답을 받을때
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print('[RES] [${response.requestOptions.method}] ${response.requestOptions
-        .uri}');
+    print(
+        '[RES] [${response.requestOptions.method}] ${response.requestOptions.uri}');
     return super.onResponse(response, handler);
   }
 
@@ -112,6 +118,15 @@ class CustomInterceptor extends Interceptor {
 
         return handler.resolve(response);
       } on DioError catch (e) {
+        // circular dependency error : 무한 루프
+        // 실수
+        // 설명 : 서로가 서로를 의존하고 있다. A -> B -> A -> B
+        // (userMeProvider(authRepositoryProvider, userMeRepositoryProvider) -> dio -> userMeProvider(authRepositoryProvider, userMeRepositoryProvider))
+        // ref.read(userMeProvider.notifier).logout();
+        // 해결법
+        // authProvider 는 dio 를 의존하고 있지 않다.그냥 ref 만 받고있다.
+        ref.read(authProvider.notifier).logout();
+
         // on DioError : 오직 DioError 만!
         return handler.reject(e);
       }
@@ -119,3 +134,5 @@ class CustomInterceptor extends Interceptor {
     return handler.reject(err);
   }
 }
+
+// refresh 까지 만료가 된다면, 기존 로직에서 에러가 던져지는데, 로그아웃을 시키고 토큰을 삭제해야한다.

@@ -5,6 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // null 체크를 위한 import
 import 'package:collection/collection.dart';
 
+final basketProvider =
+    StateNotifierProvider<BasketProvider, List<BasketItemModel>>((ref) {
+  return BasketProvider();
+});
+
 class BasketProvider extends StateNotifier<List<BasketItemModel>> {
   BasketProvider() : super([]);
 
@@ -71,7 +76,6 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
     // 존재 상품
     final existingProduct =
         state.firstWhere((element) => element.product.id == product.id);
-
 
     if (existingProduct.count == 1 || isDelete) {
       // 상품 카운트가 1 이면, 장바구니 속 상품 id 와 해당 상품 id 를 비교해서, 해당되는 상품 말고 다른 것들만 list 로 리턴한다.

@@ -1,5 +1,7 @@
 import 'package:authentication_study/product/model/product_model.dart';
 import 'package:authentication_study/user/model/basket_item_model.dart';
+import 'package:authentication_study/user/model/patch_basket_body.dart';
+import 'package:authentication_study/user/repository/user_me_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // null 체크를 위한 import
@@ -7,17 +9,37 @@ import 'package:collection/collection.dart';
 
 final basketProvider =
     StateNotifierProvider<BasketProvider, List<BasketItemModel>>((ref) {
-  return BasketProvider();
+  final repository = ref.watch(userMeRepositoryProvider);
+
+  return BasketProvider(repository: repository);
 });
 
 class BasketProvider extends StateNotifier<List<BasketItemModel>> {
-  BasketProvider() : super([]);
+  final UserMeRepository repository;
+
+  BasketProvider({required this.repository}) : super([]);
+
+  // repository 에 patchBasket 요청
+  Future<void> patchBasket() async {
+    await repository.patchBasket(
+        body: PatchBasketBody(
+      basket: state
+          .map((e) =>
+              PatchBasketBodyBasket(productId: e.product.id, count: e.count))
+          .toList(),
+    ));
+  }
 
   // 장바구니에 아이템 추가 로직
   Future<void> addToBasket({
     // ProductModel 을 전부다 받는다. (내가 추가하려는 상품 id )
     required ProductModel product,
   }) async {
+    // 요청을 먼저 보내고
+    // 응답이 오면
+    // 캐시를 업데이트 했다. 밑의 코드 는 유저에게 응답이 너무 느린것처럼 보인다.
+    // await Future.delayed(Duration(milliseconds: 500));
+
     // 1) 아직 장바구니에 해당되는 상품이 없다면,
     // 장바구니에 상품을 추가한다.
 
@@ -47,6 +69,10 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
         )
       ];
     }
+
+    // Optimistic Response (긍정적 응답)
+    // 요청에 대한 응답이 성공했다고 가정하고 상태를 먼저 업데이트한다.
+    await patchBasket();
   }
 
   // 장바구니 삭제
@@ -90,5 +116,9 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
               e.product.id == product.id ? e.copyWith(count: e.count - 1) : e)
           .toList();
     }
+
+    // Optimistic Response (긍정적 응답)
+    // 요청에 대한 응답이 성공했다고 가정하고 상태를 먼저 업데이트한다.
+    await patchBasket();
   }
 }

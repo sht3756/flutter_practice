@@ -1,5 +1,6 @@
 import 'package:authentication_study/common/view/root_tab.dart';
 import 'package:authentication_study/common/view/splash_screen.dart';
+import 'package:authentication_study/order/view/order_done_screen.dart';
 import 'package:authentication_study/restaurant/view/basket_screen.dart';
 import 'package:authentication_study/restaurant/view/restaurant_detail_screen.dart';
 import 'package:authentication_study/user/model/user_model.dart';
@@ -50,17 +51,22 @@ class AuthProvider extends ChangeNotifier {
         GoRoute(
           path: '/splash',
           name: SplashScreen.routeName,
-          builder: (_, __) => SplashScreen(),
+          builder: (_, state) => SplashScreen(),
         ),
         GoRoute(
           path: '/login',
           name: LoginScreen.routeName,
-          builder: (_, __) => LoginScreen(),
+          builder: (_, state) => LoginScreen(),
         ),
         GoRoute(
           path: '/basket',
           name: BasketScreen.routeName,
           builder: (_, state) => BasketScreen(),
+        ),
+        GoRoute(
+          path: '/order_done',
+          name: OrderDoneScreen.routeName,
+          builder: (_, state) => OrderDoneScreen(),
         ),
       ];
 

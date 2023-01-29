@@ -23,6 +23,9 @@ class OrderProductModel {
     required this.imgUrl,
     required this.price,
   });
+
+  factory OrderProductModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderProductModelFromJson(json);
 }
 
 @JsonSerializable()

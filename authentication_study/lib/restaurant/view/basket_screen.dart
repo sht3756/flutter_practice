@@ -1,10 +1,13 @@
 import 'package:authentication_study/common/const/colors.dart';
 import 'package:authentication_study/common/layout/default_layout.dart';
+import 'package:authentication_study/order/provider/order_provider.dart';
+import 'package:authentication_study/order/view/order_done_screen.dart';
 import 'package:authentication_study/product/component/product_card.dart';
 import 'package:authentication_study/user/provider/basket_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class BasketScreen extends ConsumerWidget {
   static String get routeName => 'basket';
@@ -26,7 +29,7 @@ class BasketScreen extends ConsumerWidget {
           ));
     }
     final productsTotal =
-        basket.fold<int>(0, (p, n) => p + n.product.price * n.count);
+    basket.fold<int>(0, (p, n) => p + n.product.price * n.count);
     final deliveryFee = basket.first.product.restaurant.deliveryFee;
 
     return DefaultLayout(
@@ -49,13 +52,13 @@ class BasketScreen extends ConsumerWidget {
                         model: model.product,
                         onAdd: () {
                           ref.read(basketProvider.notifier).addToBasket(
-                                product: model.product,
-                              );
+                            product: model.product,
+                          );
                         },
                         onSubtract: () {
                           ref.read(basketProvider.notifier).removeFromBasket(
-                                product: model.product,
-                              );
+                            product: model.product,
+                          );
                         },
                       );
                     },
@@ -106,7 +109,18 @@ class BasketScreen extends ConsumerWidget {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: PRIMARY_COLOR,
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              final res = await ref.read(orderProvider.notifier)
+                                  .postOrder();
+
+                              if (res) {
+                                context.goNamed(OrderDoneScreen.routeName);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('결제 실패'))
+                                );
+                              }
+                            },
                             child: Text(
                               '결제하기',
                             )))

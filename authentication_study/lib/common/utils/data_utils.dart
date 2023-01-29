@@ -23,4 +23,10 @@ class DataUtils {
 
     return encoded;
   }
+
+  // String 타입을 DateTime 으로 변환해주는 로직
+  static DateTime stringToDateTime(String value) {
+    return DateTime.parse(value);
+  }
+
 }

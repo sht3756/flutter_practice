@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // typedef 정의 : 이 타입은 3개 파라미터 입력받고 IModelWithId 을 상속한 T 만 사용가능하다. model 는 페이지네이션 가능한 클래스 의미한다.
-typedef PaginationWidgetBuilder<T extends IModelWithId> =
-Widget Function(BuildContext context, int index, T model);
+typedef PaginationWidgetBuilder<T extends IModelWithId> = Widget Function(
+    BuildContext context, int index, T model);
 
 // 렌더링 처리 일반화 시킴
 // stful 생성할때 지정한 <T> 타입이 state 클래스에서도 제너릭으로 사용할 수 있다.
 // 아무 타입만 들어올 수 있는게 아니라, IModelWithId를 상속한 타입만 들어올 수 있다.
-class PaginationListView<T extends IModelWithId> extends ConsumerStatefulWidget {
+class PaginationListView<T extends IModelWithId>
+    extends ConsumerStatefulWidget {
   // Provider 일반화 : 외부에서 받는 타입 정의
   final StateNotifierProvider<PaginationProvider, CursorPaginationBase>
       provider;
@@ -27,10 +28,12 @@ class PaginationListView<T extends IModelWithId> extends ConsumerStatefulWidget 
   }) : super(key: key);
 
   @override
-  ConsumerState<PaginationListView> createState() => _PaginationListViewState<T>();
+  ConsumerState<PaginationListView> createState() =>
+      _PaginationListViewState<T>();
 }
 
-class _PaginationListViewState<T extends IModelWithId> extends ConsumerState<PaginationListView> {
+class _PaginationListViewState<T extends IModelWithId>
+    extends ConsumerState<PaginationListView> {
   final ScrollController controller = ScrollController();
 
   @override
@@ -82,9 +85,9 @@ class _PaginationListViewState<T extends IModelWithId> extends ConsumerState<Pag
           ElevatedButton(
             onPressed: () {
               ref.read(widget.provider.notifier).paginate(
-                // 강제 새로고침
-                forceRefetch: true,
-              );
+                    // 강제 새로고침
+                    forceRefetch: true,
+                  );
             },
             child: Text('다시시도'),
           ),
@@ -100,38 +103,48 @@ class _PaginationListViewState<T extends IModelWithId> extends ConsumerState<Pag
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: ListView.separated(
-        controller: controller,
-        // ListView 에서 한개의 위젯을 더 추가 (데이터 요청하는 부분을 끊기지 않게 여유를 둔다.)
-        itemCount: cp.data.length + 1,
-        itemBuilder: (_, index) {
-          // index 가 마지막크기와 같을때 실행
-          if (index == cp.data.length) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              child: Center(
-                // 클래스가 CursorPaginationFetchingMore 일때는 로딩 아니면 메세지
-                child: cp is CursorPaginationFetchingMore
-                    ? CircularProgressIndicator()
-                    : Text('마지막 데이터입니다. :)'),
-              ),
-            );
-          }
-          final parseItem = cp.data[index];
+      child: RefreshIndicator(
+        onRefresh: () async {
+          ref.read(widget.provider.notifier).paginate(
+                // 극단적으로 로딩! 없어도 제대로 실행된다.
+                forceRefetch: true,
+              );
+        },
+        child: ListView.separated(
+          // 아이폰 경우, 리스트 길이 길지 않으면 스크롤 안된다. 하지만 언제나 스크롤 가능하게 설정
+          physics: AlwaysScrollableScrollPhysics(),
+          controller: controller,
+          // ListView 에서 한개의 위젯을 더 추가 (데이터 요청하는 부분을 끊기지 않게 여유를 둔다.)
+          itemCount: cp.data.length + 1,
+          itemBuilder: (_, index) {
+            // index 가 마지막크기와 같을때 실행
+            if (index == cp.data.length) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: Center(
+                  // 클래스가 CursorPaginationFetchingMore 일때는 로딩 아니면 메세지
+                  child: cp is CursorPaginationFetchingMore
+                      ? CircularProgressIndicator()
+                      : Text('마지막 데이터입니다. :)'),
+                ),
+              );
+            }
+            final parseItem = cp.data[index];
 
-          // 제일 중요한 부분!! (각 인덱스별로 어떤 값을 보여줘야할지!, typedef 를 이용해 외부에서 build 하는 함수를 제공해줄것이다.)
-          return widget.itemBuilder(
-            context,
-            index,
-            parseItem,
-          );
-        },
-        separatorBuilder: (_, index) {
-          return SizedBox(height: 16.0);
-        },
+            // 제일 중요한 부분!! (각 인덱스별로 어떤 값을 보여줘야할지!, typedef 를 이용해 외부에서 build 하는 함수를 제공해줄것이다.)
+            return widget.itemBuilder(
+              context,
+              index,
+              parseItem,
+            );
+          },
+          separatorBuilder: (_, index) {
+            return SizedBox(height: 16.0);
+          },
+        ),
       ),
     );
   }

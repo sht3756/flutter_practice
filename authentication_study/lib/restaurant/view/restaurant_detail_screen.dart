@@ -11,10 +11,12 @@ import 'package:authentication_study/restaurant/model/restaurant_detail_model.da
 import 'package:authentication_study/restaurant/model/restaurant_model.dart';
 import 'package:authentication_study/restaurant/provider/restaurant_provider.dart';
 import 'package:authentication_study/restaurant/provider/restaurant_rating_provider.dart';
+import 'package:authentication_study/restaurant/view/basket_screen.dart';
 import 'package:authentication_study/user/provider/basket_provider.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletons/skeletons.dart';
 
 class RestaurantDetailScreen extends ConsumerStatefulWidget {
@@ -73,7 +75,11 @@ class _RestaurantDetailScreenState
     return DefaultLayout(
       title: '불타는 떡볶이',
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          // pushNamed() 를 하면 현재 라우트 위에 페이지를 올릴 수 있디. 그래서 라우트 스택이 쌓인다.
+          // goNamed() 는 goRoute() 등록한 곳에 중첩으로 등록을 해야만 라우트 스택이 쌓인다.
+          context.pushNamed(BasketScreen.routeName);
+        },
         backgroundColor: PRIMARY_COLOR,
         child: Badge(
           // 뱃지 보여주기

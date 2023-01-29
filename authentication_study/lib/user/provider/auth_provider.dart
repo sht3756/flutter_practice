@@ -1,5 +1,6 @@
 import 'package:authentication_study/common/view/root_tab.dart';
 import 'package:authentication_study/common/view/splash_screen.dart';
+import 'package:authentication_study/restaurant/view/basket_screen.dart';
 import 'package:authentication_study/restaurant/view/restaurant_detail_screen.dart';
 import 'package:authentication_study/user/model/user_model.dart';
 import 'package:authentication_study/user/provider/user_me_provider.dart';
@@ -56,14 +57,17 @@ class AuthProvider extends ChangeNotifier {
           name: LoginScreen.routeName,
           builder: (_, __) => LoginScreen(),
         ),
+        GoRoute(
+          path: '/basket',
+          name: BasketScreen.routeName,
+          builder: (_, state) => BasketScreen(),
+        ),
       ];
 
   void logout() {
     // 테스트 : 실행이 되는 순간에만 읽는다.
     ref.read(userMeProvider.notifier).logout();
   }
-
-
 
   // redirect 로직
   // splash screen : 토큰 존재여부에따라 로그인 스크린 or 홈스크린으로 보낼지 확인 과정 필요

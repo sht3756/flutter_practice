@@ -112,7 +112,7 @@ class _PaginationListViewState<T extends IModelWithId>
         },
         child: ListView.separated(
           // 아이폰 경우, 리스트 길이 길지 않으면 스크롤 안된다. 하지만 언제나 스크롤 가능하게 설정
-          physics: AlwaysScrollableScrollPhysics(),
+          physics: ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           controller: controller,
           // ListView 에서 한개의 위젯을 더 추가 (데이터 요청하는 부분을 끊기지 않게 여유를 둔다.)
           itemCount: cp.data.length + 1,

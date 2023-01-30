@@ -2,6 +2,7 @@ import 'package:authentication_study/product/model/product_model.dart';
 import 'package:authentication_study/user/model/basket_item_model.dart';
 import 'package:authentication_study/user/model/patch_basket_body.dart';
 import 'package:authentication_study/user/repository/user_me_repository.dart';
+import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // null 체크를 위한 import
@@ -16,8 +17,17 @@ final basketProvider =
 
 class BasketProvider extends StateNotifier<List<BasketItemModel>> {
   final UserMeRepository repository;
+  final updateBasketDebounce = Debouncer(
+    Duration(seconds: 1),
+    initialValue: null,
+    checkEquality: false,
+  );
 
-  BasketProvider({required this.repository}) : super([]);
+  BasketProvider({required this.repository}) : super([]) {
+    updateBasketDebounce.values.listen((state) {
+      patchBasket();
+    });
+  }
 
   // repository 에 patchBasket 요청
   Future<void> patchBasket() async {
@@ -72,7 +82,8 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
 
     // Optimistic Response (긍정적 응답)
     // 요청에 대한 응답이 성공했다고 가정하고 상태를 먼저 업데이트한다.
-    await patchBasket();
+    // await patchBasket(); => debounce 적용 하려고 주석
+    updateBasketDebounce.setValue(null);
   }
 
   // 장바구니 삭제
@@ -119,6 +130,7 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
 
     // Optimistic Response (긍정적 응답)
     // 요청에 대한 응답이 성공했다고 가정하고 상태를 먼저 업데이트한다.
-    await patchBasket();
+    // await patchBasket(); => debounce 적용 하려고 주석
+    updateBasketDebounce.setValue(null);
   }
 }

@@ -2,7 +2,20 @@ import 'package:authentication_study/common/model/cursor_pagination_model.dart';
 import 'package:authentication_study/common/model/model_with_id.dart';
 import 'package:authentication_study/common/model/pagination_params.dart';
 import 'package:authentication_study/common/repository/base_pagination_repository.dart';
+import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class _PaginationInfo {
+  final int fetchCount;
+  final bool fetchMore;
+  final bool forceRefetch;
+
+  _PaginationInfo({
+    this.fetchCount = 20,
+    this.fetchMore = false,
+    this.forceRefetch = false,
+  });
+}
 
 // U type 은 IBasePaginationRepository 와 관련있다
 // T type 은 실제 페이지네이션에서 가져오는 실제 데이터 타입이다.
@@ -13,11 +26,25 @@ class PaginationProvider<T extends IModelWithId,
   // 너무 일반화 되어버리니 클래스에서 extends 를 해주자!
   final U repository;
 
+  // throttle 을 선언 및 초기화
+  final paginationThrottle = Throttle(
+    Duration(seconds: 3),
+    initialValue: _PaginationInfo(),
+    checkEquality: false,
+  );
+
   PaginationProvider({
     required this.repository,
   }) : super(CursorPaginationLoading()) {
     //PaginationProvider 를 상속하는 모든 클래스는 생성되자마자 함수 실행
     paginate();
+
+    // _throttlePagination 의 값의 listen 해서 _throttlePagination 함수 실행한다.
+    paginationThrottle.values.listen(
+      (state) {
+        _throttlePagination(state);
+      },
+    );
   }
 
   Future<void> paginate({
@@ -28,6 +55,20 @@ class PaginationProvider<T extends IModelWithId,
     // ture : CursorPaginationLoading()
     bool forceRefetch = false,
   }) async {
+    // throttle 통해서 페이지네이션 함수를 실행 (한개의 클래스를 넘겨줘서 안의 파라미터 값들 오류 안나게 한다.)
+    paginationThrottle.setValue(_PaginationInfo(
+      fetchCount: fetchCount,
+      fetchMore: fetchMore,
+      forceRefetch: forceRefetch,
+    ));
+  }
+
+  // 페이지네이션 처리 함수
+  _throttlePagination(_PaginationInfo info) async {
+    final fetchCount = info.fetchCount;
+    final fetchMore = info.fetchMore;
+    final forceRefetch = info.forceRefetch;
+
     try {
       // 5가지
       // State 상태

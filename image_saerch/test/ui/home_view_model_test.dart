@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image_saerch/data/photo_api_repository.dart';
-import 'package:image_saerch/data/pixabay_api.dart';
 import 'package:image_saerch/model/photo_model.dart';
 import 'package:image_saerch/ui/home_view_model.dart';
 
@@ -17,24 +16,27 @@ void main() {
         // 순서대로 어떤 동작들이 일어날건지 리스트로 작성가능
         emitsInOrder([
           // 타입 검사 isA, <List<PhotoModel>> 의 타입이 제대로 들어왔는지
-          isA<List<PhotoModel>>(),
-          // equals([]),
+          // isA<List<PhotoModel>>(),
+          equals([]),
           equals(fakeJson.map((e) => PhotoModel.fromJson(e)).toList()),
           equals(fakeJson.map((e) => PhotoModel.fromJson(e)).toList()),
         ]));
   });
 }
 
+// 임의의 클래스를 만들어 주입시켜준다.
 class FakePhotoApiRepository extends PhotoApiRepository {
   @override
   Future<List<PhotoModel>> fetch(String query) async {
-    // 임의의 데이터를 준다.
+    // 딜레이를 준다.
     Future.delayed(const Duration(milliseconds: 500));
 
+    // 가짜데이터를 PhotoModel.fromJson 에 매핑해준다.
     return fakeJson.map((e) => PhotoModel.fromJson(e)).toList();
   }
 }
 
+// 가짜 데이터를 그대로 넣어준다.
 List<Map<String, dynamic>> fakeJson = [
   {
     "id": 2295434,

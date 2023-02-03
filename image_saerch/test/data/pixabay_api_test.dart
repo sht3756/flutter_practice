@@ -2,8 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:image_saerch/data/pixabay_api.dart';
-import 'package:image_saerch/model/photo_model.dart';
-import 'package:mockito/mockito.dart';
 
 void main() {
   test('Pixabay 데이터를 잘 가져와야 한다.', () async {

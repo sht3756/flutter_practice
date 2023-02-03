@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_saerch/data/data_source/result.dart';
 import 'package:image_saerch/domain/model/photo_model.dart';
 import 'package:image_saerch/domain/repository/photo_api_repository.dart';
 import 'package:image_saerch/presentation/home/home_view_model.dart';
@@ -22,12 +23,12 @@ void main() {
 // 임의의 클래스를 만들어 주입시켜준다.
 class FakePhotoApiRepository extends PhotoApiRepository {
   @override
-  Future<List<PhotoModel>> fetch(String query) async {
+  Future<Result<List<PhotoModel>>> fetch(String query) async {
     // 딜레이를 준다.
     Future.delayed(const Duration(milliseconds: 500));
 
     // 가짜데이터를 PhotoModel.fromJson 에 매핑해준다.
-    return fakeJson.map((e) => PhotoModel.fromJson(e)).toList();
+    return Result.success(fakeJson.map((e) => PhotoModel.fromJson(e)).toList());
   }
 }
 

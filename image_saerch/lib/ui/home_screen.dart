@@ -23,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<HomeViewModel>();
 
     return Scaffold(
       appBar: AppBar(
@@ -48,30 +47,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    viewModel.fetch(_controller.text);
+                    context.read<HomeViewModel>().fetch(_controller.text);
                   },
                   icon: const Icon(Icons.search),
                 ),
               ),
             ),
           ),
-          StreamBuilder<List<PhotoModel>>(
-            stream: viewModel.photoStream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
-              }
-              final _photos = snapshot.data!;
+          Consumer<HomeViewModel>(
+            builder: (_, viewModel, child) {
               return Expanded(
                 child: GridView.builder(
                     padding: const EdgeInsets.all(16.0),
-                    itemCount: _photos.length,
+                    itemCount: viewModel.photos.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16),
                     itemBuilder: (_, index) {
-                      final photo = _photos[index];
+                      final photo = viewModel.photos[index];
 
                       return PhotoWidget(photo: photo);
                     }),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image_saerch/data/photo_api_repository.dart';
 import 'package:image_saerch/model/photo_model.dart';
@@ -9,18 +11,11 @@ void main() {
     final viewModel = HomeViewModel(FakePhotoApiRepository());
 
     await viewModel.fetch('apple');
-    await viewModel.fetch('iphone');
-    // 어떤 값이 올지 예측하는 코드 작성
-    expect(
-        viewModel.photoStream,
-        // 순서대로 어떤 동작들이 일어날건지 리스트로 작성가능
-        emitsInOrder([
-          // 타입 검사 isA, <List<PhotoModel>> 의 타입이 제대로 들어왔는지
-          // isA<List<PhotoModel>>(),
-          equals([]),
-          equals(fakeJson.map((e) => PhotoModel.fromJson(e)).toList()),
-          equals(fakeJson.map((e) => PhotoModel.fromJson(e)).toList()),
-        ]));
+
+    final List<PhotoModel> result = fakeJson.map((e) => PhotoModel.fromJson(e)).toList();
+
+    expect(viewModel.photos, result);
+
   });
 }
 

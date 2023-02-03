@@ -1,13 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
-import 'package:image_saerch/data/pixabay_api.dart';
+import 'package:image_saerch/data/data_source/pixabay_api.dart';
+import 'package:image_saerch/data/repository/photo_api_repository_impl.dart';
 
 void main() {
   test('Pixabay 데이터를 잘 가져와야 한다.', () async {
-    final api = PixabayApi();
-
-    // Mockito 를 사용
     // when() : 이런 동작들은 실행했을때 어떤 결과를 줄건지  동작 정의 하는 when()
     final mockClient = MockClient((request) async {
       if (request.url.toString() ==
@@ -17,10 +15,9 @@ void main() {
       return Response('error', 404);
     });
 
+    final api = PhotoApiRepositoryImpl(PixabayApi(mockClient));
 
-    // 기본
-    final result = await api.fetch(
-        '${PixabayApi.baseUrl}?key=${PixabayApi.key}&q=iphone&image_type=photo&pretty=true');
+    final result = await api.fetch('iphone');
 
     expect(result.length, 20);
   });

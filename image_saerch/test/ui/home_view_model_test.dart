@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:image_saerch/data/photo_api_repository.dart';
-import 'package:image_saerch/model/photo_model.dart';
-import 'package:image_saerch/ui/home_view_model.dart';
+import 'package:image_saerch/domain/model/photo_model.dart';
+import 'package:image_saerch/domain/repository/photo_api_repository.dart';
+import 'package:image_saerch/presentation/home/home_view_model.dart';
 
 void main() {
   test('Stream 이 잘 동작해야한다.', () async {
@@ -12,10 +12,10 @@ void main() {
 
     await viewModel.fetch('apple');
 
-    final List<PhotoModel> result = fakeJson.map((e) => PhotoModel.fromJson(e)).toList();
+    final List<PhotoModel> result =
+        fakeJson.map((e) => PhotoModel.fromJson(e)).toList();
 
     expect(viewModel.photos, result);
-
   });
 }
 

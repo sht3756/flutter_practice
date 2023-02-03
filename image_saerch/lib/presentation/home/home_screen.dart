@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:image_saerch/data/photo_provider.dart';
-import 'package:image_saerch/model/photo_model.dart';
-import 'package:image_saerch/ui/home_view_model.dart';
-import 'package:image_saerch/ui/widget/photo_widget.dart';
+import 'package:image_saerch/presentation/home/components/photo_widget.dart';
+import 'package:image_saerch/presentation/home/home_view_model.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<HomeViewModel>();
 
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    context.read<HomeViewModel>().fetch(_controller.text);
+                    viewModel.fetch(_controller.text);
                   },
                   icon: const Icon(Icons.search),
                 ),

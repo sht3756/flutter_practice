@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:image_saerch/data/photo_api_repository.dart';
-import 'package:image_saerch/model/photo_model.dart';
+import 'package:image_saerch/domain/repository/photo_api_repository.dart';
+import 'package:image_saerch/domain/model/photo_model.dart';
 
 // ChangeNotifier 을 mixin 하기 위함
-class HomeViewModel with ChangeNotifier{
+class HomeViewModel with ChangeNotifier {
   final PhotoApiRepository repository;
 
   List<PhotoModel> _photos = [];

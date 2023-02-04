@@ -1,15 +1,14 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image_saerch/data/data_source/result.dart';
 import 'package:image_saerch/domain/model/photo_model.dart';
 import 'package:image_saerch/domain/repository/photo_api_repository.dart';
+import 'package:image_saerch/domain/use_case/get_photos_use_case.dart';
 import 'package:image_saerch/presentation/home/home_view_model.dart';
 
 void main() {
   test('Stream 이 잘 동작해야한다.', () async {
     // viewModel 로 따로 분리를 했기에 이렇게 test 코드로 작성가능한 것이다.
-    final viewModel = HomeViewModel(FakePhotoApiRepository());
+    final viewModel = HomeViewModel(GetPhotosUseCase(FakePhotoApiRepository()));
 
     await viewModel.fetch('apple');
 

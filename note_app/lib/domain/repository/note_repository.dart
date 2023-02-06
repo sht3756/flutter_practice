@@ -5,7 +5,7 @@ abstract class NoteRepository {
   Future<List<Note>> getNotes();
 
   // 클릭하면 해당 되는 노트 가져오기
-  Future<Note> getNoteById(int id);
+  Future<Note?> getNoteById(int id);
 
   // 등록
   Future<void> insertNote(Note note);

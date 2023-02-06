@@ -2,11 +2,11 @@ import 'package:note_app/domain/model/note.dart';
 import 'package:sqflite/sqflite.dart';
 
 // sql helper 라고 한다.
-class NoteDb {
+class NoteDbHelper {
   // sqflite 에서 제공하는 db 객체
   Database db;
 
-  NoteDb(this.db);
+  NoteDbHelper(this.db);
 
   // id 별 note 가져오기
   Future<Note?> getNoteById(int id) async {

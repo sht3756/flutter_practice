@@ -14,4 +14,6 @@ abstract class NotesEvent with _$NotesEvent {
   const factory NotesEvent.restoreNote() = RestoreNote;
   // 정렬에 따른 변화
   const factory NotesEvent.changeOrder(NoteOrder noteOrder) = ChangeOrder;
+  // appBar action 클릭하면 출력, 미출력 변하는 상태값
+  const factory NotesEvent.toggleOrderSection() = ToggleOrderSection;
 }

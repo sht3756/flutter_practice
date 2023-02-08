@@ -13,8 +13,8 @@ void main() async {
   // MultiProvider 로 한번에 넣어주기!
   runApp(
     MultiProvider(
-        providers: providers,
-        child: const MyApp(),
+      providers: providers,
+      child: const MyApp(),
     ),
   );
 }
@@ -31,20 +31,18 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.white,
           backgroundColor: darkGray,
           canvasColor: darkGray,
-          floatingActionButtonTheme: Theme
-              .of(context)
-              .floatingActionButtonTheme
-              .copyWith(
-            backgroundColor: Colors.white,
-            foregroundColor: darkGray,
-          ),
-          appBarTheme: Theme
-              .of(context)
-              .appBarTheme
-              .copyWith(
-            backgroundColor: darkGray,
-          )
-      ),
+          floatingActionButtonTheme:
+              Theme.of(context).floatingActionButtonTheme.copyWith(
+                    backgroundColor: Colors.white,
+                    foregroundColor: darkGray,
+                  ),
+          appBarTheme: Theme.of(context).appBarTheme.copyWith(
+                backgroundColor: darkGray,
+              ),
+          textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.white),
+          radioTheme: RadioTheme.of(context).copyWith(
+            fillColor: MaterialStateProperty.all(Colors.white),
+          )),
       home: const NoteScreen(),
     );
   }

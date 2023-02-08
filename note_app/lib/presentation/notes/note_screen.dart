@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/presentation/add_edit_note/add_edit_note_screen.dart';
 import 'package:note_app/presentation/notes/components/note_item.dart';
+import 'package:note_app/presentation/notes/components/order_section.dart';
 import 'package:note_app/presentation/notes/notes_event.dart';
 import 'package:note_app/presentation/notes/notes_view_model.dart';
 import 'package:provider/provider.dart';
@@ -41,46 +42,53 @@ class NoteScreen extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       body: ListView(
-        children: state.notes
-            .map(
-              (note) => GestureDetector(
-                onTap: () async {
-                  // 수정하기
-                  bool? isSaved = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddEditNoteScreen(
-                        note: note,
-                      ),
-                    ),
-                  );
-
-                  if (isSaved != null && isSaved) {
-                    viewModel.onEvent(const NotesEvent.loadNotes());
-                  }
-
-                },
-                child: NoteItem(
-                  note: note,
-                  onDeleteTap: () {
-                    viewModel.onEvent(NotesEvent.deleteNote(note));
-
-                    final snackBar = SnackBar(
-                      content: const Text('노트가 삭제되었습니다.'),
-                      action: SnackBarAction(
-                        label: '취소',
-                        onPressed: () {
-                          viewModel.onEvent(const NotesEvent.restoreNote());
-                        },
+        children: [
+          OrderSection(
+            noteOrder: state.noteOrder,
+            onOrderChanged: (noteOrder) {
+              viewModel.onEvent(NotesEvent.changeOrder(noteOrder));
+            },
+          ),
+          ...state.notes
+              .map(
+                (note) => GestureDetector(
+                  onTap: () async {
+                    // 수정하기
+                    bool? isSaved = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddEditNoteScreen(
+                          note: note,
+                        ),
                       ),
                     );
 
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    if (isSaved != null && isSaved) {
+                      viewModel.onEvent(const NotesEvent.loadNotes());
+                    }
                   },
+                  child: NoteItem(
+                    note: note,
+                    onDeleteTap: () {
+                      viewModel.onEvent(NotesEvent.deleteNote(note));
+
+                      final snackBar = SnackBar(
+                        content: const Text('노트가 삭제되었습니다.'),
+                        action: SnackBarAction(
+                          label: '취소',
+                          onPressed: () {
+                            viewModel.onEvent(const NotesEvent.restoreNote());
+                          },
+                        ),
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                  ),
                 ),
-              ),
-            )
-            .toList(),
+              )
+              .toList()
+        ],
       ),
     );
   }

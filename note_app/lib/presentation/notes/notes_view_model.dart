@@ -11,7 +11,9 @@ class NotesViewModel with ChangeNotifier {
 
   // default 값 설정
   NotesState _state = NotesState(
-      notes: [], noteOrder: const NoteOrder.date(OrderType.descending()));
+    notes: [],
+    noteOrder: const NoteOrder.date(OrderType.descending()),
+  );
 
   NotesState get state => _state;
 
@@ -26,6 +28,13 @@ class NotesViewModel with ChangeNotifier {
       loadNotes: _loadNotes,
       deleteNote: _deleteNote,
       restoreNote: _restoreNote,
+      changeOrder: (NoteOrder noteOrder) {
+        // 기존 _state 에 바뀐 noteOrder 만 copyWith 으로 변경후, 새로 로드
+        _state = state.copyWith(
+          noteOrder: noteOrder,
+        );
+        _loadNotes();
+      },
     );
   }
 

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/domain/model/note.dart';
 import 'package:note_app/domain/use_case/use_cases.dart';
+import 'package:note_app/domain/util/note_order.dart';
+import 'package:note_app/domain/util/order_type.dart';
 import 'package:note_app/presentation/notes/notes_event.dart';
 import 'package:note_app/presentation/notes/notes_state.dart';
 
 class NotesViewModel with ChangeNotifier {
   final UseCases useCases;
 
-  NotesState _state = NotesState();
+  // default 값 설정
+  NotesState _state = NotesState(
+      notes: [], noteOrder: const NoteOrder.date(OrderType.descending()));
 
   NotesState get state => _state;
 
@@ -26,7 +30,7 @@ class NotesViewModel with ChangeNotifier {
   }
 
   Future<void> _loadNotes() async {
-    List<Note> notes = await useCases.getNotes();
+    List<Note> notes = await useCases.getNotes(state.noteOrder);
     // 정렬(날짜 기준)
     notes.sort((a, b) => -a.timestamp.compareTo(b.timestamp));
 

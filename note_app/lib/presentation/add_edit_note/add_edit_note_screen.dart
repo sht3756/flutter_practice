@@ -33,14 +33,27 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
   void initState() {
     super.initState();
 
+    // 수정 이라면?
+    if (widget.note != null) {
+      // 값 넣어주기
+      _titleController.text = widget.note!.title;
+      _contentController.text = widget.note!.content;
+    }
+
+    // 약간의 딜레이
     Future.microtask(() {
       final viewModel = context.read<AddEditNoteViewModel>();
 
       // 상태 변하는걸 감지 후 뒤로가기 버튼!
       _streamSubscription = viewModel.eventStream.listen((event) {
-        event.when(saveNote: () {
-          Navigator.pop(context, true);
-        });
+        event.when(
+            saveNote: () {
+              Navigator.pop(context, true);
+            },
+            showSnackBar: (String message) {
+              final snackBar = SnackBar(content: Text(message));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            });
       });
     });
   }
@@ -60,11 +73,7 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (_contentController.text.isEmpty ||
-              _titleController.text.isEmpty) {
-            const snackBar = SnackBar(content: Text('제목이나 내용을 채워주세요.'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
+          // 저장
           viewModel.onEvent(AddEditNoteEvent.saveNote(
             widget.note == null ? null : widget.note!.id,
             _titleController.text,

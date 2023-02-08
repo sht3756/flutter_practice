@@ -1,13 +1,14 @@
+
 import 'package:note_app/domain/model/note.dart';
 import 'package:note_app/domain/repository/note_repository.dart';
 
-// 노트 수정하기
-class UpdateNote {
+// 노트 삭제
+class DeleteNoteUseCase {
   final NoteRepository repository;
 
-  UpdateNote(this.repository);
+  DeleteNoteUseCase(this.repository);
 
   Future<void> call(Note note) async {
-    await repository.updateNote(note);
+    await repository.deleteNote(note);
   }
 }

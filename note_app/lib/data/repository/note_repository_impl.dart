@@ -24,11 +24,11 @@ class NoteRepositoryImpl implements NoteRepository {
 
   @override
   Future<void> insertNote(Note note) async {
-    await insertNote(note);
+    await db.insertNote(note);
   }
 
   @override
   Future<void> updateNote(Note note) async {
-    await updateNote(note);
+    await db.updateNote(note);
   }
 }

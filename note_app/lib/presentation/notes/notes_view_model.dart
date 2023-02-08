@@ -13,7 +13,9 @@ class NotesViewModel with ChangeNotifier {
 
   Note? _recentlyDeletedNote;
 
-  NotesViewModel(this.repository);
+  NotesViewModel(this.repository) {
+    _loadNotes();
+  }
 
   void onEvent(NotesEvent event) {
     event.when(
@@ -39,7 +41,7 @@ class NotesViewModel with ChangeNotifier {
 
   Future<void> _restoreNote() async {
     // 최근 삭제 리스트가 있다면, 최근 삭제 리스트를 다시 등록 한다. 그리고 비워준다. 그리고 다시 로드
-    if(_recentlyDeletedNote != null) {
+    if (_recentlyDeletedNote != null) {
       await repository.insertNote(_recentlyDeletedNote!);
       _recentlyDeletedNote = null;
 

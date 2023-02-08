@@ -1,8 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:note_app/domain/model/note.dart';
+import 'package:note_app/presentation/add_edit_note/add_edit_note_event.dart';
+import 'package:note_app/presentation/add_edit_note/add_edit_note_view_model.dart';
 import 'package:note_app/ui/colors.dart';
+import 'package:provider/provider.dart';
 
 class AddEditNoteScreen extends StatefulWidget {
-  const AddEditNoteScreen({Key? key}) : super(key: key);
+  final Note? note;
+
+  const AddEditNoteScreen({Key? key, this.note}) : super(key: key);
 
   @override
   State<AddEditNoteScreen> createState() => _AddEditNoteScreenState();
@@ -11,6 +19,7 @@ class AddEditNoteScreen extends StatefulWidget {
 class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
+  StreamSubscription? _streamSubscription;
 
   final List<Color> noteColors = [
     roseBud,
@@ -20,10 +29,25 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
     illusion,
   ];
 
-  Color _color = roseBud;
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      final viewModel = context.read<AddEditNoteViewModel>();
+
+      // 상태 변하는걸 감지 후 뒤로가기 버튼!
+      _streamSubscription = viewModel.eventStream.listen((event) {
+        event.when(saveNote: () {
+          Navigator.pop(context, true);
+        });
+      });
+    });
+  }
 
   @override
   void dispose() {
+    _streamSubscription?.cancel();
     _titleController.dispose();
     _contentController.dispose();
     super.dispose();
@@ -31,16 +55,29 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<AddEditNoteViewModel>();
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          if (_contentController.text.isEmpty ||
+              _titleController.text.isEmpty) {
+            const snackBar = SnackBar(content: Text('제목이나 내용을 채워주세요.'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+          viewModel.onEvent(AddEditNoteEvent.saveNote(
+            widget.note == null ? null : widget.note!.id,
+            _titleController.text,
+            _contentController.text,
+          ));
+        },
         child: const Icon(Icons.save),
       ),
       body: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         padding:
             const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 90),
-        color: _color,
+        color: Color(viewModel.color),
         child: Column(
           children: [
             Row(
@@ -50,12 +87,13 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
                     (color) => InkWell(
                       onTap: () {
                         setState(() {
-                          _color = color;
+                          viewModel.onEvent(
+                              AddEditNoteEvent.changeColor(color.value));
                         });
                       },
                       child: _buildBackgroundColor(
                         color: color,
-                        selected: _color == color,
+                        selected: viewModel.color == color.value,
                       ),
                     ),
                   )

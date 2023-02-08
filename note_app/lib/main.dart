@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:note_app/di/provider_setupe.dart';
+import 'package:note_app/di/provider_setup.dart';
 import 'package:note_app/presentation/notes/note_screen.dart';
 import 'package:note_app/ui/colors.dart';
 import 'package:provider/provider.dart';

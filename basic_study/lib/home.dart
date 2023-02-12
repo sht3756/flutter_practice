@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fooderlich/card1.dart';
 
 import 'fooderlich_theme.dart';
 
@@ -13,7 +14,8 @@ class _HomeState extends State<Home> {
 
   int _selectedIndex = 0;
   static List<Widget> pages = <Widget>[
-    Container(color: Colors.redAccent),
+
+    const Card1(),
     Container(color: Colors.greenAccent),
     Container(color: Colors.orangeAccent)
   ];

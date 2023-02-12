@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'author_card.dart';
-import 'circle_image.dart';
 
 class Card2 extends StatelessWidget {
   const Card2({Key? key}) : super(key: key);
 
-  final String name = 'Mike Katz';
-  final String subName = 'Smoothie Connoisseur';
-  final String a = 'Smoothies';
-  final String s = 'sdasd';
+  final String name = 'Smoothie';
+  final String subName = 'Recipe';
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +29,27 @@ class Card2 extends StatelessWidget {
               title: 'Smootie',
               imageProvider: AssetImage('assets/author_katz.jpeg'),
             ),
-            Row(
-              children: [Text(name), Text(subName)],
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 32.0),
+                    child: RotatedBox(
+                      quarterTurns: 3,
+                      child: Text(
+                        name,
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    subName,
+                    style: Theme.of(context).textTheme.headline1,
+                  )
+                ],
+              ),
             ),
           ],
         ),

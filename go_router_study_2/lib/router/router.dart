@@ -5,6 +5,7 @@ import 'package:go_router_study_2/ui/create_account.dart';
 import 'package:go_router_study_2/ui/error_page.dart';
 import 'package:go_router_study_2/ui/home_screen.dart';
 import 'package:go_router_study_2/ui/login.dart';
+import 'package:go_router_study_2/ui/personal_info.dart';
 
 class MyRouter {
   final LoginState loginState;
@@ -37,12 +38,21 @@ class MyRouter {
         },
       ),
       GoRoute(
-        path: '/',
-        name: rootRouteName,
-        builder: (context, state) {
-          return HomeScreen(tab: 'shopping');
-        },
-      ),
+          path: '/:tab',
+          name: rootRouteName,
+          builder: (context, state) {
+            final tab = state.params['tab'];
+            return HomeScreen(tab: tab ?? '');
+          },
+          routes: [
+            GoRoute(
+              name: profilePersonalRouteName,
+              path: 'personal',
+              builder: (context, state) {
+                return const PersonalInfo();
+              },
+            ),
+          ]),
     ],
     redirect: (context, state) {
       // 현재 우리가 보고있는 페이지 확인
@@ -53,9 +63,9 @@ class MyRouter {
           state.subloc.contains(createAccountRouteName);
 
       // inAuth && true => go to home
-      if(inAuthPages && loggedIn) return '/';
+      if (inAuthPages && loggedIn) return '/shop';
       // noInAuth && false => go to loginPage
-      if(!inAuthPages && !loggedIn) return '/login';
+      if (!inAuthPages && !loggedIn) return '/login';
     },
     // 초기값
     initialLocation: '/login',

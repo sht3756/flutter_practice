@@ -44,6 +44,19 @@ class MyRouter {
         },
       ),
     ],
+    redirect: (context, state) {
+      // 현재 우리가 보고있는 페이지 확인
+      // 현재 로그인 상태 어떤지 확인
+      final loggedIn = loginState.loggedIn;
+      // state.subloc : 현재 위치해 있는 쿼리파라미터를 리턴한다.
+      final inAuthPages = state.subloc.contains(loginRouteName) ||
+          state.subloc.contains(createAccountRouteName);
+
+      // inAuth && true => go to home
+      if(inAuthPages && loggedIn) return '/';
+      // noInAuth && false => go to loginPage
+      if(!inAuthPages && !loggedIn) return '/login';
+    },
     // 초기값
     initialLocation: '/login',
     // loginState 상태를 지켜본다.

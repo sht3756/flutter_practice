@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router_study_2/login_state.dart';
+import 'package:provider/provider.dart';
 
 class MoreInfo extends StatefulWidget {
   const MoreInfo({Key? key}) : super(key: key);
@@ -66,9 +68,37 @@ class _MoreInfoState extends State<MoreInfo> {
                 ),
               ),
             ),
+            Card(
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(
+                    color: Colors.black, width: 1.0, style: BorderStyle.solid),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              color: Colors.white,
+              child: Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(
+                      'log out',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      logOut(context);
+                    },
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void logOut(BuildContext context) {
+    Provider.of<LoginState>(context, listen: false).loggedIn = false;
   }
 }

@@ -2,10 +2,14 @@ import 'package:go_router/go_router.dart';
 import 'package:go_router_study_2/constants.dart';
 import 'package:go_router_study_2/login_state.dart';
 import 'package:go_router_study_2/ui/create_account.dart';
+import 'package:go_router_study_2/ui/details.dart';
 import 'package:go_router_study_2/ui/error_page.dart';
 import 'package:go_router_study_2/ui/home_screen.dart';
 import 'package:go_router_study_2/ui/login.dart';
+import 'package:go_router_study_2/ui/more_info.dart';
+import 'package:go_router_study_2/ui/payment.dart';
 import 'package:go_router_study_2/ui/personal_info.dart';
+import 'package:go_router_study_2/ui/signin_info.dart';
 
 class MyRouter {
   final LoginState loginState;
@@ -50,6 +54,34 @@ class MyRouter {
               path: 'profile-personal',
               builder: (context, state) {
                 return const PersonalInfo();
+              },
+            ),
+            GoRoute(
+              name: shopDetailsRouteName,
+              path: 'details/:item',
+              builder: (context, state) {
+                return Details(description: state.params['item']!);
+              },
+            ),
+            GoRoute(
+              name: profilePaymentRouteName,
+              path: 'payment',
+              builder: (context, state) {
+                return const Payment();
+              },
+            ),
+            GoRoute(
+              name: profileSigninInfoRouteName,
+              path: 'signin-info',
+              builder: (context, state) {
+                return const SigninInfo();
+              },
+            ),
+            GoRoute(
+              name: profileMoreInfoRouteName,
+              path: 'more-info',
+              builder: (context, state) {
+                return const MoreInfo();
               },
             ),
           ]),

@@ -47,7 +47,7 @@ class MyRouter {
           routes: [
             GoRoute(
               name: profilePersonalRouteName,
-              path: 'personal',
+              path: 'profile-personal',
               builder: (context, state) {
                 return const PersonalInfo();
               },

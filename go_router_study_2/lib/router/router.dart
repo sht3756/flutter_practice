@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:go_router_study_2/constants.dart';
 import 'package:go_router_study_2/login_state.dart';
 import 'package:go_router_study_2/ui/create_account.dart';
+import 'package:go_router_study_2/ui/error_page.dart';
 import 'package:go_router_study_2/ui/home_screen.dart';
 import 'package:go_router_study_2/ui/login.dart';
 
@@ -11,6 +12,11 @@ class MyRouter {
   MyRouter(this.loginState);
 
   late final router = GoRouter(
+    errorBuilder: (context, state) {
+      return ErrorPage(
+        error: state.error,
+      );
+    },
     // 각페이지의 루트 포함
     routes: [
       GoRoute(
@@ -32,12 +38,14 @@ class MyRouter {
       ),
       GoRoute(
         path: '/',
-        name: loginRouteName,
+        name: rootRouteName,
         builder: (context, state) {
           return HomeScreen(tab: 'shopping');
         },
       ),
     ],
+    // 초기값
+    initialLocation: '/login',
     // loginState 상태를 지켜본다.
     refreshListenable: loginState,
     // 개발시 디버그하기, 앱출시에는 false 로 변경해야한다.

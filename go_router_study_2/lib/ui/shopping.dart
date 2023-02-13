@@ -21,6 +21,7 @@ class Shopping extends StatelessWidget {
               context.goNamed(
                 shopDetailsRouteName,
                 params: {'tab': 'shop', 'item': value},
+                extra: 'TestText - $value'
               );
             },
           );

@@ -60,7 +60,7 @@ class MyRouter {
               name: shopDetailsRouteName,
               path: 'details/:item',
               builder: (context, state) {
-                return Details(description: state.params['item']!);
+                return Details(description: state.params['item']!, extra: state.extra,);
               },
             ),
             GoRoute(

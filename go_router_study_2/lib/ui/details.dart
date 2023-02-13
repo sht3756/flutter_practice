@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 
 class Details extends StatelessWidget {
   final String description;
+  final Object? extra;
 
-  const Details({Key? key, required this.description}) : super(key: key);
+  const Details({Key? key, required this.description, this.extra}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class Details extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(description),
+            Text('extra- ${extra as String}'),
             const SizedBox(
               height: 20.0,
             ),

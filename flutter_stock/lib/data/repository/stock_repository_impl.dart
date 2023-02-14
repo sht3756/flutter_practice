@@ -1,4 +1,4 @@
-import 'package:flutter_stock/data/csv/company_listing_parser.dart';
+import 'package:flutter_stock/data/csv/company_listing_parsers.dart';
 import 'package:flutter_stock/data/mapper/company_mapper.dart';
 import 'package:flutter_stock/data/source/local/stock_dao.dart';
 import 'package:flutter_stock/data/source/remote/stock_api.dart';

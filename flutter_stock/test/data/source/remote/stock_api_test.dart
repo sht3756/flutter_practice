@@ -1,4 +1,4 @@
-import 'package:flutter_stock/data/csv/company_listing_parser.dart';
+import 'package:flutter_stock/data/csv/company_listing_parsers.dart';
 import 'package:flutter_stock/data/source/remote/stock_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 void main() {

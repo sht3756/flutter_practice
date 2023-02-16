@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter_stock/data/source/remote/dto/company_info_dto.dart';
 import 'package:http/http.dart' as http;
 
 class StockApi {
@@ -9,7 +12,17 @@ class StockApi {
   StockApi({http.Client? client}) : _client = (client ?? http.Client());
 
   Future<http.Response> getListings({String apiKey = apiKey}) async {
-    return await _client.get(Uri.parse(
-        'https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=$apiKey'));
+    return await _client.get(
+        Uri.parse('$baseUrl/query?function=LISTING_STATUS&apikey=$apiKey'));
+  }
+
+  Future<CompanyInfoDto> getCompanyInfo({
+    required String symbol,
+    String apiKey = apiKey,
+  }) async {
+    final res = await _client.get(Uri.parse(
+        '$baseUrl/query?function=OVERVIEW&symbol=$symbol&apikey=$apiKey'));
+
+    return CompanyInfoDto.fromJson(jsonDecode(res.body));
   }
 }

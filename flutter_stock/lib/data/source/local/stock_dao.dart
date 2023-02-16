@@ -5,7 +5,6 @@ import 'company_listing_entity.dart';
 class StockDao {
   static const companyListing = 'companyListing';
 
-  final box = Hive.box('stock.db');
 
   Future<void> insertCompanyListings(
       List<CompanyListingEntity> companyListingEntities) async {

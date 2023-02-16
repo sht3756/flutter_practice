@@ -7,7 +7,7 @@ part 'company_listings_state.g.dart';
 
 @freezed
 class CompanyListingsState with _$CompanyListingsState {
-  factory CompanyListingsState({
+  const factory CompanyListingsState({
     @Default([]) List<CompanyListing> companies,
     @Default(false) bool isLoading,
     @Default(false) bool isRefreshing,

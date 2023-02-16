@@ -1,4 +1,5 @@
 import 'package:flutter_stock/domain/model/company_info.dart';
+import 'package:flutter_stock/domain/model/intraday_info.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'company_info_state.freezed.dart';
@@ -11,6 +12,7 @@ class CompanyInfoState with _$CompanyInfoState {
     CompanyInfo? companyInfo,
     @Default(false) bool isLoading,
     String? errorMessage,
+    @Default([]) List<IntradayInfo> stockInfos,
   }) = _CompanyInfoState;
 
   factory CompanyInfoState.fromJson(Map<String, dynamic> json) =>

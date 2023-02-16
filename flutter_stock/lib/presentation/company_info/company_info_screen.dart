@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stock/domain/model/company_info.dart';
+import 'package:flutter_stock/presentation/company_info/company_info_state.dart';
 import 'package:flutter_stock/presentation/company_info/company_info_view_mode.dart';
+import 'package:flutter_stock/presentation/company_info/components/stock_chart.dart';
 import 'package:provider/provider.dart';
 
 class CompanyInfoScreen extends StatelessWidget {
@@ -24,21 +25,21 @@ class CompanyInfoScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               ),
             if (state.isLoading == false && state.errorMessage == null)
-              _buildBody(state.companyInfo!),
+              _buildBody(context, state),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBody(CompanyInfo companyInfo) {
+  Widget _buildBody(BuildContext context, CompanyInfoState state) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            companyInfo.name,
+            state.companyInfo!.name,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
@@ -46,23 +47,37 @@ class CompanyInfoScreen extends StatelessWidget {
             ),
           ),
           Text(
-            companyInfo.symbol,
+            state.companyInfo!.symbol,
             style: const TextStyle(fontStyle: FontStyle.italic),
           ),
           const Divider(),
           Text(
-            'Industry: ${companyInfo.industry}',
+            'Industry: ${state.companyInfo!.industry}',
             style: const TextStyle(
               overflow: TextOverflow.ellipsis,
             ),
           ),
           const Divider(),
           Text(
-            companyInfo.description,
+            state.companyInfo!.description,
             style: const TextStyle(
               fontSize: 12,
             ),
-          )
+          ),
+          const SizedBox(height: 26),
+          const Text(
+            '주가 그래프',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 26),
+          if (state.stockInfos.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: StockChart(
+                infos: state.stockInfos,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            )
         ],
       ),
     );

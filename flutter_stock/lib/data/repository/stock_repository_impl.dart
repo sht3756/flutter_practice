@@ -27,8 +27,14 @@ class StockRepositoryImpl implements StockRepository {
 
     if (shouldJustLoadFromCache) {
       // 확장 메소드 사용 toCompanyListing()
-      return Result.success(
-          localListings.map((e) => e.toCompanyListing()).toList());
+      // null 예외처리
+      return Result.success(localListings
+          .where((element) =>
+              element.symbol != null &&
+              element.name != null &&
+              element.exchange != null)
+          .map((e) => e.toCompanyListing())
+          .toList());
     }
 
     try {

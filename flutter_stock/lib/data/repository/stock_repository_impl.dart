@@ -1,16 +1,19 @@
 import 'package:flutter_stock/data/csv/company_listing_parsers.dart';
+import 'package:flutter_stock/data/csv/intraday_info_parser.dart';
 import 'package:flutter_stock/data/mapper/company_mapper.dart';
 import 'package:flutter_stock/data/source/local/stock_dao.dart';
 import 'package:flutter_stock/data/source/remote/stock_api.dart';
 import 'package:flutter_stock/domain/model/company_info.dart';
 import 'package:flutter_stock/domain/model/company_listing.dart';
+import 'package:flutter_stock/domain/model/intraday_info.dart';
 import 'package:flutter_stock/domain/repository/stock_repository.dart';
 import 'package:flutter_stock/util/result.dart';
 
 class StockRepositoryImpl implements StockRepository {
   final StockApi _api;
   final StockDao _dao;
-  final _parser = CompanyListingsParser();
+  final _companyListingsParser = CompanyListingsParser();
+  final _intradayInfoParser = IntradayInfoParser();
 
   StockRepositoryImpl(this._api, this._dao);
 
@@ -30,9 +33,10 @@ class StockRepositoryImpl implements StockRepository {
 
     try {
       final res = await _api.getListings();
-      final remoteListings = await _parser.parse(res.body);
+      final remoteListings = await _companyListingsParser.parse(res.body);
 
       await _dao.clearCompanyListings();
+
       await _dao.insertCompanyListings(
           remoteListings.map((e) => e.toCompanyListingEntity()).toList());
 
@@ -49,6 +53,18 @@ class StockRepositoryImpl implements StockRepository {
       return Result.success(dto.toCompanyInfo());
     } catch (e) {
       return Result.error(Exception('회사 정보 로드 실패!! : ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Result<List<IntradayInfo>>> getIntradayInfo(String symbol) async {
+    try {
+      final res = await _api.getIntradayInfo(symbol: symbol);
+      final results = await _intradayInfoParser.parse(res.body);
+
+      return Result.success(results);
+    } catch (e) {
+      return Result.error(Exception('intradya 정보 로드 실패!! : ${e.toString()}'));
     }
   }
 }

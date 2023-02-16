@@ -15,6 +15,6 @@ class CompanyInfoState with _$CompanyInfoState {
     @Default([]) List<IntradayInfo> stockInfos,
   }) = _CompanyInfoState;
 
-  factory CompanyInfoState.fromJson(Map<String, dynamic> json) =>
+  factory CompanyInfoState.fromJson(Map<String, Object?> json) =>
       _$CompanyInfoStateFromJson(json);
 }

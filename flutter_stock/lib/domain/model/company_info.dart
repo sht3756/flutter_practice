@@ -6,7 +6,7 @@ part 'company_info.g.dart';
 
 @freezed
 class CompanyInfo with _$CompanyInfo {
-  factory CompanyInfo({
+  const factory CompanyInfo({
     required String symbol,
     required String description,
     required String name,
@@ -14,6 +14,6 @@ class CompanyInfo with _$CompanyInfo {
     required String industry,
   }) = _CompanyInfo;
 
-  factory CompanyInfo.fromJson(Map<String, dynamic> json) =>
+  factory CompanyInfo.fromJson(Map<String, Object?> json) =>
       _$CompanyInfoFromJson(json);
 }

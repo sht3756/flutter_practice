@@ -11,6 +11,6 @@ class IntradayInfoDto with _$IntradayInfoDto {
     required double close,
   }) = _IntradayInfoDto;
 
-  factory IntradayInfoDto.fromJson(Map<String, dynamic> json) =>
+  factory IntradayInfoDto.fromJson(Map<String, Object?> json) =>
       _$IntradayInfoDtoFromJson(json);
 }

@@ -5,7 +5,7 @@ import 'package:flutter_stock/domain/model/intraday_info.dart';
 
 extension ToIntradayInfo on IntradayInfoDto {
   IntradayInfo toIntradayInfo() {
-    final formatter = DateFormat('yyy-<<-ddHH:mm:ss');
+    final formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     return IntradayInfo(
       date: formatter.parse(timestamp),
       close: close,

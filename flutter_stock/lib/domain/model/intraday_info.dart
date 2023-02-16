@@ -6,11 +6,11 @@ part 'intraday_info.g.dart';
 
 @freezed
 class IntradayInfo with _$IntradayInfo {
-  factory IntradayInfo({
+  const factory IntradayInfo({
     required DateTime date,
     required double close,
   }) = _IntradayInfo;
 
-  factory IntradayInfo.fromJson(Map<String, dynamic> json) =>
+  factory IntradayInfo.fromJson(Map<String, Object?> json) =>
       _$IntradayInfoFromJson(json);
 }

@@ -33,6 +33,7 @@ class CompanyInfoScreen extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context, CompanyInfoState state) {
+    print(state);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -75,6 +76,8 @@ class CompanyInfoScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: StockChart(
                 infos: state.stockInfos,
+                graphColor: Theme.of(context).colorScheme.primary,
+                textColor: Theme.of(context).colorScheme.onSurface,
                 color: Theme.of(context).colorScheme.primary,
               ),
             )

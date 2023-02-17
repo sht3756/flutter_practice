@@ -21,7 +21,7 @@ class ExploreScreen extends StatelessWidget {
           if (snapshot.hasData) {
             final todayRecipes = snapshot.data?.todayRecipes ?? [];
 
-            return TodayRecipeListView();
+            return TodayRecipeListView(recipes: todayRecipes);
           }
           return Text('Please add som data!!');
         } else {

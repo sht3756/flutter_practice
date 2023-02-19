@@ -14,16 +14,19 @@ class ExploreScreen extends StatelessWidget {
     return FutureBuilder<ExploreData>(
       future: mockService.getExploreData(),
       builder: (context, snapshot) {
-        print(snapshot.connectionState);
-        print(snapshot.hasData);
-
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             final todayRecipes = snapshot.data?.todayRecipes ?? [];
 
-            return TodayRecipeListView(recipes: todayRecipes);
+            return ListView(
+              children: [
+                TodayRecipeListView(recipes: todayRecipes),
+                const SizedBox(height: 32),
+                FriendPostTitle(),
+              ],
+            );
           }
-          return Text('Please add som data!!');
+          return const Text('Please add som data!!');
         } else {
           return const Center(child: CircularProgressIndicator());
         }

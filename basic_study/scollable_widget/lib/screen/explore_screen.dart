@@ -17,12 +17,13 @@ class ExploreScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             final todayRecipes = snapshot.data?.todayRecipes ?? [];
+            final friendPost = snapshot.data?.friendPosts ?? [];
 
             return ListView(
               children: [
                 TodayRecipeListView(recipes: todayRecipes),
                 const SizedBox(height: 32),
-                FriendPostListView(),
+                FriendPostListView(posts: friendPost),
               ],
             );
           }

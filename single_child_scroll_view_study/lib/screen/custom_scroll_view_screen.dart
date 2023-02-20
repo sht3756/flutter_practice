@@ -56,7 +56,7 @@ class CustomScrollViewScreen extends StatelessWidget {
         // list 형태의 위젯들을 한번에 쓸수 있게끔 해준다! 하지만 특정 되어있다.
         slivers: [
           // ios : appBar 가 스크롤이 된다.
-          renderSliverAppBar(),
+          // renderSliverAppBar(),
           renderHeader(),
           renderChildSliverGrid(),
           renderHeader(),
@@ -75,7 +75,7 @@ class CustomScrollViewScreen extends StatelessWidget {
       pinned: true,
       delegate: _SliverFixedHeaderDelegate(
         child: Container(
-          color: Colors.black,
+          color: Colors.pink,
           child: Center(
             child: Text(
               '내용',
@@ -83,12 +83,11 @@ class CustomScrollViewScreen extends StatelessWidget {
             ),
           ),
         ),
-        minHeight: 75,
-        maxHeight: 150,
+        minHeight: 200,
+        maxHeight: 250,
       ),
     );
   }
-
 
   // AppBar
   SliverAppBar renderSliverAppBar() {
@@ -106,13 +105,13 @@ class CustomScrollViewScreen extends StatelessWidget {
       // 최소 사이즈 설정
       collapsedHeight: 150,
       // AppBar 공간을 차지하는 부분 설정, 앱바의 전체 부분을 차지한다.
-      flexibleSpace: FlexibleSpaceBar(
-        background: Image.asset(
-          'asset/img/image_1.jpeg',
-          fit: BoxFit.cover,
-        ),
-        title: Text('FlexibleSpaceBar'),
-      ),
+      // flexibleSpace: FlexibleSpaceBar(
+      //   background: Image.asset(
+      //     'asset/img/image_1.jpeg',
+      //     fit: BoxFit.cover,
+      //   ),
+      //   title: Text('FlexibleSpaceBar'),
+      // ),
       title: Text('CustomScrollViewScreen'),
     );
   }

@@ -68,8 +68,9 @@ class SingleChildScrollViewScreen extends StatelessWidget {
       child: Column(
           children: numbers
               .map((e) => renderContainer(
-            // 빨강 부터 보라색까지 가져오려는식 나머지를 구함.
-                  color: rainbowColors[e % rainbowColors.length], index: e))
+                  // 빨강 부터 보라색까지 가져오려는식 나머지를 구함.
+                  color: rainbowColors[e % rainbowColors.length],
+                  index: e))
               .toList()),
     );
   }
@@ -78,7 +79,7 @@ class SingleChildScrollViewScreen extends StatelessWidget {
     required Color color,
     int? index,
   }) {
-    if(index != null) {
+    if (index != null) {
       print(index);
     }
 

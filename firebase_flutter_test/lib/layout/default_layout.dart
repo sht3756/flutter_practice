@@ -14,7 +14,7 @@ class DefaultLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appbar,
-      body: body,
+      body: SafeArea(child: body),
     );
   }
 }

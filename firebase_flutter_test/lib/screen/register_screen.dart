@@ -62,11 +62,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     password: _passwordController.text,
                   );
                   print('userCredential ${userCredential.toString()}');
-                } on FirebaseAuthException catch (e) {}
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'email-already-in-use') {
+                    customSnackBar(
+                        context, const Text('email-already-in-use!!'));
+                  } else if (e.code == 'invalid-email') {
+                    customSnackBar(context, const Text('invalid-email!!'));
+                  } else if (e.code == 'operation-not-allowed') {
+                    customSnackBar(
+                        context, const Text('operation-not-allowed!!'));
+                  } else if (e.code == 'weak-password') {
+                    customSnackBar(context, const Text('weak-password!!'));
+                  }
+                }
               },
               child: const Text('회원가입'))
         ],
       ),
     ));
+  }
+
+  // 스낵바
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> customSnackBar(
+      BuildContext context, Widget childText) {
+    final customSnackBar = SnackBar(
+      content: childText,
+      duration: const Duration(seconds: 3),
+    );
+    return ScaffoldMessenger.of(context).showSnackBar(customSnackBar);
   }
 }

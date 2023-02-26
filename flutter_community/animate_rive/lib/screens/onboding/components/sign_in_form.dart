@@ -1,3 +1,5 @@
+import 'package:animate_rive/screens/onboding/components/entry_point.dart';
+import 'package:animate_rive/utils/rive_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,48 +13,59 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isShowLoading = false;
   bool isShowConfetti = false;
 
-  late SMITrigger confetti;
   late SMITrigger check;
   late SMITrigger error;
   late SMITrigger reset;
+
+  late SMITrigger confetti;
 
   void signIn(BuildContext context) {
     setState(() {
       isShowLoading = true;
       isShowConfetti = true;
     });
-
-    Future.delayed(const Duration(seconds: 1), () {
-      if (_formKey.currentState!.validate()) {
-        check.fire();
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            isShowLoading = false;
-          });
-
-          // TODO : Fire confetti animation
-          confetti.fire();
-          isShowConfetti = true;
-          // TODO : Navigate to next screen
-          // Future.delayed(const Duration(seconds: 1), () {
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (context) => DestinationPage()));
-          // });
-        });
-      } else {
-        error.fire();
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            isShowLoading = false;
-          });
-        });
-      }
-    });
+    Future.delayed(
+      Duration(seconds: 1),
+          () {
+        if (_formKey.currentState!.validate()) {
+          check.fire();
+          Future.delayed(
+            Duration(seconds: 2),
+                () {
+              setState(() {
+                isShowLoading = false;
+              });
+              confetti.fire();
+              Future.delayed(
+                Duration(seconds: 1),
+                    () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EntryPoint(),
+                      ));
+                },
+              );
+            },
+          );
+        } else {
+          error.fire();
+          Future.delayed(
+            const Duration(seconds: 2),
+                () {
+              setState(() {
+                isShowLoading = false;
+              });
+            },
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -65,32 +78,7 @@ class _SignInFormState extends State<SignInForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Email',
-                style: TextStyle(color: Colors.black54),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 8,
-                  bottom: 16,
-                ),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "";
-                    } else {
-                      return null;
-                    }
-                  },
-                  onSaved: (email) {},
-                  decoration: InputDecoration(
-                      prefixIcon: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: SvgPicture.asset("assets/icons/email.svg"),
-                  )),
-                ),
-              ),
-              const Text(
-                'Password',
+                "Email",
                 style: TextStyle(color: Colors.black54),
               ),
               Padding(
@@ -99,9 +87,30 @@ class _SignInFormState extends State<SignInForm> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "";
-                    } else {
-                      return null;
                     }
+                    return null;
+                  },
+                  onSaved: (email) {},
+                  decoration: InputDecoration(
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: SvgPicture.asset("assets/icons/email.svg"),
+                    ),
+                  ),
+                ),
+              ),
+              const Text(
+                "Password",
+                style: TextStyle(color: Colors.black54),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 16),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "";
+                    }
+                    return null;
                   },
                   onSaved: (password) {},
                   obscureText: true,
@@ -137,42 +146,41 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   label: const Text("Sign In"),
                 ),
-              )
+              ),
             ],
           ),
         ),
         isShowLoading
             ? CustomPositioned(
-                child: RiveAnimation.asset(
-                  "assets/RiveAssets/check.riv",
-                  onInit: (artboard) {
-                    StateMachineController? controller =
-                        StateMachineController.fromArtboard(
-                            artboard, "State Machine 1");
-                    artboard.addController(controller!);
-                    check = controller.findSMI("Check") as SMITrigger;
-                    error = controller.findSMI("Error") as SMITrigger;
-                    reset = controller.findSMI("Reset") as SMITrigger;
-                  },
-                ),
-              )
+          child: RiveAnimation.asset(
+            "assets/RiveAssets/check.riv",
+            onInit: (artboard) {
+              StateMachineController controller =
+              RiveUtils.getRiveController(artboard);
+              check = controller.findSMI("Check") as SMITrigger;
+              error = controller.findSMI("Error") as SMITrigger;
+              reset = controller.findSMI("Reset") as SMITrigger;
+            },
+          ),
+        )
             : const SizedBox(),
+
         isShowConfetti
             ? CustomPositioned(
-                child: Transform.scale(
-                scale: 7,
-                child: RiveAnimation.asset(
-                  "assets?RiveAssets/confetti.riv",
-                  onInit: (artboard) {
-                    StateMachineController? controller =
-                        StateMachineController.fromArtboard(
-                            artboard, "State Machine 1");
-                    artboard.addController(controller!);
-                    confetti =
-                        controller.findSMI("Trigger explosion") as SMITrigger;
-                  },
-                ),
-              ))
+          child: Transform.scale(
+            scale: 7,
+            child: RiveAnimation.asset(
+              "assets/RiveAssets/confetti.riv",
+              onInit: (artboard) {
+                StateMachineController controller =
+                RiveUtils.getRiveController(artboard);
+
+                confetti =
+                controller.findSMI("Trigger explosion") as SMITrigger;
+              },
+            ),
+          ),
+        )
             : const SizedBox(),
       ],
     );
@@ -180,28 +188,26 @@ class _SignInFormState extends State<SignInForm> {
 }
 
 class CustomPositioned extends StatelessWidget {
+  const CustomPositioned({super.key, required this.child, this.size = 100});
+
   final Widget child;
   final double size;
-
-  const CustomPositioned({
-    Key? key,
-    required this.child,
-    this.size = 100,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-        child: Column(
-      children: [
-        const Spacer(),
-        SizedBox(
-          height: size,
-          width: size,
-          child: child,
-        ),
-        const Spacer(flex: 2),
-      ],
-    ));
+      // Let's make it small
+      child: Column(
+        children: [
+          const Spacer(),
+          SizedBox(
+            height: size,
+            width: size,
+            child: child,
+          ),
+          const Spacer(flex: 2),
+        ],
+      ),
+    );
   }
 }

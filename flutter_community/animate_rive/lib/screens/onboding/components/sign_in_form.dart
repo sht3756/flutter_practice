@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rive/rive.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -11,6 +12,48 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool isShowLoading = false;
+  bool isShowConfetti = false;
+
+  late SMITrigger confetti;
+  late SMITrigger check;
+  late SMITrigger error;
+  late SMITrigger reset;
+
+  void signIn(BuildContext context) {
+    setState(() {
+      isShowLoading = true;
+      isShowConfetti = true;
+    });
+
+    Future.delayed(const Duration(seconds: 1), () {
+      if (_formKey.currentState!.validate()) {
+        check.fire();
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            isShowLoading = false;
+          });
+
+          // TODO : Fire confetti animation
+          confetti.fire();
+          isShowConfetti = true;
+          // TODO : Navigate to next screen
+          // Future.delayed(const Duration(seconds: 1), () {
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (context) => DestinationPage()));
+          // });
+        });
+      } else {
+        error.fire();
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            isShowLoading = false;
+          });
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +116,9 @@ class _SignInFormState extends State<SignInForm> {
               Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 24),
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    signIn(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFF77D8E),
                     minimumSize: const Size(double.infinity, 56),
@@ -95,8 +140,68 @@ class _SignInFormState extends State<SignInForm> {
               )
             ],
           ),
-        )
+        ),
+        isShowLoading
+            ? CustomPositioned(
+                child: RiveAnimation.asset(
+                  "assets/RiveAssets/check.riv",
+                  onInit: (artboard) {
+                    StateMachineController? controller =
+                        StateMachineController.fromArtboard(
+                            artboard, "State Machine 1");
+                    artboard.addController(controller!);
+                    check = controller.findSMI("Check") as SMITrigger;
+                    error = controller.findSMI("Error") as SMITrigger;
+                    reset = controller.findSMI("Reset") as SMITrigger;
+                  },
+                ),
+              )
+            : const SizedBox(),
+        isShowConfetti
+            ? CustomPositioned(
+                child: Transform.scale(
+                scale: 7,
+                child: RiveAnimation.asset(
+                  "assets?RiveAssets/confetti.riv",
+                  onInit: (artboard) {
+                    StateMachineController? controller =
+                        StateMachineController.fromArtboard(
+                            artboard, "State Machine 1");
+                    artboard.addController(controller!);
+                    confetti =
+                        controller.findSMI("Trigger explosion") as SMITrigger;
+                  },
+                ),
+              ))
+            : const SizedBox(),
       ],
     );
+  }
+}
+
+class CustomPositioned extends StatelessWidget {
+  final Widget child;
+  final double size;
+
+  const CustomPositioned({
+    Key? key,
+    required this.child,
+    this.size = 100,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+        child: Column(
+      children: [
+        const Spacer(),
+        SizedBox(
+          height: size,
+          width: size,
+          child: child,
+        ),
+        const Spacer(flex: 2),
+      ],
+    ));
   }
 }

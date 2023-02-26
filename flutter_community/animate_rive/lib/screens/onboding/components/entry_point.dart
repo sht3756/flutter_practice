@@ -1,7 +1,10 @@
 import 'package:animate_rive/constants.dart';
 import 'package:animate_rive/models/rive_asset.dart';
+import 'package:animate_rive/utils/rive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+
+import 'animated_bar.dart';
 
 class EntryPoint extends StatefulWidget {
   const EntryPoint({Key? key}) : super(key: key);
@@ -11,6 +14,8 @@ class EntryPoint extends StatefulWidget {
 }
 
 class _EntryPointState extends State<EntryPoint> {
+  RiveAsset selectedBottomNav = bottomNavs.first;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,30 +29,47 @@ class _EntryPointState extends State<EntryPoint> {
             borderRadius: BorderRadius.all(Radius.circular(24)),
           ),
           child: Row(
-            // TODO: Set mainAxisAlignment
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // TODO: Bottom nav items
               ...List.generate(
                   bottomNavs.length,
                   (index) => GestureDetector(
                         onTap: () {
-                          // TODO: 탭 시 애니메이션 재생
+                          bottomNavs[index].input!.change(true);
+                          if (bottomNavs[index] != selectedBottomNav) {
+                            setState(() {
+                              selectedBottomNav = bottomNavs[index];
+                            });
+                          }
+                          Future.delayed(const Duration(seconds: 1), () {
+                            bottomNavs[index].input!.change(false);
+                          });
                         },
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            //  TODO: Animated Bar
+                            AnimatedBar(
+                                isActive:
+                                    bottomNavs[index] == selectedBottomNav),
                             SizedBox(
                               height: 36,
                               width: 36,
                               child: Opacity(
-                                  opacity: 1,
-                                  // TODO: 자식인 선택되지 않을 경우 투명도 변경
+                                  opacity:
+                                      bottomNavs[index] == selectedBottomNav
+                                          ? 1
+                                          : 0.5,
                                   child: RiveAnimation.asset(
                                       bottomNavs[index].src,
                                       artboard: bottomNavs[index].artboard,
                                       onInit: (artboard) {
-                                    // TODO: 입력값 설정
+                                    StateMachineController controller =
+                                        RiveUtils.getRiveController(artboard,
+                                            stateMachineName: bottomNavs[index]
+                                                .stateMachineName);
+
+                                    bottomNavs[index].input =
+                                        controller.findSMI("active") as SMIBool;
                                   })),
                             )
                           ],

@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
+import 'components/custom_sign_in_dialog.dart';
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -23,6 +25,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,14 +90,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onTap: () {
                       // 애니메이션 시작
                       _btnAnimationController.isActive = true;
+                      Future.delayed(const Duration(milliseconds: 800), () {
+                        // TODO: Update dialog status
+                        customSignInDialog(context, onClosed: (_) {});
+                      });
                     },
                     child: SizedBox(
                       height: 64,
                       width: 260,
                       child: Stack(
                         children: [
-                           RiveAnimation.asset(
-                              "assets/RiveAssets/button.riv",
+                          RiveAnimation.asset(
+                            "assets/RiveAssets/button.riv",
                             // 컨트롤 추가
                             controllers: [_btnAnimationController],
                           ),

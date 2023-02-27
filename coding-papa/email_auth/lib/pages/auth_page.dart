@@ -257,6 +257,32 @@ class _AuthWidgetState extends State<AuthWidget> {
             }
           } else {
             // 로그인 일때
+            try{
+              await FirebaseAuth.instance.signInWithEmailAndPassword(
+                email: _emailController.text,
+                password: _passwordController.text,
+              );
+            }on FirebaseAuthException catch(e){
+              if (e.code == 'invalid-email') {
+                SnackBar snackBar =
+                const SnackBar(content: Text('이메일이 잘못 되었습니다.'));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (e.code == 'user-disabled') {
+                SnackBar snackBar =
+                const SnackBar(content: Text('유저는 비활성화 상태입니다.'));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (e.code == 'user-not-found') {
+                SnackBar snackBar =
+                const SnackBar(content: Text('유저를 찾을수 없습니다.'));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (e.code == 'wrong-password') {
+                SnackBar snackBar =
+                const SnackBar(content: Text('비밀번호가 잘못 되었습니다.'));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+
+            }
+
           }
         }
       },

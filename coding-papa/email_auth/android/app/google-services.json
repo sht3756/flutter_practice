@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "952005346716",
+    "project_id": "fir-auth-80ba3",
+    "storage_bucket": "fir-auth-80ba3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952005346716:android:c6c3064b61324a3a80f459",
+        "android_client_info": {
+          "package_name": "com.example.email_auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952005346716-rb9u5l53pbsrh4cu9l2p8r5rpqpvlft6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgfekVgNUh90vYMWG3R6ZbLdN2Pho8EBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "952005346716-rb9u5l53pbsrh4cu9l2p8r5rpqpvlft6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

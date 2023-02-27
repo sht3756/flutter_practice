@@ -13,8 +13,7 @@ class PageNotifier extends ChangeNotifier {
       if (user == null) {
         // 비로그인일때
         showPage(AuthPage.pageName); // 로그인 페이지
-      }
-      if (user != null) {
+      }else {
         // 로그인된 상태일때
         if (user.emailVerified) {
           goToMain(); // 메인페이지
@@ -43,10 +42,12 @@ class PageNotifier extends ChangeNotifier {
 
     if (user == null) showPage(AuthPage.pageName);
 
+    if(user != null) {
     if (user.emailVerified) {
-      goToMain();
-    } else {
-      showPage(CheckYourEmail.pageName);
+        goToMain();
+      } else {
+        showPage(CheckYourEmail.pageName);
+      }
     }
   }
 }

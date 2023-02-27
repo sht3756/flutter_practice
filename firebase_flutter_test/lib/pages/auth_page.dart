@@ -156,7 +156,7 @@ class _AuthWidgetState extends State<AuthWidget> {
       child: Text('Register',
           style: TextStyle(
               fontSize: 18,
-              fontWeight: isRegister ? FontWeight.w600 : FontWeight.w500, color: Colors.transparent)),
+              fontWeight: isRegister ? FontWeight.w600 : FontWeight.w500, color: Colors.black)),
     );
   }
 
@@ -173,7 +173,7 @@ class _AuthWidgetState extends State<AuthWidget> {
       child: Text('Login',
           style: TextStyle(
               fontSize: 18,
-              fontWeight: isRegister ? FontWeight.w500 : FontWeight.w600, color: Colors.transparent)),
+              fontWeight: isRegister ? FontWeight.w500 : FontWeight.w600, color: Colors.black)),
     );
   }
 

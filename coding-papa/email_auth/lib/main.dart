@@ -1,3 +1,4 @@
+import 'package:email_auth/pages/check_your_email.dart';
 import 'package:email_auth/pages/my_home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:email_auth/pages/auth_page.dart';
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
                     child: MyHome(
                         title: 'Flutter Demo Home Page')), // main home page
 
-                if (pageNotifier.curPage == AuthPage.pageName) AuthPage()
+                if (pageNotifier.curPage == AuthPage.pageName) const AuthPage(),
+                if (pageNotifier.curPage == CheckYourEmail.pageName) const CheckYourEmail(),
               ],
               onPopPage: (route, result) {
                 if (!route.didPop(result)) {

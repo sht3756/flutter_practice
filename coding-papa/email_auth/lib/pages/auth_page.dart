@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AuthPage extends Page {
-  static final pageName = "AuthPage";
+  static const pageName = "AuthPage";
 
   const AuthPage({super.key});
 
+  @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
       settings: this,
@@ -28,20 +29,20 @@ class AuthWidget extends StatefulWidget {
 class _AuthWidgetState extends State<AuthWidget> {
   final radiusSize = 8.0;
   bool isRegister = false;
-  final _duration = Duration(milliseconds: 200);
+  final _duration = const Duration(milliseconds: 200);
   final _curve = Curves.fastOutSlowIn;
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
           image: AssetImage('assets/image.gif'),
           fit: BoxFit.cover,
@@ -55,7 +56,7 @@ class _AuthWidgetState extends State<AuthWidget> {
             body: Form(
               key: _formKey,
               child: ListView(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 reverse: true,
                 children: <Widget>[
                   CircleAvatar(
@@ -69,16 +70,12 @@ class _AuthWidgetState extends State<AuthWidget> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 60,
-                  ),
+                  const SizedBox(height: 60),
                   ButtonBar(
                     children: [_loginTabButton(context), _registerTabButton()],
                   ),
                   _textFormField(_emailController, 'Email Address'),
-                  SizedBox(
-                    height: 8,
-                  ),
+                  const SizedBox(height: 8),
                   _textFormField(_passwordController, 'Password'),
                   AnimatedContainer(
                     duration: _duration,
@@ -91,11 +88,9 @@ class _AuthWidgetState extends State<AuthWidget> {
                       curve: _curve,
                       child: _textFormField(
                           _confirmController, 'Confirm Password')),
-                  SizedBox(
-                    height: 24,
-                  ),
+                  const SizedBox(height: 24),
                   _loginButton(context),
-                  Divider(
+                  const Divider(
                     height: 50,
                     thickness: 1,
                     color: Colors.white54,
@@ -187,27 +182,32 @@ class _AuthWidgetState extends State<AuthWidget> {
       controller: controller,
       cursorColor: Colors.white,
       obscureText: controller != _emailController,
-      style: TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.white),
       validator: (text) {
-        if (controller != _confirmController && (text == null || text.isEmpty))
+        if (controller != _confirmController &&
+            (text == null || text.isEmpty)) {
           return "Please input something!!";
+        }
 
         if (controller == _confirmController && isRegister) {
-          if ((text == null && text == '') || text != _passwordController.text)
+          if ((text == null && text == '') ||
+              text != _passwordController.text) {
             return "Password you input does not match.";
+          }
         }
 
         return null;
       },
       decoration: InputDecoration(
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: Colors.white,
         ),
         labelText: hint,
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusSize),
-            borderSide: BorderSide(color: Colors.black, width: 3)),
-        errorStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            borderSide: const BorderSide(color: Colors.black, width: 3)),
+        errorStyle:
+            const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         filled: true,
         fillColor: Colors.black45,
         border: OutlineInputBorder(
@@ -215,10 +215,10 @@ class _AuthWidgetState extends State<AuthWidget> {
         ),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusSize),
-            borderSide: BorderSide(color: Colors.transparent, width: 0)),
+            borderSide: const BorderSide(color: Colors.transparent, width: 0)),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radiusSize),
-            borderSide: BorderSide(color: Colors.transparent, width: 0)),
+            borderSide: const BorderSide(color: Colors.transparent, width: 0)),
       ),
     );
   }

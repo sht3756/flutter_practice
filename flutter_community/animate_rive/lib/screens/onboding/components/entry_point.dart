@@ -1,5 +1,6 @@
 import 'package:animate_rive/constants.dart';
 import 'package:animate_rive/models/rive_asset.dart';
+import 'package:animate_rive/screens/home/home_screen.dart';
 import 'package:animate_rive/utils/rive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
@@ -19,7 +20,7 @@ class _EntryPointState extends State<EntryPoint> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(),
+      body: HomeScreen(),
       bottomNavigationBar: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(12),

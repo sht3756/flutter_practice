@@ -1,6 +1,7 @@
 import 'package:email_auth/provider/page_notifier.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class AuthPage extends Page {
@@ -103,8 +104,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                       _socialLogin(
                           assetLoction: 'assets/icons8-google-48.png',
                           onPress: () {
-                            Provider.of<PageNotifier>(context, listen: false)
-                                .goToMain();
+                            _signInGoogle();
                           }),
                       _socialLogin(
                           assetLoction: 'assets/icons8-facebook-48.png',
@@ -127,6 +127,27 @@ class _AuthWidgetState extends State<AuthWidget> {
         ),
       ),
     );
+  }
+
+  Future<UserCredential> _signInGoogle() async {
+    // 구글 창뜨고 로그인 하기
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // 구글에 로그인 한 정보들 googleAuth 저장
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser!.authentication;
+
+    // 파이어베이스 credential 에 맞게끔 세팅
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // 파이어베이스에 만들어놓은 credential 로 로그인하기
+    final UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    return userCredential;
   }
 
   Container _socialLogin(
@@ -257,32 +278,30 @@ class _AuthWidgetState extends State<AuthWidget> {
             }
           } else {
             // 로그인 일때
-            try{
+            try {
               await FirebaseAuth.instance.signInWithEmailAndPassword(
                 email: _emailController.text,
                 password: _passwordController.text,
               );
-            }on FirebaseAuthException catch(e){
+            } on FirebaseAuthException catch (e) {
               if (e.code == 'invalid-email') {
                 SnackBar snackBar =
-                const SnackBar(content: Text('이메일이 잘못 되었습니다.'));
+                    const SnackBar(content: Text('이메일이 잘못 되었습니다.'));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               } else if (e.code == 'user-disabled') {
                 SnackBar snackBar =
-                const SnackBar(content: Text('유저는 비활성화 상태입니다.'));
+                    const SnackBar(content: Text('유저는 비활성화 상태입니다.'));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               } else if (e.code == 'user-not-found') {
                 SnackBar snackBar =
-                const SnackBar(content: Text('유저를 찾을수 없습니다.'));
+                    const SnackBar(content: Text('유저를 찾을수 없습니다.'));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               } else if (e.code == 'wrong-password') {
                 SnackBar snackBar =
-                const SnackBar(content: Text('비밀번호가 잘못 되었습니다.'));
+                    const SnackBar(content: Text('비밀번호가 잘못 되었습니다.'));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
-
             }
-
           }
         }
       },

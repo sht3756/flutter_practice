@@ -102,18 +102,18 @@ class _AuthWidgetState extends State<AuthWidget> {
                     alignment: MainAxisAlignment.center,
                     children: [
                       _socialLogin(
-                          assetLoction: 'assets/icons8-google-48.png',
+                          assetLocation: 'assets/icons8-google-48.png',
                           onPress: () {
                             _signInGoogle();
                           }),
                       _socialLogin(
-                          assetLoction: 'assets/icons8-facebook-48.png',
+                          assetLocation: 'assets/icons8-facebook-48.png',
                           onPress: () {
                             Provider.of<PageNotifier>(context, listen: false)
                                 .goToMain();
                           }),
                       _socialLogin(
-                          assetLoction: 'assets/icons8-apple-logo-48.png',
+                          assetLocation: 'assets/icons8-apple-logo-48.png',
                           onPress: () {
                             Provider.of<PageNotifier>(context, listen: false)
                                 .goToMain();
@@ -151,14 +151,14 @@ class _AuthWidgetState extends State<AuthWidget> {
   }
 
   Container _socialLogin(
-      {required String assetLoction, required VoidCallback onPress}) {
+      {required String assetLocation, required VoidCallback onPress}) {
     return Container(
       width: 50,
       height: 50,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25), color: Colors.white54),
       child: IconButton(
-          icon: ImageIcon(AssetImage(assetLoction)), onPressed: onPress),
+          icon: ImageIcon(AssetImage(assetLocation)), onPressed: onPress),
     );
   }
 

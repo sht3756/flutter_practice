@@ -3,22 +3,33 @@ import 'package:portfolio/screen/home_screen.dart';
 import 'package:portfolio/utils/size.dart';
 
 class DefaultLayout extends StatelessWidget {
-  final AppBar appBar;
+  final Widget body;
 
-  const DefaultLayout({Key? key, required this.appBar}) : super(key: key);
+  const DefaultLayout({Key? key, required this.body}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double pageWidth = MediaQuery.of(context).size.width;
     isWeb = pageWidth > mobileWidth ? true : false;
+
     bool isDarkMode = false;
 
     return Scaffold(
-      body: Column(
-        children: [
-          _Header(isWeb: isWeb, isDarkMode: isDarkMode),
-          _Body(isWeb: isWeb, isDarkMode: isDarkMode),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            _Header(isDarkMode: isDarkMode, isWeb: isWeb),
+            Container(
+              color: Colors.red,
+              width: isWeb ? 50 : 20,
+            ),
+            body,
+            Container(
+              color: Colors.red,
+              width: isWeb ? 50 : 20,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -50,15 +61,15 @@ class _Header extends StatelessWidget {
       width: double.infinity,
       height: 48,
       color: Colors.black54,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        SizedBox(
-          width: pageWidth > breakPointWidth
-              ? (pageWidth - breakPointWidth) / 2 + 10
-              : 20,
+      child: Row(children: [
+        Container(
+          color: Colors.red,
+          width: isWeb ? 50 : 20,
         ),
+
         Text("<Shin Heetae/>",
             style: isWeb ? isWebHeaderTextStyle : isBodyTextStyle),
-        if (isWeb) const Spacer(),
+        // if (isWeb) const Spacer(),
         if (isWeb)
           TextButton(
               onPressed: () {
@@ -104,39 +115,14 @@ class _Header extends StatelessWidget {
               child: Text("Blog",
                   style: isWeb ? isBodyTextStyle : isMobileTextStyle)),
         if (isWeb) const SizedBox(width: 24),
+        const Spacer(),
         IconButton(
             onPressed: () {},
             icon: Icon(
               isDarkMode ? Icons.dark_mode : Icons.light_mode,
             )),
-        SizedBox(
-            width: pageWidth > breakPointWidth
-                ? (pageWidth - breakPointWidth) / 2
-                : 20),
+        SizedBox(width: isWeb ? 50 : 20),
       ]),
-    );
-  }
-}
-
-class _Body extends StatelessWidget {
-  final bool isWeb;
-  final bool isDarkMode;
-
-  const _Body({Key? key, required this.isDarkMode, required this.isWeb})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.star,
-        children: [
-          Text(
-            '현재는 ${isWeb ? '웹 사이즈' : '모바일 사이즈'} ',
-            style: const TextStyle(fontSize: 30),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/theme/constant/app_icons.dart';
 import '../../../routes/route_path.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,8 +24,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: SvgPicture.asset('assets/svg/main_logo.svg')),
-      backgroundColor: Color(0xFF5F0080),
+      body: Center(child: SvgPicture.asset(AppIcons.mainLogo)),
+      backgroundColor: Theme.of(context).colorScheme.primary,
     );
   }
 }

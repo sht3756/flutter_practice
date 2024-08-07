@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../routes/route_path.dart';
 
-class SplashPage extends StatelessWidget {
-  const SplashPage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class SplashPage extends StatelessWidget {
               'SplashPage',
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
-            ElevatedButton(onPressed: () => context.push(RoutePath.home), child: Text('go Home')),
+            ElevatedButton(onPressed: () => context.push(RoutePath.main), child: Text('go Home')),
           ],
         ),
       ),

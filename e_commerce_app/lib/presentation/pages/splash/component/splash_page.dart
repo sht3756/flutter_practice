@@ -7,19 +7,19 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/constant/app_icons.dart';
 import '../../../routes/route_path.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class SplashPage extends StatefulWidget {
+  const SplashPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 2),() => context.go(RoutePath.home));
+    Timer(Duration(seconds: 2),() => context.go(RoutePath.main));
   }
   @override
   Widget build(BuildContext context) {

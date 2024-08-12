@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_study/course_1/sliver/ex_sliver_app_bar.dart';
 
+import 'sliver.dart';
+
 void main() {
   runApp(const MyApp1());
 }
@@ -23,6 +25,7 @@ class MyApp1 extends StatelessWidget {
 
 final List<Map<String, dynamic>> _examples = [
   {'title': 'SliverAppBar', 'widget': const SliverAppBarExample()},
+  {'title': 'SliverPersistentHeader', 'widget': const SliverPersistentHeaderExample()},
 ];
 
 class SliverExampleNavigatorList extends StatelessWidget {

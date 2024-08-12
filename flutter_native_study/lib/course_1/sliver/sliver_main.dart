@@ -32,7 +32,9 @@ final List<Map<String, dynamic>> _examples = [
   {'title': 'SliverFixedExtendedList', 'widget': const SliverFixedExtendedListExample()},
   {'title': 'SliverGrid.count', 'widget': const SliverGridCountExample()},
   {'title': 'SliverGrid.extent', 'widget': const SliverGridExtentExample()},
-
+  {'title': 'SliverAnimatedList', 'widget': const SliverAnimatedListExample()},
+  {'title': 'SliverFillRemaining', 'widget': const SliverFillRemainingExample()},
+  {'title': 'SliverFillViewport', 'widget': const SliverFillViewportExample()},
 ];
 
 class SliverExampleNavigatorList extends StatelessWidget {

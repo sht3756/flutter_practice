@@ -16,3 +16,11 @@ export 'ex_sliver_animated_list.dart';
 export 'ex_sliver_fill_remaining.dart';
 // 각 아이템이 뷰포트의 일정 비율을 차지하도록 설정
 export 'ex_sliver_fill_viewport.dart';
+// sliver 간 겹침 처리 (SliverOverlapAbsorber & SliverOverlapInjector)
+export 'ex_sliver_overlap_absorber.dart';
+// 복합적인 스크롤 뷰 구성을 위한 Slivers 와 CustomScrollView 의 결합
+export 'ex_sliver_app_grid.dart';
+// 동적인 상단 탭과 SliverAppBar 를 결합한 인터페이스 구현
+export 'ex_sliver_app_bar_with_tab.dart';
+// 스크롤 가능한 뷰에 새로고침 기능 추가
+export 'ex_sliver_refresh_list.dart';

@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_study/course_1/async_hive_cache/api/api_service.dart';
+import 'package:flutter_native_study/course_1/async_hive_cache/data/todo_repository.dart';
 import 'package:flutter_native_study/course_1/async_hive_cache/model/todo.dart';
+import 'package:flutter_native_study/course_1/async_hive_cache/todo_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -21,7 +27,16 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Placeholder(),
+      home: TodoScreen(
+        repository: ToDoRepository(
+          ApiService(Dio(),
+              baseUrl: Platform.isAndroid
+                  ? 'http://10.0.2.2:3000'
+                  : 'http://localhost:3000',
+          ),
+          Hive.box<ToDo>('todoBox'),
+        ),
+      ),
     );
   }
 }

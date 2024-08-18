@@ -12,7 +12,7 @@ abstract class ApiService {
   @GET('/todo')
   Future<List<ToDo>> getToDos();
   @POST('/todo')
-  Future<ToDo> createToDos();
+  Future<ToDo> createToDos(@Body()ToDo toDo);
   @PATCH('/todo')
   Future<ToDo> updateToDos(@Path('id') String id);
 }

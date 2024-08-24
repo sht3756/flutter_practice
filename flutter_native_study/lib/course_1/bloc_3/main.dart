@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_study/course_1/bloc_2/pages/step_one.dart';
+import 'package:flutter_native_study/course_1/bloc_3/bloc/pw_bloc.dart';
 
 import 'bloc/email_bloc.dart';
 import 'bloc/name_bloc.dart';
@@ -14,10 +15,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => EmailBloc()),
-        BlocProvider(create: (context) => NameBloc())
+        BlocProvider(create: (context) => NameBloc()),
+        BlocProvider(create: (context) => PwBloc()),
       ],
       child: MaterialApp(
         title: 'Bloc From Validation 예제',

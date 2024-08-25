@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_study/course_1/bloc_2/widgets/flat_button.dart';
 import 'package:flutter_native_study/course_1/bloc_3/bloc/pw_bloc.dart';
 
+import '../bloc/email_bloc.dart';
+import '../bloc/name_bloc.dart';
+
 class StepThree extends StatefulWidget {
   const StepThree({super.key});
 
@@ -86,6 +89,9 @@ class _StepThreeState extends State<StepThree> {
                 builder: (BuildContext context, PwState state) {
                   return FlatButton(
                     onPressed: () {
+                      context.read<EmailBloc>().add(EmailSubmitted());
+                      context.read<NameBloc>().add(NameSubmitted());
+                      context.read<PwBloc>().add(PwSubmitted());
                       Navigator.popUntil(context, (route) => route.isFirst);
                     },
                     text: '완료',

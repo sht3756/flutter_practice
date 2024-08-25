@@ -14,15 +14,16 @@ class PwBloc extends Bloc<PwEvent, PwState> {
         )) {
     on<PwChanged>(_onPwChanged);
     on<ConfirmPwChanged>(_onConfirmPwChanged);
+    on<PwSubmitted>(_onPwSubmitted);
   }
 
   void _onPwChanged(PwChanged event, Emitter<PwState> emit) {
     final newPw = event.pw;
     final newState = state.copyWith(
-      pw: newPw,
-      isPwValid: _isValidPw(newPw),
-      isConfirmPwValid: _isValidPw(state.confirmPw) && newPw == state.confirmPw
-    );
+        pw: newPw,
+        isPwValid: _isValidPw(newPw),
+        isConfirmPwValid:
+            _isValidPw(state.confirmPw) && newPw == state.confirmPw);
     emit(newState);
   }
 
@@ -33,6 +34,15 @@ class PwBloc extends Bloc<PwEvent, PwState> {
       isConfirmPwValid: _isValidPw(newConfirmPw) && newConfirmPw == state.pw,
     );
     emit(newState);
+  }
+
+  void _onPwSubmitted(PwSubmitted event, Emitter<PwState> emit) {
+    emit(PwState(
+      pw: '',
+      confirmPw: '',
+      isPwValid: false,
+      isConfirmPwValid: false,
+    ));
   }
 
   bool _isValidPw(String pw) {

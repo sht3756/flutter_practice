@@ -17,3 +17,7 @@ final class ConfirmPwChanged extends PwEvent {
   ConfirmPwChanged(this.confirmPw);
 
 }
+
+final class PwSubmitted extends PwEvent {
+  PwSubmitted();
+}

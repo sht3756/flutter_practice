@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_study/course_1/bloc_2/widgets/flat_button.dart';
+import 'package:flutter_native_study/course_1/bloc_3/bloc/pw_bloc.dart';
 
 class StepThree extends StatefulWidget {
   const StepThree({super.key});
@@ -49,33 +51,47 @@ class _StepThreeState extends State<StepThree> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: _pwController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: '비밀번호',
-                hintText: '비밀번호를 입력하세요.',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20.0),
-            TextField(
-              controller: _pwController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: '비밀번호 재입력',
-                hintText: '비밀번호를 다시 입력하세요.',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20.0),
-            FlatButton(
-              onPressed: () {
-                Navigator.popUntil(context, (route) => route.isFirst);
+            BlocBuilder<PwBloc, PwState>(
+              builder: (BuildContext context, PwState state) {
+                return TextField(
+                  onChanged: (pw) => context.read<PwBloc>().add(PwChanged(pw)),
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: '비밀번호',
+                    hintText: '비밀번호를 입력하세요.',
+                    border: const OutlineInputBorder(),
+                    errorText: !state.isPwValid ? '비밀번호는 8자 이상이어야 합니다.' : null
+                  ),
+                );
               },
-              text: '완료',
-              isActive: _isButtonActive,
-            )
+            ),
+            const SizedBox(height: 20.0),
+            BlocBuilder<PwBloc, PwState>(
+                builder: (BuildContext context, PwState state) {
+              return TextField(
+                onChanged: (confirmPw) =>
+                    context.read<PwBloc>().add(ConfirmPwChanged(confirmPw)),
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: '비밀번호 재입력',
+                  hintText: '비밀번호를 다시 입력하세요.',
+                  border: const OutlineInputBorder(),
+                  errorText: !state.isConfirmPwValid ? '비밀번호가 일치하지 않습니다.' : null
+                ),
+              );
+            }),
+            const SizedBox(height: 20.0),
+            BlocBuilder<PwBloc, PwState>(
+                buildWhen: (p, c) => p.isPwValid != c.isPwValid,
+                builder: (BuildContext context, PwState state) {
+                  return FlatButton(
+                    onPressed: () {
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                    },
+                    text: '완료',
+                    isActive: state.isPwValid && state.isConfirmPwValid,
+                  );
+                }),
           ],
         ),
       ),

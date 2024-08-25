@@ -9,3 +9,7 @@ final class EmailChanged extends EmailEvent {
 
   EmailChanged(this.email);
 }
+
+final class EmailSubmitted extends EmailEvent {
+  EmailSubmitted();
+}

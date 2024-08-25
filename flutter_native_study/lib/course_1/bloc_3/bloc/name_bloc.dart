@@ -7,6 +7,7 @@ part 'name_state.dart';
 class NameBloc extends Bloc<NameEvent, NameState> {
   NameBloc() : super(NameState(name: '', isValid: false)) {
     on<NameChanged>(_onNameChanged);
+    on<NameSubmitted>(_onNameSubmitted);
   }
 
   void _onNameChanged(NameChanged event, Emitter<NameState> emit) {
@@ -14,4 +15,9 @@ class NameBloc extends Bloc<NameEvent, NameState> {
     final isValid = name.length >= 2;
     emit(NameState(name: name, isValid: isValid));
   }
+
+  void _onNameSubmitted(NameSubmitted event, Emitter<NameState> emit) {
+    emit(NameState(name: '', isValid: false));
+  }
+
 }

@@ -7,3 +7,7 @@ final class NameChanged extends NameEvent {
 
   NameChanged({required this.name});
 }
+
+final class NameSubmitted extends NameEvent {
+  NameSubmitted();
+}

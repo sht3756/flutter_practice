@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_study/course_1/riverpod_provider_1/exam_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'exam_state_provider.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -12,6 +12,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: HelloWidget(),),);
+    return const Scaffold(
+      body: Center(
+        child: CounterWidget(),
+      ),
+    );
   }
 }

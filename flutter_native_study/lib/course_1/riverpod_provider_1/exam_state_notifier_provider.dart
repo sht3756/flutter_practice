@@ -1,3 +1,7 @@
+// 복잡한 상태 관리를 위해 사용됨
+// StateNotifier 를 확장하여 상태를 캡슐화
+// 변경사항을 관리하여 UI 에 반영
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

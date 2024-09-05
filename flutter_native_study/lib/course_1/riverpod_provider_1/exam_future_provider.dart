@@ -1,3 +1,8 @@
+// 비동기 작업의 결과를 관리하기 위해 사용
+// 비동기 연산의 캐싱과 결과 반환
+// 비동기 작업의 에러와 로딩 상태 처리
+// 여러 비동기 값 결합
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

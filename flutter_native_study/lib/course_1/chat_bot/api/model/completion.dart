@@ -21,8 +21,9 @@ class CompletionResponse {
   final String id;
   final int created;
   final String model;
+  final List<ChoiceModel> choices;
 
-  CompletionResponse(this.id, this.created, this.model);
+  CompletionResponse(this.id, this.created, this.model, this.choices);
 
   factory CompletionResponse.fromJson(Map<String, dynamic> json) => _$CompletionResponseFromJson(json);
 

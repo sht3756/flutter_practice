@@ -40,7 +40,7 @@ class ChatListPage extends StatelessWidget {
 
   void _openChat(ChatItemModel chatItem, BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (_) => const ChatPage()));
+        context, MaterialPageRoute(builder: (_) => ChatPage(chatItem: chatItem)));
   }
 
   void _deleteChat(int index, BuildContext context) {
